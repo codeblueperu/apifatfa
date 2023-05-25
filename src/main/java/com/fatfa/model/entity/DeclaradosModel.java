@@ -56,8 +56,8 @@ public class DeclaradosModel {
 	@Column(name = "fecha", nullable = false)
 	private Date fecha;
 	
-	@Column(name = "localidad_trabajador", length = 70, nullable = false)
-	private String localidadTrabajador;
+//	@Column(name = "localidad_trabajador", length = 70, nullable = false)
+//	private String localidadTrabajador;
 	
 	@Column(name = "jornada_reducida", length = 4, nullable = true, columnDefinition = "CHAR(4)")
 	private String jornadaReducida;
@@ -74,20 +74,20 @@ public class DeclaradosModel {
 	@Column(nullable = true)
 	private int  rectificativa;
 	
-	@Column(name="sueldo_remunerativo",nullable = true, columnDefinition = "decimal(18,2)")
-	private double sueldoRemunerativo;
+//	@Column(name="sueldo_remunerativo",nullable = true, columnDefinition = "decimal(18,2)")
+//	private double sueldoRemunerativo;
 	
 	@Column(name="monto_sac",nullable = true, columnDefinition = "decimal(18,2)")
 	private double montoSac ;
 	
-	@Column(name="monto_vacaciones",nullable = true, columnDefinition = "decimal(18,2)")
-	private double montoVacaciones;
-	
+//	@Column(name="monto_vacaciones",nullable = true, columnDefinition = "decimal(18,2)")
+//	private double montoVacaciones;
+
 	@Column(nullable = true, columnDefinition = "BIT")
 	private boolean licencia;
 	
-	@Column(name="afiliado_federacion",nullable = true, columnDefinition = "BIT")
-	private boolean afiliadoFederacion;
+//	@Column(name="afiliado_federacion",nullable = true, columnDefinition = "BIT")
+//	private boolean afiliadoFederacion;
 	
 	@Column(name="afiliado_obra_social",nullable = true, columnDefinition = "BIT")
 	private boolean afiliadoObraSocial;
@@ -98,11 +98,12 @@ public class DeclaradosModel {
 	@Column(name = "cantidad_dias_trabajados", nullable = true)
 	private int cantidadDiasTrabajados;
 	
-	@Column(name = "cantidad_dias_vacaciones", nullable = true)
-	private int cantidadDiasVacaciones;
+//	@Column(name = "cantidad_dias_vacaciones", nullable = true)
+//	private int cantidadDiasVacaciones;
 	
-	@Column(name = "sueldo_no_remunerativo", nullable = true, columnDefinition = "decimal(18,2)")
-	private double sueldo_no_remunerativo ;
+//	@Column(name = "sueldo_no_remunerativo", nullable = true, columnDefinition = "decimal(18,2)")
+//	private double sueldo_no_remunerativo ;
+
 	
 	@Column(name = "nombre_archivo", nullable = true, length = 70)
 	private String nombreArchivo;
@@ -123,57 +124,34 @@ public class DeclaradosModel {
 	@JoinColumn(name = "id_zona")
 	private ZonasModel zona;
 	
+//	@OneToOne
+//	@JoinColumn(name = "id_estado_trabajador")
+//	private EstadoTrabajadoresModel estadoTrabajador;
+	
 	@OneToOne
-	@JoinColumn(name = "id_estado_trabajador")
-	private EstadoTrabajadoresModel estadoTrabajador;
+	@JoinColumn(name = "id_empresa")
+	private EmpresasModel empresa;
+	
+	@OneToOne
+	@JoinColumn(name = "id_convenio")
+	private ConveniosAplicablesModel convenio;
 
 	public DeclaradosModel() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public DeclaradosModel(int idDeclarado, String cuit, String cuil, String nombres, Date fechaIngreso,
-			Date fechaEgreso, double sueldo, String localidadNombre, boolean estadoBaja, Date fechaBaja, Date fecha,
-			String localidadTrabajador, String jornadaReducida, String ingresoAyudante, String mes, String anio,
-			int rectificativa, double sueldoRemunerativo, double montoSac, double montoVacaciones, boolean licencia,
-			boolean afiliadoFederacion, boolean afiliadoObraSocial, String observaciones, int cantidadDiasTrabajados,
-			int cantidadDiasVacaciones, double sueldo_no_remunerativo, String nombreArchivo, CategoriasModelo categoria,
-			LocalidadModel localidad, SindicatosModel sindicato, ZonasModel zona,
-			EstadoTrabajadoresModel estadoTrabajador) {
-		super();
-		this.idDeclarado = idDeclarado;
-		this.cuit = cuit;
-		this.cuil = cuil;
-		this.nombres = nombres;
-		this.fechaIngreso = fechaIngreso;
-		this.fechaEgreso = fechaEgreso;
-		this.sueldo = sueldo;
-		this.localidadNombre = localidadNombre;
-		this.estadoBaja = estadoBaja;
-		this.fechaBaja = fechaBaja;
-		this.fecha = fecha;
-		this.localidadTrabajador = localidadTrabajador;
-		this.jornadaReducida = jornadaReducida;
-		this.ingresoAyudante = ingresoAyudante;
-		this.mes = mes;
-		this.anio = anio;
-		this.rectificativa = rectificativa;
-		this.sueldoRemunerativo = sueldoRemunerativo;
-		this.montoSac = montoSac;
-		this.montoVacaciones = montoVacaciones;
-		this.licencia = licencia;
-		this.afiliadoFederacion = afiliadoFederacion;
-		this.afiliadoObraSocial = afiliadoObraSocial;
-		this.observaciones = observaciones;
-		this.cantidadDiasTrabajados = cantidadDiasTrabajados;
-		this.cantidadDiasVacaciones = cantidadDiasVacaciones;
-		this.sueldo_no_remunerativo = sueldo_no_remunerativo;
-		this.nombreArchivo = nombreArchivo;
-		this.categoria = categoria;
-		this.localidad = localidad;
-		this.sindicato = sindicato;
-		this.zona = zona;
-		this.estadoTrabajador = estadoTrabajador;
+	@Override
+	public String toString() {
+		return "DeclaradosModel [idDeclarado=" + idDeclarado + ", cuit=" + cuit + ", cuil=" + cuil + ", nombres="
+				+ nombres + ", fechaIngreso=" + fechaIngreso + ", fechaEgreso=" + fechaEgreso + ", sueldo=" + sueldo
+				+ ", localidadNombre=" + localidadNombre + ", estadoBaja=" + estadoBaja + ", fechaBaja=" + fechaBaja
+				+ ", fecha=" + fecha + ", jornadaReducida=" + jornadaReducida + ", ingresoAyudante=" + ingresoAyudante
+				+ ", mes=" + mes + ", anio=" + anio + ", rectificativa=" + rectificativa + ", montoSac=" + montoSac
+				+ ", licencia=" + licencia + ", afiliadoFederacion=" + afiliadoObraSocial + ", observaciones="
+				+ observaciones + ", cantidadDiasTrabajados=" + cantidadDiasTrabajados + ", nombreArchivo="
+				+ nombreArchivo + ", categoria=" + categoria + ", localidad=" + localidad + ", sindicato=" + sindicato
+				+ ", zona=" + zona + ", empresa=" + empresa + ", convenio=" + convenio + "]";
 	}
 
 	public int getIdDeclarado() {
@@ -264,14 +242,6 @@ public class DeclaradosModel {
 		this.fecha = fecha;
 	}
 
-	public String getLocalidadTrabajador() {
-		return localidadTrabajador;
-	}
-
-	public void setLocalidadTrabajador(String localidadTrabajador) {
-		this.localidadTrabajador = localidadTrabajador;
-	}
-
 	public String getJornadaReducida() {
 		return jornadaReducida;
 	}
@@ -312,28 +282,12 @@ public class DeclaradosModel {
 		this.rectificativa = rectificativa;
 	}
 
-	public double getSueldoRemunerativo() {
-		return sueldoRemunerativo;
-	}
-
-	public void setSueldoRemunerativo(double sueldoRemunerativo) {
-		this.sueldoRemunerativo = sueldoRemunerativo;
-	}
-
 	public double getMontoSac() {
 		return montoSac;
 	}
 
 	public void setMontoSac(double montoSac) {
 		this.montoSac = montoSac;
-	}
-
-	public double getMontoVacaciones() {
-		return montoVacaciones;
-	}
-
-	public void setMontoVacaciones(double montoVacaciones) {
-		this.montoVacaciones = montoVacaciones;
 	}
 
 	public boolean isLicencia() {
@@ -344,20 +298,12 @@ public class DeclaradosModel {
 		this.licencia = licencia;
 	}
 
-	public boolean isAfiliadoFederacion() {
-		return afiliadoFederacion;
-	}
-
-	public void setAfiliadoFederacion(boolean afiliadoFederacion) {
-		this.afiliadoFederacion = afiliadoFederacion;
-	}
-
-	public boolean isAfiliadoObraSocial() {
+	public boolean isafiliadoObraSocial() {
 		return afiliadoObraSocial;
 	}
 
-	public void setAfiliadoObraSocial(boolean afiliadoObraSocial) {
-		this.afiliadoObraSocial = afiliadoObraSocial;
+	public void setAfiliadoFederacion(boolean afiliadoFederacion) {
+		this.afiliadoObraSocial = afiliadoFederacion;
 	}
 
 	public String getObservaciones() {
@@ -374,22 +320,6 @@ public class DeclaradosModel {
 
 	public void setCantidadDiasTrabajados(int cantidadDiasTrabajados) {
 		this.cantidadDiasTrabajados = cantidadDiasTrabajados;
-	}
-
-	public int getCantidadDiasVacaciones() {
-		return cantidadDiasVacaciones;
-	}
-
-	public void setCantidadDiasVacaciones(int cantidadDiasVacaciones) {
-		this.cantidadDiasVacaciones = cantidadDiasVacaciones;
-	}
-
-	public double getSueldo_no_remunerativo() {
-		return sueldo_no_remunerativo;
-	}
-
-	public void setSueldo_no_remunerativo(double sueldo_no_remunerativo) {
-		this.sueldo_no_remunerativo = sueldo_no_remunerativo;
 	}
 
 	public String getNombreArchivo() {
@@ -432,27 +362,21 @@ public class DeclaradosModel {
 		this.zona = zona;
 	}
 
-	public EstadoTrabajadoresModel getEstadoTrabajador() {
-		return estadoTrabajador;
+	public EmpresasModel getEmpresa() {
+		return empresa;
 	}
 
-	public void setEstadoTrabajador(EstadoTrabajadoresModel estadoTrabajador) {
-		this.estadoTrabajador = estadoTrabajador;
+	public void setEmpresa(EmpresasModel empresa) {
+		this.empresa = empresa;
 	}
 
-	@Override
-	public String toString() {
-		return "DeclaradosModel [idDeclarado=" + idDeclarado + ", cuit=" + cuit + ", cuil=" + cuil + ", nombres="
-				+ nombres + ", fechaIngreso=" + fechaIngreso + ", fechaEgreso=" + fechaEgreso + ", sueldo=" + sueldo
-				+ ", localidadNombre=" + localidadNombre + ", estadoBaja=" + estadoBaja + ", fechaBaja=" + fechaBaja
-				+ ", fecha=" + fecha + ", localidadTrabajador=" + localidadTrabajador + ", jornadaReducida="
-				+ jornadaReducida + ", ingresoAyudante=" + ingresoAyudante + ", mes=" + mes + ", anio=" + anio
-				+ ", rectificativa=" + rectificativa + ", sueldoRemunerativo=" + sueldoRemunerativo + ", montoSac="
-				+ montoSac + ", montoVacaciones=" + montoVacaciones + ", licencia=" + licencia + ", afiliadoFederacion="
-				+ afiliadoFederacion + ", afiliadoObraSocial=" + afiliadoObraSocial + ", observaciones=" + observaciones
-				+ ", cantidadDiasTrabajados=" + cantidadDiasTrabajados + ", cantidadDiasVacaciones="
-				+ cantidadDiasVacaciones + ", sueldo_no_remunerativo=" + sueldo_no_remunerativo + ", nombreArchivo="
-				+ nombreArchivo + ", categoria=" + categoria + ", localidad=" + localidad + ", sindicato=" + sindicato
-				+ ", zona=" + zona + ", estadoTrabajador=" + estadoTrabajador + "]";
+	public ConveniosAplicablesModel getConvenio() {
+		return convenio;
 	}
+
+	public void setConvenio(ConveniosAplicablesModel convenio) {
+		this.convenio = convenio;
+	}
+
+	
 }

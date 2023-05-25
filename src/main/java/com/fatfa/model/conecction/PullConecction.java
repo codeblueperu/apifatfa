@@ -73,9 +73,9 @@ public class PullConecction {
 		Properties propiedad = new Properties();
 		propiedad.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
 		//#CREAR LAS TABLAS
-		//propiedad.setProperty("hibernate.hbm2ddl.auto", "update");
+		propiedad.setProperty("hibernate.hbm2ddl.auto", "update");
 		//#VALIDA TABLAS
-		propiedad.setProperty("hibernate.hbm2ddl.auto", "validate");
+		//propiedad.setProperty("hibernate.hbm2ddl.auto", "validate");
 		propiedad.setProperty("hibernate.show_sql", "true");
 		propiedad.setProperty("hibernate.format_sql", "true");
 		return propiedad;

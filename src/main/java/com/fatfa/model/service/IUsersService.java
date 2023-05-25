@@ -1,4 +1,4 @@
-package com.fatfa.model.service;
+ package com.fatfa.model.service;
 
 import java.util.List;
 import java.util.Map;
