@@ -14,16 +14,13 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@Table(name = "tb_declarados")
-public class DeclaradosModel {
+@Table(name = "tb_nominas")
+public class NominasModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_declarado")
-	private int idDeclarado ;
-	
-	@Column(length = 11, nullable = false)
-	private String cuit;
+	@Column(name = "id_nomina")
+	private int idNomina ;
 	
 	@Column(length = 11, nullable = false)
 	private String cuil;
@@ -42,9 +39,6 @@ public class DeclaradosModel {
 	@Column(nullable = true, columnDefinition = "decimal(18,2)")
 	private double sueldo;
 	
-	@Column(name="localidad",length = 70, nullable = true)
-	private String localidadNombre;
-	
 	@Column(name="estado_baja",nullable = true, columnDefinition = "BIT")
 	private boolean estadoBaja;
 	
@@ -53,17 +47,11 @@ public class DeclaradosModel {
 	private Date fechaBaja;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",locale = "es-PE", timezone = "America/Lima")
-	@Column(name = "fecha", nullable = false)
-	private Date fecha;
-	
-//	@Column(name = "localidad_trabajador", length = 70, nullable = false)
-//	private String localidadTrabajador;
-	
-	@Column(name = "jornada_reducida", length = 4, nullable = true, columnDefinition = "CHAR(4)")
+	@Column(name = "fecha_procesa", nullable = true)
+	private Date fechaProcesa;
+
+	@Column(name = "jornada_reducida", nullable = true, columnDefinition = "BIT")
 	private String jornadaReducida;
-	
-	@Column(name = "ingreso_ayudante", length = 60, nullable = true)
-	private String ingresoAyudante;
 	
 	@Column(name = "mes", length = 2, nullable = true, columnDefinition = "CHAR(2)")
 	private String mes;
@@ -71,23 +59,16 @@ public class DeclaradosModel {
 	@Column(name = "anio", length = 4, nullable = true, columnDefinition = "CHAR(4)")
 	private String anio;
 	
-	@Column(nullable = true)
+	@Column(nullable = false, columnDefinition = "INT default 0")
 	private int  rectificativa;
 	
-//	@Column(name="sueldo_remunerativo",nullable = true, columnDefinition = "decimal(18,2)")
-//	private double sueldoRemunerativo;
 	
 	@Column(name="monto_sac",nullable = true, columnDefinition = "decimal(18,2)")
 	private double montoSac ;
-	
-//	@Column(name="monto_vacaciones",nullable = true, columnDefinition = "decimal(18,2)")
-//	private double montoVacaciones;
 
 	@Column(nullable = true, columnDefinition = "BIT")
 	private boolean licencia;
 	
-//	@Column(name="afiliado_federacion",nullable = true, columnDefinition = "BIT")
-//	private boolean afiliadoFederacion;
 	
 	@Column(name="afiliado_obra_social",nullable = true, columnDefinition = "BIT")
 	private boolean afiliadoObraSocial;
@@ -97,24 +78,13 @@ public class DeclaradosModel {
 	
 	@Column(name = "cantidad_dias_trabajados", nullable = true)
 	private int cantidadDiasTrabajados;
-	
-//	@Column(name = "cantidad_dias_vacaciones", nullable = true)
-//	private int cantidadDiasVacaciones;
-	
-//	@Column(name = "sueldo_no_remunerativo", nullable = true, columnDefinition = "decimal(18,2)")
-//	private double sueldo_no_remunerativo ;
-
-	
+		
 	@Column(name = "nombre_archivo", nullable = true, length = 70)
 	private String nombreArchivo;
 	
 	@OneToOne()
 	@JoinColumn(name = "id_categoria")
 	private CategoriasModelo categoria;
-	
-	@OneToOne
-	@JoinColumn(name = "id_localidad")
-	private LocalidadModel localidad;
 	
 	@OneToOne
 	@JoinColumn(name = "id_sindicato")
@@ -124,50 +94,33 @@ public class DeclaradosModel {
 	@JoinColumn(name = "id_zona")
 	private ZonasModel zona;
 	
-//	@OneToOne
-//	@JoinColumn(name = "id_estado_trabajador")
-//	private EstadoTrabajadoresModel estadoTrabajador;
-	
 	@OneToOne
 	@JoinColumn(name = "id_empresa")
 	private EmpresasModel empresa;
-	
-	@OneToOne
-	@JoinColumn(name = "id_convenio")
-	private ConveniosAplicablesModel convenio;
 
-	public DeclaradosModel() {
+	public NominasModel() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String toString() {
-		return "DeclaradosModel [idDeclarado=" + idDeclarado + ", cuit=" + cuit + ", cuil=" + cuil + ", nombres="
-				+ nombres + ", fechaIngreso=" + fechaIngreso + ", fechaEgreso=" + fechaEgreso + ", sueldo=" + sueldo
-				+ ", localidadNombre=" + localidadNombre + ", estadoBaja=" + estadoBaja + ", fechaBaja=" + fechaBaja
-				+ ", fecha=" + fecha + ", jornadaReducida=" + jornadaReducida + ", ingresoAyudante=" + ingresoAyudante
+		return "NominasModel [idNomina=" + idNomina + ", cuil=" + cuil + ", nombres=" + nombres + ", fechaIngreso="
+				+ fechaIngreso + ", fechaEgreso=" + fechaEgreso + ", sueldo=" + sueldo + ", estadoBaja=" + estadoBaja
+				+ ", fechaBaja=" + fechaBaja + ", fechaProcesa=" + fechaProcesa + ", jornadaReducida=" + jornadaReducida
 				+ ", mes=" + mes + ", anio=" + anio + ", rectificativa=" + rectificativa + ", montoSac=" + montoSac
-				+ ", licencia=" + licencia + ", afiliadoFederacion=" + afiliadoObraSocial + ", observaciones="
+				+ ", licencia=" + licencia + ", afiliadoObraSocial=" + afiliadoObraSocial + ", observaciones="
 				+ observaciones + ", cantidadDiasTrabajados=" + cantidadDiasTrabajados + ", nombreArchivo="
-				+ nombreArchivo + ", categoria=" + categoria + ", localidad=" + localidad + ", sindicato=" + sindicato
-				+ ", zona=" + zona + ", empresa=" + empresa + ", convenio=" + convenio + "]";
+				+ nombreArchivo + ", categoria=" + categoria + ", sindicato=" + sindicato + ", zona=" + zona
+				+ ", empresa=" + empresa + "]";
 	}
 
-	public int getIdDeclarado() {
-		return idDeclarado;
+	public int getIdNomina() {
+		return idNomina;
 	}
 
-	public void setIdDeclarado(int idDeclarado) {
-		this.idDeclarado = idDeclarado;
-	}
-
-	public String getCuit() {
-		return cuit;
-	}
-
-	public void setCuit(String cuit) {
-		this.cuit = cuit;
+	public void setIdNomina(int idNomina) {
+		this.idNomina = idNomina;
 	}
 
 	public String getCuil() {
@@ -210,14 +163,6 @@ public class DeclaradosModel {
 		this.sueldo = sueldo;
 	}
 
-	public String getLocalidadNombre() {
-		return localidadNombre;
-	}
-
-	public void setLocalidadNombre(String localidadNombre) {
-		this.localidadNombre = localidadNombre;
-	}
-
 	public boolean isEstadoBaja() {
 		return estadoBaja;
 	}
@@ -234,30 +179,15 @@ public class DeclaradosModel {
 		this.fechaBaja = fechaBaja;
 	}
 
-	public Date getFecha() {
-		return fecha;
+	public Date getFechaProcesa() {
+		return fechaProcesa;
 	}
 
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
+	public void setFechaProcesa(Date fechaProcesa) {
+		this.fechaProcesa = fechaProcesa;
 	}
 
-	public String getJornadaReducida() {
-		return jornadaReducida;
-	}
-
-	public void setJornadaReducida(String jornadaReducida) {
-		this.jornadaReducida = jornadaReducida;
-	}
-
-	public String getIngresoAyudante() {
-		return ingresoAyudante;
-	}
-
-	public void setIngresoAyudante(String ingresoAyudante) {
-		this.ingresoAyudante = ingresoAyudante;
-	}
-
+	
 	public String getMes() {
 		return mes;
 	}
@@ -298,12 +228,12 @@ public class DeclaradosModel {
 		this.licencia = licencia;
 	}
 
-	public boolean isafiliadoObraSocial() {
+	public boolean isAfiliadoObraSocial() {
 		return afiliadoObraSocial;
 	}
 
-	public void setAfiliadoFederacion(boolean afiliadoFederacion) {
-		this.afiliadoObraSocial = afiliadoFederacion;
+	public void setAfiliadoObraSocial(boolean afiliadoObraSocial) {
+		this.afiliadoObraSocial = afiliadoObraSocial;
 	}
 
 	public String getObservaciones() {
@@ -338,14 +268,6 @@ public class DeclaradosModel {
 		this.categoria = categoria;
 	}
 
-	public LocalidadModel getLocalidad() {
-		return localidad;
-	}
-
-	public void setLocalidad(LocalidadModel localidad) {
-		this.localidad = localidad;
-	}
-
 	public SindicatosModel getSindicato() {
 		return sindicato;
 	}
@@ -370,13 +292,14 @@ public class DeclaradosModel {
 		this.empresa = empresa;
 	}
 
-	public ConveniosAplicablesModel getConvenio() {
-		return convenio;
+	public String getJornadaReducida() {
+		return jornadaReducida;
 	}
 
-	public void setConvenio(ConveniosAplicablesModel convenio) {
-		this.convenio = convenio;
+	public void setJornadaReducida(String jornadaReducida) {
+		this.jornadaReducida = jornadaReducida;
 	}
 
+	
 	
 }

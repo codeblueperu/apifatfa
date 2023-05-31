@@ -33,7 +33,10 @@ public class CategoriasModelo {
 		this.categoria = categoria;
 		this.estado = estado;
 	}
-
+	public CategoriasModelo(int idCategoria) {
+		super();
+		this.idCategoria = idCategoria;
+	}
 	public int getIdCategoria() {
 		return idCategoria;
 	}

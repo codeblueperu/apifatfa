@@ -18,11 +18,6 @@ public class CombosController {
 	@Autowired
 	private CombosService srvCombo;
 	
-	@GetMapping("/listaJuridiccion")
-	public ResponseEntity<?> onListaJuridiccionAll() {
-		return ResponseEntity.ok(srvCombo.srvJuridiccion());
-	}
-	
 	@GetMapping("/listaLocalidad")
 	public ResponseEntity<?> onLocalidadAll(@RequestParam("IdProvincia") ProvinciasModel IdProvincia, @RequestParam("IdPartidos") PartidosModel IdPartidos) {
 		return ResponseEntity.ok(srvCombo.srvLocalidad(IdProvincia, IdPartidos));

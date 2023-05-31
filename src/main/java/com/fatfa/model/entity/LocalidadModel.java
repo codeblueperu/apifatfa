@@ -20,10 +20,10 @@ public class LocalidadModel {
 	@Column(length = 70, nullable = false)
 	private String nombre;
 	
-	@Column(name = "municipio", length = 70, nullable = false)
+	@Column(name = "municipio", length = 70, nullable = true)
 	private String municipio;
 	
-	@Column(name = "codigo_postal", length = 10, nullable = false)
+	@Column(name = "codigo_postal", length = 10, nullable = true)
 	private String codigoPostal ;
 	
 	@Column(length = 20, nullable = true)
@@ -33,11 +33,11 @@ public class LocalidadModel {
 	private String longitud ;
 	
 	@OneToOne
-	@JoinColumn(name = "id_provincia")
+	@JoinColumn(name = "id_provincia", nullable = false)
 	private ProvinciasModel provincia;
 	
 	@OneToOne
-	@JoinColumn(name = "id_partido")
+	@JoinColumn(name = "id_partido", nullable = false)
 	private PartidosModel partido;
 
 	public LocalidadModel() {

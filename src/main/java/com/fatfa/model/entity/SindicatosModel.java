@@ -3,6 +3,7 @@ package com.fatfa.model.entity;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,41 +20,48 @@ public class SindicatosModel {
 	@Column(name = "id_sindicato")
 	private int idSindicato;
 
-	@Column(length = 70, nullable = false)
-	private String nombre;
+	@Column(name = "nombre_sindicato", length=50, nullable = false)
+	private String nombreSindicato;
 
-	@Column(nullable = false, columnDefinition = "BIT default 1")
+	@Column(name = "telefono_sindicato",length = 25, nullable = false)
+	private String telefonoSindicato;
+
+	@Column(name = "domicilio_sindicato", length = 100, nullable = false)
+	private String domicilio;
+	
+	@Column(name = "nombres_responsable", length = 50, nullable = false)
+	private String nombreResponsable;
+	
+	@Column(name = "apellidos_responsable", length = 70, nullable = false)
+	private String apellidoResponsable;
+	
+	@Column(name = "telefono_responsable", length = 25, nullable = false)
+	private String telefonoResponsable;
+	
+	@Column(name = "correo_responsable", length = 50, nullable = false)
+	private String correoResponsable;
+	
+	@Column(name = "avatar_sindicato", length = 50, nullable = false)
+	private String avatar;
+	@Column(name = "estado", nullable = false, columnDefinition = "BIT default 1")
 	private boolean estado;
-
-	@Column(length = 30, nullable = false)
-	private String telefono;
-
-	@Column(length = 70, nullable = false)
-	private String region;
-
-	@OneToOne()
-	@JoinColumn(name = "id_juridiccion")
-	private TipoJuridiccionModel juridiccion;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "id_domicilio")
-	private DomicilioModel domicilio;
+	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_localidad")
+	private LocalidadModel idLocalidad;
 
 	public SindicatosModel() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public SindicatosModel(int idSindicato, String nombre, boolean estado, String telefono, String region,
-			TipoJuridiccionModel juridiccion, DomicilioModel domicilio) {
-		super();
-		this.idSindicato = idSindicato;
-		this.nombre = nombre;
-		this.estado = estado;
-		this.telefono = telefono;
-		this.region = region;
-		this.juridiccion = juridiccion;
-		this.domicilio = domicilio;
+	@Override
+	public String toString() {
+		return "SindicatosModel [idSindicato=" + idSindicato + ", estadoSindicato=" + nombreSindicato
+				+ ", telefonoSindicato=" + telefonoSindicato + ", domicilio=" + domicilio + ", nombreResponsable="
+				+ nombreResponsable + ", apellidoResponsable=" + apellidoResponsable + ", telefonoResponsable="
+				+ telefonoResponsable + ", correoResponsable=" + correoResponsable + ", avatar=" + avatar + ", estado="
+				+ estado + ", idLocalidad=" + idLocalidad + "]";
 	}
 
 	public int getIdSindicato() {
@@ -64,12 +72,69 @@ public class SindicatosModel {
 		this.idSindicato = idSindicato;
 	}
 
-	public String getNombre() {
-		return nombre;
+	
+	public String getNombreSindicato() {
+		return nombreSindicato;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setNombreSindicato(String nombreSindicato) {
+		this.nombreSindicato = nombreSindicato;
+	}
+
+	public String getTelefonoSindicato() {
+		return telefonoSindicato;
+	}
+
+	public void setTelefonoSindicato(String telefonoSindicato) {
+		this.telefonoSindicato = telefonoSindicato;
+	}
+
+	public String getDomicilio() {
+		return domicilio;
+	}
+
+	public void setDomicilio(String domicilio) {
+		this.domicilio = domicilio;
+	}
+
+	public String getNombreResponsable() {
+		return nombreResponsable;
+	}
+
+	public void setNombreResponsable(String nombreResponsable) {
+		this.nombreResponsable = nombreResponsable;
+	}
+
+	public String getApellidoResponsable() {
+		return apellidoResponsable;
+	}
+
+	public void setApellidoResponsable(String apellidoResponsable) {
+		this.apellidoResponsable = apellidoResponsable;
+	}
+
+	public String getTelefonoResponsable() {
+		return telefonoResponsable;
+	}
+
+	public void setTelefonoResponsable(String telefonoResponsable) {
+		this.telefonoResponsable = telefonoResponsable;
+	}
+
+	public String getCorreoResponsable() {
+		return correoResponsable;
+	}
+
+	public void setCorreoResponsable(String correoResponsable) {
+		this.correoResponsable = correoResponsable;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
 	public boolean isEstado() {
@@ -80,42 +145,14 @@ public class SindicatosModel {
 		this.estado = estado;
 	}
 
-	public String getTelefono() {
-		return telefono;
+	public LocalidadModel getIdLocalidad() {
+		return idLocalidad;
 	}
 
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
+	public void setIdLocalidad(LocalidadModel idLocalidad) {
+		this.idLocalidad = idLocalidad;
 	}
+	
 
-	public String getRegion() {
-		return region;
-	}
-
-	public void setRegion(String region) {
-		this.region = region;
-	}
-
-	public TipoJuridiccionModel getJuridiccion() {
-		return juridiccion;
-	}
-
-	public void setJuridiccion(TipoJuridiccionModel juridiccion) {
-		this.juridiccion = juridiccion;
-	}
-
-	public DomicilioModel getDomicilio() {
-		return domicilio;
-	}
-
-	public void setDomicilio(DomicilioModel domicilio) {
-		this.domicilio = domicilio;
-	}
-
-	@Override
-	public String toString() {
-		return "SindicatosModel [idSindicato=" + idSindicato + ", nombre=" + nombre + ", estado=" + estado
-				+ ", telefono=" + telefono + ", region=" + region + ", juridiccion=" + juridiccion + ", domicilio="
-				+ domicilio + "]";
-	}
+	
 }

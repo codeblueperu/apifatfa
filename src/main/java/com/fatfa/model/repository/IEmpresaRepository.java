@@ -17,5 +17,13 @@ public interface IEmpresaRepository extends JpaRepository<EmpresasModel, Integer
 	 * @return
 	 */
 	Optional<EmpresasModel> findByCuitOrRazonSocial(String nombre, String razonsocial);
+	
+	/**
+	 * @author SOPORTE
+	 * @apiNote BUSCAR EMPRESA POR CUIT
+	 * @param cuit
+	 * @return
+	 */
+	Optional<EmpresasModel> findByCuit(String cuit);
 
 }

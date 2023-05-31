@@ -50,19 +50,11 @@ public class EmpresasModel {
 	private int trabajadoresAfectadosPorConvenio;
 	
 	@Column(name = "trabajadores_afectados_por_obra_social", nullable = false)
-	private int trabajadoresAfectadosPorObraSocial;
+	private int trabajadoresAfectadosPorObraSocial;	
 	
 	@OneToOne
-	@JoinColumn(name="id_actividadEconomica", nullable = false)
-	private ActividadesEconomicaModel idActividad;
-	
-	@OneToOne
-	@JoinColumn(name="id_convenios", nullable = false)
-	private ConveniosAplicablesModel idConvenios;
-	
-	@OneToOne
-	@JoinColumn(name="id_juridiccion", nullable = false)
-	private TipoJuridiccionModel idJuridiccion;
+	@JoinColumn(name="id_sindicato", nullable = false)
+	private SindicatosModel idSindicato;
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "idResponsable")
@@ -72,33 +64,24 @@ public class EmpresasModel {
 	@JoinColumn(name = "idRecusosHumanos")
 	private ResponsableRRHHModel responableRH;
 	
+	@OneToOne
+	@JoinColumn(name = "id_actividad_economica")
+	private ActividadesEconomicaModel idActividad;
 
 	public EmpresasModel() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public EmpresasModel(int idEmpresa, String cuit, String razonSocial, String nombreFantasia, int numeroAfiliacion,
-			Date periodoInicial, boolean activo, String observaciones, int trabajadoresAfectadosPorConvenio,
-			int trabajadoresAfectadosPorObraSocial, ActividadesEconomicaModel idActividad,
-			ConveniosAplicablesModel idConvenios, TipoJuridiccionModel idJuridiccion, ResponsableDDJJModel reponsableDJ,
-			ResponsableRRHHModel responableRH) {
-		super();
-		this.idEmpresa = idEmpresa;
-		this.cuit = cuit;
-		this.razonSocial = razonSocial;
-		this.nombreFantasia = nombreFantasia;
-		this.numeroAfiliacion = numeroAfiliacion;
-		this.periodoInicial = periodoInicial;
-		this.activo = activo;
-		this.observaciones = observaciones;
-		this.trabajadoresAfectadosPorConvenio = trabajadoresAfectadosPorConvenio;
-		this.trabajadoresAfectadosPorObraSocial = trabajadoresAfectadosPorObraSocial;
-		this.idActividad = idActividad;
-		this.idConvenios = idConvenios;
-		this.idJuridiccion = idJuridiccion;
-		this.reponsableDJ = reponsableDJ;
-		this.responableRH = responableRH;
+	@Override
+	public String toString() {
+		return "EmpresasModel [idEmpresa=" + idEmpresa + ", cuit=" + cuit + ", razonSocial=" + razonSocial
+				+ ", nombreFantasia=" + nombreFantasia + ", numeroAfiliacion=" + numeroAfiliacion + ", periodoInicial="
+				+ periodoInicial + ", activo=" + activo + ", observaciones=" + observaciones
+				+ ", trabajadoresAfectadosPorConvenio=" + trabajadoresAfectadosPorConvenio
+				+ ", trabajadoresAfectadosPorObraSocial=" + trabajadoresAfectadosPorObraSocial + ", idSindicato="
+				+ idSindicato + ", reponsableDJ=" + reponsableDJ + ", responableRH=" + responableRH + ", idActividad="
+				+ idActividad + ", idConvenio=" + "]";
 	}
 
 	public int getIdEmpresa() {
@@ -181,28 +164,12 @@ public class EmpresasModel {
 		this.trabajadoresAfectadosPorObraSocial = trabajadoresAfectadosPorObraSocial;
 	}
 
-	public ActividadesEconomicaModel getIdActividad() {
-		return idActividad;
+	public SindicatosModel getIdSindicato() {
+		return idSindicato;
 	}
 
-	public void setIdActividad(ActividadesEconomicaModel idActividad) {
-		this.idActividad = idActividad;
-	}
-
-	public ConveniosAplicablesModel getIdConvenios() {
-		return idConvenios;
-	}
-
-	public void setIdConvenios(ConveniosAplicablesModel idConvenios) {
-		this.idConvenios = idConvenios;
-	}
-
-	public TipoJuridiccionModel getIdJuridiccion() {
-		return idJuridiccion;
-	}
-
-	public void setIdJuridiccion(TipoJuridiccionModel idJuridiccion) {
-		this.idJuridiccion = idJuridiccion;
+	public void setIdSindicato(SindicatosModel idSindicato) {
+		this.idSindicato = idSindicato;
 	}
 
 	public ResponsableDDJJModel getReponsableDJ() {
@@ -221,14 +188,12 @@ public class EmpresasModel {
 		this.responableRH = responableRH;
 	}
 
-	@Override
-	public String toString() {
-		return "EmpresasModel [idEmpresa=" + idEmpresa + ", cuit=" + cuit + ", razonSocial=" + razonSocial
-				+ ", nombreFantasia=" + nombreFantasia + ", numeroAfiliacion=" + numeroAfiliacion + ", periodoInicial="
-				+ periodoInicial + ", activo=" + activo + ", observaciones=" + observaciones
-				+ ", trabajadoresAfectadosPorConvenio=" + trabajadoresAfectadosPorConvenio
-				+ ", trabajadoresAfectadosPorObraSocial=" + trabajadoresAfectadosPorObraSocial + ", idActividad="
-				+ idActividad + ", idConvenios=" + idConvenios + ", idJuridiccion=" + idJuridiccion + ", reponsableDJ="
-				+ reponsableDJ + ", responableRH=" + responableRH + "]";
-	}	
+	public ActividadesEconomicaModel getIdActividad() {
+		return idActividad;
+	}
+
+	public void setIdActividad(ActividadesEconomicaModel idActividad) {
+		this.idActividad = idActividad;
+	}
+
 }

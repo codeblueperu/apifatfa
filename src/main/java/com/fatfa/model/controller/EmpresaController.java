@@ -41,7 +41,6 @@ public class EmpresaController {
 		ResponsableRRHHModel datosRRHH= datos.getResponsableRRHH();
 		System.out.println(datos.getDatoEmpresa());
 		
-		System.out.println(datosDDJJ);
 		 return ResponseEntity.ok(srvEmpresa.srvAgregarEmpresa(empresa,domicilio, datosDDJJ, datosRRHH));
 	}
 

@@ -10,7 +10,6 @@ import com.fatfa.model.entity.LocalidadModel;
 import com.fatfa.model.entity.PartidosModel;
 import com.fatfa.model.entity.ProvinciasModel;
 import com.fatfa.model.entity.SindicatosModel;
-import com.fatfa.model.entity.TipoJuridiccionModel;
 import com.fatfa.model.entity.ZonasModel;
 
 public interface CombosService {
@@ -32,14 +31,7 @@ public interface CombosService {
 	 * @return
 	 */
 	List<LocalidadModel> srvLocalidad(ProvinciasModel IdProvincia, PartidosModel Partidos);
-	/**
-	 * @author CodeBluePeru
-	 * @apiNote LISTA TODAS LOS TIPOS DE JURIDICCIÓN DE LA BASE DE DATOS
-	 * @return
-	 */
-	List<TipoJuridiccionModel> srvJuridiccion();
-	
-	
+
 	/**
 	 * @author CodeBluePeru
 	 * @apiNote LISTA TODAS LAS ACTIVIDADES ECONOMICAS DE LA BASE DE DATOS

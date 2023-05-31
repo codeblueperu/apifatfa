@@ -16,7 +16,6 @@ import com.fatfa.model.entity.LocalidadModel;
 import com.fatfa.model.entity.PartidosModel;
 import com.fatfa.model.entity.ProvinciasModel;
 import com.fatfa.model.entity.SindicatosModel;
-import com.fatfa.model.entity.TipoJuridiccionModel;
 import com.fatfa.model.entity.ZonasModel;
 import com.fatfa.model.repository.IActividadesEconomicasRepositoy;
 import com.fatfa.model.repository.ICategoriasRepository;
@@ -26,7 +25,6 @@ import com.fatfa.model.repository.ILocalidadRepository;
 import com.fatfa.model.repository.IPartidosRepository;
 import com.fatfa.model.repository.IProvinciasRepository;
 import com.fatfa.model.repository.ISindicatoRepository;
-import com.fatfa.model.repository.ITipoJuridiccionRepository;
 import com.fatfa.model.repository.IZonasRepository;
 import com.fatfa.model.service.CombosService;
 
@@ -43,9 +41,6 @@ public class CombosServiceImpl implements CombosService {
 	
 	@Autowired
 	private ILocalidadRepository repoLocalidad;
-	
-	@Autowired
-	private ITipoJuridiccionRepository repoJurid;
 	
 	@Autowired
 	private IActividadesEconomicasRepositoy repoActividades;
@@ -77,18 +72,6 @@ public class CombosServiceImpl implements CombosService {
 		return datos;
 	}
 
-	
-	@Override
-	public List<TipoJuridiccionModel> srvJuridiccion() {
-		List<TipoJuridiccionModel> datos= new ArrayList<>();
-		try {
-			datos = repoJurid.findAll();
-		} catch (Exception e) {
-			log.error("ERROR LISTAR JURIDICCIONES => " + e.toString());
-			throw e;
-		}
-		return datos;
-	}
 
 	@Override
 	public List<ActividadesEconomicaModel> srvActividadEconomica() {

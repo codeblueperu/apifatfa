@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.fatfa.model.entity.DeclaradosModel;
+import com.fatfa.model.entity.NominasModel;
 import com.fatfa.model.entity.EmpresasModel;
 
 @Repository
-public interface IDeclaradosRepository extends JpaRepository<DeclaradosModel, Integer> {
+public interface IDeclaradosRepository extends JpaRepository<NominasModel, Integer> {
 
 	/**
 	 * @author CodeBluePeru
@@ -21,5 +22,8 @@ public interface IDeclaradosRepository extends JpaRepository<DeclaradosModel, In
 	 * @param rectificativa
 	 * @return
 	 */
-	List<DeclaradosModel> findByEmpresaAndMesAndAnioAndRectificativa(EmpresasModel empresa, String mes, String anio, Integer rectificativa);
+	List<NominasModel> findByEmpresaAndMesAndAnioAndRectificativa(EmpresasModel empresa, String mes, String anio, Integer rectificativa);
+	
+	@Query("SELECT COUNT(*) FROM NominasModel n WHERE n.empresa.idEmpresa = ?1 AND n.anio = ?2 AND n.mes = ?3")
+	int findContarItemRectificativaEmpresaAnioMes(int id_empresa,String anio,String  mes);
 }

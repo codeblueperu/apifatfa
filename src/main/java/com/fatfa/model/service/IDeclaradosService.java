@@ -2,9 +2,10 @@ package com.fatfa.model.service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import com.fatfa.model.entity.DeclaradosModel;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fatfa.model.entity.NominasModel;
 import com.fatfa.model.entity.EmpresasModel;
 
 public interface IDeclaradosService {
@@ -15,7 +16,36 @@ public interface IDeclaradosService {
 	 * @param declarados
 	 * @return
 	 */
-	Map<String, Object> srvAgregarDeclarados(DeclaradosModel declarados);
+	Map<String, Object> srvAgregarDeclarados(NominasModel declarados);
+	/**
+	 * @author CodeBluePeru
+	 * @param fileExcel
+	 * @param id_empresa
+	 * @param anio
+	 * @param mes
+	 * @param rectificativa
+	 * @return
+	 */
+	Map<String, Object> srvGuardarNominaMasiva(MultipartFile fileExcel, int id_empresa, String anio, String mes,
+			int rectificativa);
+	
+	/**
+	 * @author CodeBluePeru
+	 * @param id_empresa
+	 * @param anio
+	 * @param mes
+	 * @return
+	 */
+	int srvObtenerelUltimoRectificativo(int id_empresa, String anio, String mes);
+	
+	/**
+	 * @author CodeBluePeru
+	 * @apiNote PERMITE AGREGAR UN NUEVO DECLARADO DE EMPRESA
+	 * @param id
+	 * @return
+	 */
+	NominasModel srvBuscarDeclaradosID(int id);
+	
 	
 	/**
 	 * @author CodeBluePeru
@@ -23,7 +53,7 @@ public interface IDeclaradosService {
 	 * @param declarados
 	 * @return
 	 */
-	List<DeclaradosModel> srvCopiarDeclarados(List<DeclaradosModel> declarados);
+	List<NominasModel> srvCopiarDeclarados(List<NominasModel> declarados);
 	
 	
 	/**
@@ -35,7 +65,14 @@ public interface IDeclaradosService {
 	 * @param rectificativa
 	 * @return
 	 */
-	List<DeclaradosModel> srvBuscarDeclarados(EmpresasModel empresa, String mes, String anio, Integer rectificativa);
+	List<NominasModel> srvBuscarDeclarados(EmpresasModel empresa, String mes, String anio, Integer rectificativa);
 	
+	/**
+	 * @author CodeBluePeru
+	 * @apiNote GUARDA EL ARCHIVO DE JUSTIFICANTE REDUCIDA EN EL WEBAPP
+	 * @param file
+	 * @return
+	 */
+	String saveFile(MultipartFile file);
 	
 }
