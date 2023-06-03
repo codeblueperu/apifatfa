@@ -1,7 +1,6 @@
 package com.fatfa.model.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,6 +23,23 @@ public interface IDeclaradosRepository extends JpaRepository<NominasModel, Integ
 	 */
 	List<NominasModel> findByEmpresaAndMesAndAnioAndRectificativa(EmpresasModel empresa, String mes, String anio, Integer rectificativa);
 	
+	/**
+	 * @author SOPORTE
+	 * @param id_empresa
+	 * @param anio
+	 * @param mes
+	 * @return
+	 */
 	@Query("SELECT COUNT(*) FROM NominasModel n WHERE n.empresa.idEmpresa = ?1 AND n.anio = ?2 AND n.mes = ?3")
 	int findContarItemRectificativaEmpresaAnioMes(int id_empresa,String anio,String  mes);
+	
+	/**
+	 * @author SOPORTE
+	 * @param idEmpresa
+	 * @param anio
+	 * @param mes
+	 * @return
+	 */
+	List<NominasModel> findByEmpresaIdEmpresaAndAnioAndMes(int idEmpresa, String anio, String mes);
+	
 }

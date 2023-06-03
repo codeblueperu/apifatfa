@@ -13,7 +13,8 @@ public class BancosModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id_banco ;
+	@Column(name = "id_banco", nullable = false)
+	private int idBanco ;
 	
 	@Column(name = "banco", length = 80, nullable = false)
 	private String banco;
@@ -26,19 +27,19 @@ public class BancosModel {
 		// TODO Auto-generated constructor stub
 	}
 
-	public BancosModel(int id_banco, String banco, boolean estado) {
+	public BancosModel(int idBanco, String banco, boolean estado) {
 		super();
-		this.id_banco = id_banco;
+		this.idBanco = idBanco;
 		this.banco = banco;
 		this.estado = estado;
 	}
 
-	public int getId_banco() {
-		return id_banco;
+	public int getidBanco() {
+		return idBanco;
 	}
 
-	public void setId_banco(int id_banco) {
-		this.id_banco = id_banco;
+	public void setidBanco(int idBanco) {
+		this.idBanco = idBanco;
 	}
 
 	public String getBanco() {
@@ -59,6 +60,6 @@ public class BancosModel {
 
 	@Override
 	public String toString() {
-		return "BancosModel [id_banco=" + id_banco + ", banco=" + banco + ", estado=" + estado + "]";
+		return "BancosModel [idBanco=" + idBanco + ", banco=" + banco + ", estado=" + estado + "]";
 	}
 }

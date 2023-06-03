@@ -2,6 +2,7 @@ package com.fatfa.model.serviceImp;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,11 +31,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import com.fatfa.model.entity.NominasModel;
 import com.fatfa.model.entity.SindicatosModel;
 import com.fatfa.model.entity.ZonasModel;
 import com.fatfa.exceptions.ErrorNotFoundException;
+import com.fatfa.model.controller.StorageController;
 import com.fatfa.model.entity.CategoriasModelo;
 import com.fatfa.model.entity.EmpresasModel;
 import com.fatfa.model.repository.ICategoriasRepository;
@@ -43,15 +46,16 @@ import com.fatfa.model.repository.IEmpresaRepository;
 import com.fatfa.model.repository.ISindicatoRepository;
 import com.fatfa.model.repository.IZonasRepository;
 import com.fatfa.model.service.IDeclaradosService;
+import com.fatfa.utils.Constantes;
 
 @Service
 public class DeclaradosServiceImpl implements IDeclaradosService {
 	private String ruta = "src//main//webapp//";
 	private static final Logger log = LoggerFactory.getLogger(DeclaradosServiceImpl.class);
-	
+
 	@Autowired
 	private IDeclaradosRepository repoDeclarados;
-	
+
 	@Autowired
 	private IEmpresaRepository repoEmpresa;
 
@@ -66,7 +70,6 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-
 
 	@Override
 	public Map<String, Object> srvAgregarDeclarados(NominasModel declarados) {
@@ -137,35 +140,40 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 		}
 		return datos;
 	}
-	
+
 	@Override
 	public Map<String, Object> srvGuardarNominaMasiva(MultipartFile fileExcel, int id_empresa, String anio, String mes,
 			int rectificativa) {
 		Map<String, Object> map = new HashMap<>();
-		//HttpServletRequest request = new HttpServletRequest();
+		// HttpServletRequest request = new HttpServletRequest();
 		File fileExcelMasivo = null;
 		try {
+//			#VALIDAR QUE EL ARCHIVO EXCEL EXISTA
 			if (fileExcel.isEmpty()) {
 				throw new ErrorNotFoundException(
 						"Para continuar con e proceso se solicita un archivo con la extension (.xlsx).");
 			}
 
+//			#PROCESAR EL GUARDADO TEMPORAL DEL ARCHIVO
 			byte[] bytes = fileExcel.getBytes();
 			Path path = Paths.get("src//main//webapp//temp//" + fileExcel.getOriginalFilename());
 			Files.write(path, bytes);
-			
-			fileExcelMasivo = new File("src//main//webapp//temp//" +fileExcel.getOriginalFilename());
+//			#PROCEDEMOS CON LA LECTURA DEL ARCHIVO
+			fileExcelMasivo = new File("src//main//webapp//temp//" + fileExcel.getOriginalFilename());
 			FileInputStream inputStream = new FileInputStream(fileExcelMasivo);
 			Workbook workbook = new XSSFWorkbook(inputStream);
 			Sheet firstSheet = workbook.getSheetAt(0);
 
 			DataFormatter formatter = new DataFormatter();
+//			#LISTA DE DATA A PROCESAR SIN ERRORES
 			List<NominasModel> listNomina = new ArrayList<>();
 
 //			#CONTADOR DE FILAS
 			int contadorRow = 1;
 //			#CONTADOR DE ERRORES
 			int errorCount = 0;
+//			#CREAR UNA LISTA PARA LOS ERRORES
+			List<String> logErrores = new ArrayList<>();
 			SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
 			for (int i = 1; i < firstSheet.getLastRowNum(); i++) {
 				Row row = firstSheet.getRow(i);
@@ -188,23 +196,31 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 							nominaUser.setCuil(cuil_trabajdor);
 						} else {
 							errorCount++;
-							log.error("El valor del campo CUIL del trabajador en la Fila (" + contadorRow
-									+ ") no puede ser vacio y solo debe de tener 11 caracteres. se solicita su correccion");
+							logErrores.add(estructuraLogCargaMasiva(contadorRow, "CUIL",
+									"El valor del campo es requerido y no puede ser vacio y debe de contener como minimo 11 caracteres."));
 						}
 
 //						#NOMBRE DEL TRABAJADOR
-						nominaUser.setNombres(formatter.formatCellValue(row.getCell(3)));
+						String nombreTrabajador = formatter.formatCellValue(row.getCell(3));
+						Pattern paterLetras = Pattern.compile(Constantes.EXPRESION_REGULAR_SOLO_LETRAS);
+						Matcher matcherNombreTrabajador = paterLetras.matcher(nombreTrabajador.replace(" ", ""));
+						if (!nombreTrabajador.isEmpty() && (matcherNombreTrabajador.matches())) {
+							nominaUser.setNombres(nombreTrabajador);
+						} else {
+							logErrores.add(estructuraLogCargaMasiva(contadorRow, "NOMBRES",
+									"El valor del campo es requerido y no puede ser nulo y solo debe de contener letras."));
+						}
 
 //						#FECHA DE INGRESO
-						Pattern paterFecha = Pattern.compile("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$");
+						Pattern paterFecha = Pattern.compile(Constantes.EXPRESION_REGULAR_FORMATO_FECHA_YYYY_MM_DD);
 						Matcher matcherFechaIngreso = paterFecha.matcher(formatter.formatCellValue(row.getCell(16)));
 						if (matcherFechaIngreso.matches()) {
 							nominaUser.setFechaIngreso(formatoFecha.parse(formatter.formatCellValue(row.getCell(16))));
 						} else {
 							errorCount++;
-							log.error("La FECHA INGRESO " + formatter.formatCellValue(row.getCell(16))
-									+ "  en la Fila (" + contadorRow
-									+ ") ==> No coincide con el formato solicitado (yyyy-MM-dd) <===> (2023-01-30).");
+							logErrores.add(estructuraLogCargaMasiva(contadorRow, "FECHA INGRESO",
+									"El valor del campo no coincide con el formato solicitado (yyyy-MM-dd) <===> ("
+											+ formatter.formatCellValue(row.getCell(16)) + ")"));
 						}
 
 //						#CATEGORIA
@@ -214,15 +230,14 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 							nominaUser.setCategoria(new CategoriasModelo(validcategoria.get().getIdCategoria()));
 						} else {
 							errorCount++;
-							log.error("El valor del campo CATEGORIA  " + formatter.formatCellValue(row.getCell(4))
-									+ "  en la Fila (" + contadorRow
-									+ ") ==> No coincide con ninguna categoria registrada, es posible que la CATEGORIA este mal digitado  y/ó vacio.");
+							logErrores.add(estructuraLogCargaMasiva(contadorRow, "CATEGORIA",
+									"El valor del campo no coincide con ninguna categoria registrada, es posible que la CATEGORIA este mal digitado  y/ó vacio"));
 						}
 
 //						#SUELDO
-						Pattern paterNumericDecimales = Pattern.compile("^[0-9]+([.,][0-9]+)?$");
-						System.err.println(formatter.formatCellValue(row.getCell(5)));
-						Matcher mat = paterNumericDecimales.matcher(formatter.formatCellValue(row.getCell(5)));
+						Pattern paterNumericDecimales = Pattern.compile(Constantes.EXPRESION_REGULAR_NUMEROS_DECIMALES);
+						String sueldoTrabajador = formatter.formatCellValue(row.getCell(5));
+						Matcher mat = paterNumericDecimales.matcher(sueldoTrabajador);
 //						#VALIDAR SI CUMPLE LA EXPRECION REGULAR
 						if (mat.matches()) {
 							XSSFCell sueldoCell = (XSSFCell) row.getCell(5);
@@ -231,8 +246,9 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 							nominaUser.setSueldo(sueldo_trabajador.doubleValue());
 						} else {
 							errorCount++;
-							log.error("El valor del campo SUELDO no cumple con el formato adecuado en la fila (" + contadorRow
-									+ ") se solicita su correccion. Ejemplo formato (00000.00), sin simbolos y con 2 decimales.");
+							logErrores.add(estructuraLogCargaMasiva(contadorRow, "SUELDO",
+									"El valor del campo no cumple con el formato adecuado (00000.00) <=====> ("
+											+ sueldoTrabajador + ")"));
 						}
 
 //						#ESTADO BAJA
@@ -250,16 +266,16 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 										nominaUser.setFechaEgreso(formatoFecha.parse(fechaEgreso));
 									} else {
 										errorCount++;
-										log.error("El valor del campo FECHA EGRESO " + fechaEgreso + "  en la Fila (" + contadorRow
-												+ ") ==> No coincide con el formato solicitado (yyyy-MM-dd) <===> (2023-01-30).");
+										logErrores.add(estructuraLogCargaMasiva(contadorRow, "FECHA EGRESO",
+												"El valor del campo no coincide con el formato solicitado (yyyy-MM-dd) <===> ("
+														+ fechaEgreso + ")"));
 									}
 								} else {
 									errorCount++;
-									log.error(
-											"El valor del campo FECHA EGRESO es requerido cuando un empleado tiene el ESTADO DE BAJA (S), se solicita su correccion. en la Fila ("
-													+ contadorRow + ")");
+									logErrores.add(estructuraLogCargaMasiva(contadorRow, "FECHA EGRESO",
+											"El valor del campo es requerido cuando un empleado tiene el ESTADO DE BAJA EN (S) y no puede ser vacio"));
 								}
-								
+
 //								#VALIDAMOS LA FECHA BAJA
 								String fechaBaja = formatter.formatCellValue(row.getCell(18));
 								Matcher matcherFechaBaja = paterFecha.matcher(fechaBaja);
@@ -269,27 +285,28 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 										nominaUser.setFechaBaja(formatoFecha.parse(fechaBaja));
 									} else {
 										errorCount++;
-										log.error("El valor del campo FECHA BAJA " + fechaBaja + "  en la Fila (" + contadorRow
-												+ ") ==> No coincide con el formato solicitado (yyyy-MM-dd) <===> (2023-01-30).");
+										logErrores.add(estructuraLogCargaMasiva(contadorRow, "FECHA BAJA",
+												"El valor del campo no coincide con el formato solicitado (yyyy-MM-dd) <===> ("
+														+ fechaBaja + ")"));
 									}
 								} else {
 									errorCount++;
-									log.error(
-											"El valor del campo FECHA BAJA es requerido cuando un empleado tiene el ESTADO DE BAJA (S), se solicita su correccion. en la Fila ("
-													+ contadorRow + ")");
+									logErrores.add(estructuraLogCargaMasiva(contadorRow, "FECHA BAJA",
+											"El valor del campo es requerido cuando un empleado tiene el ESTADO DE BAJA EN (S) y no puede ser vacio"));
 								}
-								
+
 							} else if (estadoBaja.compareTo("N") == 0) {
 								nominaUser.setEstadoBaja(false);
 							} else {
 								errorCount++;
-								log.error("El valor del campo ESTADO BAJA  en la Fila (" + contadorRow
-										+ ") ==> SOLO DEBE DE TENER UN CARACTER (S) ó (N)");
+								logErrores.add(estructuraLogCargaMasiva(contadorRow, "ESTADO BAJA",
+										"El valor del campo solo puede contener 1 caracter (S) ó (N) y no  <====> ("
+												+ estadoBaja + ")"));
 							}
 						} else {
 							errorCount++;
-							log.error("El valor del campo ESTADO BAJA  en la Fila (" + contadorRow
-									+ ") ==> NO PUEDE TENER UN CARACTER DIFERENTE A (S) ó (N)");
+							logErrores.add(estructuraLogCargaMasiva(contadorRow, "ESTADO BAJA",
+									"El valor del campo es requerido y solo puede contener 1 caracter (S) ó (N)."));
 						}
 
 //						#FECHA PROCESA
@@ -300,8 +317,8 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 							nominaUser.setJornadaReducida(formatter.formatCellValue(row.getCell(7)).toUpperCase());
 						} else {
 							errorCount++;
-							log.error("EL valor del campo JORNADA REDUCIDA en la Fila (" + contadorRow
-									+ ") ==> SOLO DEBE DE TENER 2 CARACTERES (SI) ó (NO)");
+							logErrores.add(estructuraLogCargaMasiva(contadorRow, "JORNADA REDUCIDA",
+									"El valor del campo es requerido y solo puede contener 2 caracteres (SI) ó (NO)."));
 						}
 
 //						#ANIO
@@ -312,20 +329,21 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 
 //						#RECTIFICATIVA
 						int valor_rectificativa = Integer.parseInt(formatter.formatCellValue(row.getCell(11)));
-						int rectificativa_db = srvObtenerelUltimoRectificativo(validEmpresa.get().getIdEmpresa(), anio, mes);
-						System.err.println();
+						int rectificativa_db = srvObtenerelUltimoRectificativo(validEmpresa.get().getIdEmpresa(), anio,
+								mes);
+
 						if (rectificativa_db == valor_rectificativa) {
 							nominaUser.setRectificativa(valor_rectificativa);
 						} else {
 							errorCount++;
-							log.error("El valor del campo RECTIFICATIVA en la Fila (" + contadorRow
-									+ ") ==> no corresponde al numero consecutivo: DICE ("
-									+ valor_rectificativa + ") <=====> DEBE DECIR (" + rectificativa_db + ")");
+							logErrores.add(estructuraLogCargaMasiva(contadorRow, "RECTIFICATIVA",
+									"El valor del campo no corresponde al numero consecutivo: DICE ("
+											+ valor_rectificativa + ") <====>  DEBE DECIR (" + rectificativa_db + ")"));
 						}
 
 //						#MONTO SAC
-						Matcher matcherMontoSac = paterNumericDecimales
-								.matcher(formatter.formatCellValue(row.getCell(14)));
+						String monto_sac = formatter.formatCellValue(row.getCell(14));
+						Matcher matcherMontoSac = paterNumericDecimales.matcher(monto_sac);
 //						#VALIDAR SI CUMPLE LA EXPRECION REGULAR
 						if (matcherMontoSac.matches()) {
 							XSSFCell montoSacCell = (XSSFCell) row.getCell(14);
@@ -334,9 +352,9 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 							nominaUser.setMontoSac(monto_sac_decimal.doubleValue());
 						} else {
 							errorCount++;
-							log.error("EL valor del MONTO SAC " + formatter.formatCellValue(row.getCell(14))
-									+ " no cumple con el formato adecuado en la fila (" + contadorRow
-									+ ") se solicita su correccion. Ejemplo del formato (000000.00), sin simbolos y con 2 decimales.");
+							logErrores.add(estructuraLogCargaMasiva(contadorRow, "MONTO SAC", "El valor del campo ("
+									+ monto_sac
+									+ ") no cumple con el formato adecuado. Ejemplo del formato (000000.00), sin simbolos y con 2 decimales."));
 						}
 
 //						#LICENCIA
@@ -348,13 +366,13 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 								nominaUser.setLicencia(false);
 							} else {
 								errorCount++;
-								log.error("El valor del campo LICENCIA en la fila (" + contadorRow
-										+ ") solo acepta un solo valor (S) ó (N)");
+								logErrores.add(estructuraLogCargaMasiva(contadorRow, "LICENCIAL",
+										"El valor del campo solo puede contener 1 valor (S) ó (N)"));
 							}
 						} else {
 							errorCount++;
-							log.error("El valor del campo LICENCIA es requerido en la fila (" + contadorRow
-									+ ") se solicita su correccion. Teniendo en cuenta que solo acepta un solo valor (S) ó (N)");
+							logErrores.add(estructuraLogCargaMasiva(errorCount, "LICENCIAL",
+									"El valor del campo es requerido y solo puede contener 1 valor (S) ó (N)"));
 						}
 
 //						#AFILIADO OBRA SOCIAL
@@ -366,30 +384,38 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 								nominaUser.setAfiliadoObraSocial(false);
 							} else {
 								errorCount++;
-								log.error("El valor del campo AFILIADO OBRA SOCIAL en la fila (" + contadorRow
-										+ ") solo acepta 2 valores (SI) ó (NO)");
+								logErrores.add(estructuraLogCargaMasiva(contadorRow, "AFILIADO OBRA SOCIAL",
+										"El valor del campo solo puede contener 2 valores (SI) ó (NO)"));
 							}
 						} else {
 							errorCount++;
-							log.error("El valor del campo AFILIADO OBRA SOCIAL es requerido en la fila (" + contadorRow
-									+ ") se solicita su correccion. Teniendo en cuenta que solo acepta 2 valores (SI) ó (NO)");
+							logErrores.add(estructuraLogCargaMasiva(contadorRow, "AFILIADO OBRA SOCIAL",
+									"El valor del campo es requerido y no puede estar vacio. Solo puede contener 2 valores (SI) ó (NO)"));
 						}
 
 //						#OBSERVACIONES
 						String observaciones = formatter.formatCellValue(row.getCell(20));
-						nominaUser.setObservaciones(observaciones);
+						Matcher matcherObservaciones = paterLetras.matcher(observaciones.replace(" ", ""));
+						if (!observaciones.isEmpty()) {
+							if (matcherObservaciones.matches()) {
+								nominaUser.setObservaciones(observaciones);
+							} else {
+								logErrores.add(estructuraLogCargaMasiva(contadorRow, "OBSERVACIONES",
+										"El valor del campo solo debe de contener letras."));
+							}
+						}
 
 //						#CANTIDAD DIAS TRABAJADOS
 						String cant_dias_trabjados = formatter.formatCellValue(row.getCell(13));
-						Pattern paterNumeric = Pattern.compile("[0-9]+");
+						Pattern paterNumeric = Pattern.compile(Constantes.EXPRESION_REGULAR_SOLO_NUMEROS);
 						Matcher matcherCantidad_dias_trabajados = paterNumeric.matcher(cant_dias_trabjados);
 
 						if (matcherCantidad_dias_trabajados.matches()) {
 							nominaUser.setCantidadDiasTrabajados(Integer.parseInt(cant_dias_trabjados));
 						} else {
 							errorCount++;
-							log.error(
-									"EL valor del campo CANTIDAD DIAS TRABAJADOS es requerida y no puede estar vacio y solo puede contener valores numericos.");
+							logErrores.add(estructuraLogCargaMasiva(contadorRow, "CANTIDAD DIAS TRABAJADOS",
+									"El valor del campo es requerido y no puede estar vacio y solo puede contener valores numericos."));
 						}
 
 //						#SINDICATO
@@ -400,8 +426,8 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 							nominaUser.setSindicato(validSindicato.get());
 						} else {
 							errorCount++;
-							log.error("El valor del campo SINDICATO " + sindicato_nombre + " en la Fila (" + contadorRow
-									+ ") ==> No coincide con ningun SINDICATO registrado, es posible que el Nombre este mal digitado ó vacio.");
+							logErrores.add(estructuraLogCargaMasiva(contadorRow, "SINDICATO",
+									"El valor del campo no coincide con ningun SINDICATO registrado, es posible que este mal digitado ó vacio."));
 						}
 
 //						#ZONA
@@ -411,17 +437,16 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 							nominaUser.setZona(validZona.get());
 						} else {
 							errorCount++;
-							log.error("El valor del campo ZONA " + zona
-									+ ", no se encuentra registrada o es posible que el campo esta vacio ó mal escrito, se solicita su correccion en la fila ("
-									+ contadorRow + ")");
+							logErrores.add(estructuraLogCargaMasiva(contadorRow, "ZONA",
+									"El valor del campo no se encuentra registrado ó es posible que el campo esta vacio ó mal escrito, se solicita su correccion"));
 						}
 
 //						#LLENAR TODO LOS DATOS AL ARRAY PARA EL GUARDADO AL FINAL
 						listNomina.add(nominaUser);
 					} else {
 						errorCount++;
-						log.error("El valor del campo CUIT de la empresa en la Fila (" + contadorRow
-								+ " ) ==> No coincide con ninguna empresa registrada, es posible que el CUIT este mal digitado ó vacio.");
+						logErrores.add(estructuraLogCargaMasiva(contadorRow, "CUIT",
+								"El valor del campo no coincide con ninguna empresa registrada, es posible que el CUIT este mal digitado ó vacio."));
 					}
 
 				}
@@ -435,18 +460,29 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 				map.put("message", "La data fue procesada y registrada con éxito");
 				map.put("errores", errorCount);
 			} else {
+//				#CREAR ARCHIVO LOG 
+				String nameLog = "LOG" + id_empresa + anio + mes + rectificativa + ".txt";
+				FileWriter logMasivo = new FileWriter("src//main//webapp//temp//" + nameLog);
+				for (String error : logErrores) {
+					logMasivo.write(error);
+				}
+				logMasivo.close();
+				String url = MvcUriComponentsBuilder.fromMethodName(StorageController.class, "getFile", nameLog).build()
+						.toString();
 				map.put("message", "El archivo contiene muchos errores se solicita su correccion");
 				map.put("errores", errorCount);
+				map.put("log", url);
+
 			}
-			System.err.println(listNomina.size());
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("ERROR GUARDAR MASIVO NOMINA => " + e.toString());
-		}finally {
-			if(fileExcelMasivo.exists()) {
+		} finally {
+			if (fileExcelMasivo.exists()) {
 				fileExcelMasivo.delete();
 			}
-			
+
 		}
 		return map;
 	}
@@ -470,6 +506,16 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 		}
 
 		return returValor;
+	}
+
+	public String estructuraLogCargaMasiva(int numero_fila, String name_columna, String message_log) {
+		String estructuraLogFila = "";
+		estructuraLogFila += "============== ERROR EN LA FILA (" + numero_fila
+				+ ")=======================================\n";
+		estructuraLogFila += "==> NOMBRE DEL CAMPO: " + name_columna + "\n";
+		estructuraLogFila += "==> OBSERVACION: " + message_log + "\n";
+		estructuraLogFila += "=============================================================================================\n";
+		return estructuraLogFila;
 	}
 
 }

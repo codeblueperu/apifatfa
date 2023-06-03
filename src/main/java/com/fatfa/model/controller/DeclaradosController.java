@@ -26,6 +26,8 @@ public class DeclaradosController {
 	@Autowired
 	private IDeclaradosService srvDelcrados;
 	
+	
+	
 	@PostMapping(path="/saveDeclarados")
 	public ResponseEntity<?> onAgregarDeclarados(@RequestPart(name="datos") NominasModel datos, @RequestParam(name ="file",required = false ) MultipartFile file) {
 		
@@ -99,4 +101,6 @@ public class DeclaradosController {
 			@RequestParam(name = "mes", required = true) String mes) {
 		return ResponseEntity.ok(srvDelcrados.srvGuardarNominaMasiva(file, 0, anio, mes, 0));
 	}
+	
+	 
 }
