@@ -32,10 +32,7 @@ public class BoletasController {
 	
 	@PostMapping("/guardarDataBoleta")
 	public void srvGuardarDatosBoleta(@RequestBody BoletaModel dataBoleta, HttpServletRequest request, HttpServletResponse response) {
-		BoletaModel boletaDB	=srvBoleta.onGenerarTalonBoletaPago(dataBoleta);
-		
-		srvBoleta.onGenerarBoleta(boletaDB.getIdBoleta(), "boleta_banco_nacion.jrxml", request, response);
-		
+		srvBoleta.onGenerarTalonBoletaPago(dataBoleta,  request,  response);			
 		//return ResponseEntity.ok().body("EXCELENTE");
 	}
 }

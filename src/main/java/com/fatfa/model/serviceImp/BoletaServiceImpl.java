@@ -11,23 +11,19 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import com.fatfa.exceptions.ErrorConflictException;
 import com.fatfa.model.entity.BoletaModel;
 import com.fatfa.model.entity.DetalleBoletaConceptoModel;
-import com.fatfa.model.entity.EmpresasModel;
 import com.fatfa.model.entity.NominasModel;
 import com.fatfa.model.repository.IBoletaRepository;
 import com.fatfa.model.repository.IDeclaradosRepository;
-import com.fatfa.model.repository.IEmpresaRepository;
+import com.fatfa.model.service.IBancosService;
 import com.fatfa.model.service.IBoletaService;
-import com.fatfa.utils.Constantes;
 
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
@@ -45,7 +41,7 @@ public class BoletaServiceImpl implements IBoletaService {
 	private IBoletaRepository repoBoleta;
 
 	@Autowired
-	private IEmpresaRepository repoEmpresa;
+	private IBancosService srvBancos;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -117,70 +113,35 @@ public class BoletaServiceImpl implements IBoletaService {
 	}
 
 	@Override
-	public BoletaModel onGenerarTalonBoletaPago(BoletaModel dataBoleta) {
+	public void onGenerarTalonBoletaPago(BoletaModel dataBoleta, HttpServletRequest request, HttpServletResponse response) {
 		BoletaModel boletaDB = new BoletaModel();
+		String nameFile = "";
 		try {
 //			# GUARDAR DATOS DE LA BOLETA
 			boletaDB = repoBoleta.save(dataBoleta);
 //			#GENERAR CODIGO DE BARRA
-			this.onGenerarCodigoBarraSegunTipoBanco(boletaDB.getIdBoleta());
+			
+//			BANCO DE LA NACION
+			if(dataBoleta.getBanco().getIdBanco().trim().compareTo("4977") == 0) {
+				srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
+				nameFile = "boleta_banco_nacion.jrxml";
+			}
+//			PAGO FACIL
+			else if(dataBoleta.getBanco().getIdBanco().trim().compareTo("1037") == 0){
+				srvBancos.onGeneraCodigoBarraPagoFacil(boletaDB.getIdBoleta());
+				nameFile = "boleta_pago_facil.jrxml";
+			}else {
+				srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
+				nameFile = "boleta_banco_nacion.jrxml";
+			}
+//			GENERAR BOLETA DE PAGO SEGUN EL TIPO DE BANCO
+			onGenerarBoleta(boletaDB.getIdBoleta(), nameFile, request, response);
 
 		} catch (Exception e) {
 			log.error("ERROR GENERAR TALON BOLETA SEGUN TIPO BANCO => " + e.toString());
 			throw e;
 		}
-		return boletaDB;
-	}
-
-	@Override
-	public String onGenerarCodigoBarraSegunTipoBanco(int idBoleta) {
-		String codigoBarra = "";
-		try {
-			BoletaModel boleta = repoBoleta.findById(idBoleta).orElseThrow(
-					() -> new ErrorConflictException("Error al intentar buscar la boleta mediante su identificador."));
-			EmpresasModel empresa = repoEmpresa.findById(boleta.getEmpresa().getIdEmpresa()).orElseThrow(
-					() -> new ErrorConflictException("Error al intentar buscar empresa mediante su identificador."));
-
-//			# CODIGO ASIGNADO POR EL BANCO 4 DIGITOS
-			codigoBarra += boleta.getBanco().getIdBanco();
-//			# IMPORTE TOTAL PAGAR 8 DIGITOS	<===> AUTOCOMLETAR CON 0 SI ES NECESARIO
-			String importeTotal = boleta.getImporteTotal().toString().replace(",", "").replace(".", "");
-			codigoBarra += StringUtils.leftPad(importeTotal, 8, "0");
-//			# ANIO PERIODO 2 DIGITOS 
-			codigoBarra += boleta.getAnio().substring(2, 4);
-//			# 163 ?
-			codigoBarra += 163;
-//			#CUIT DE LA EMPRESA 11 DIGITOS
-			codigoBarra += empresa.getCuit();
-//			# MES PERIODO 2 DIGITOS
-			codigoBarra += boleta.getMes();
-//			# ULTIMO DIGITO ANIO PERIODO 1 DIGITO
-			codigoBarra += boleta.getAnio().substring(3, 4);
-//			# VALOR DEFAULT 0
-			codigoBarra += "0";
-//			# 0085500190 ????
-			codigoBarra += "008550019";
-
-			// SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-			// codigoBarra += formatter.format(boleta.getFechaProbablePago());
-
-//			# DIGITO VERIFICADOR 1 DIGITO
-			codigoBarra += Constantes.generarDigitoVerificador(codigoBarra);
-//			#UPDATE CODIGO BARRA BOLETA
-			boleta.setCodigoBarras(codigoBarra);
-			repoBoleta.save(boleta);
-
-		} catch (Exception e) {
-			log.error("ERROR GENERAR CODIGO BARRA SEGUN TIPO BANCO => " + e.toString());
-			throw e;
-		}
-		return codigoBarra;
-	}
-
-	@Override
-	public BoletaModel prueba() {
-		// TODO Auto-generated method stub
-		return repoBoleta.findAll().get(0);
+		//return boletaDB;
 	}
 
 	@Override
@@ -189,7 +150,7 @@ public class BoletaServiceImpl implements IBoletaService {
 		Connection connection = null;
 
 		try {
-			String rutaFile = request.getSession().getServletContext().getRealPath("/rpt/boletas/" + nameFile);// "_FICHA_CONFIDENCIALIDAD_.jrxml";
+			String rutaFile = request.getSession().getServletContext().getRealPath("/rpt/boletas/" + nameFile);
 			JasperReport jasperReport = JasperCompileManager.compileReport(rutaFile);
 			Map<String, Object> parametros = new HashMap<>();
 

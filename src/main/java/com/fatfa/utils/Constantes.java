@@ -1,5 +1,9 @@
 package com.fatfa.utils;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+
 public class Constantes {
 
 	public static final String EXPRESION_REGULAR_SOLO_LETRAS = "[a-záÁéÉìÌíÍóÓúÚñÑA-Z()¿?,.]*";
@@ -7,6 +11,11 @@ public class Constantes {
 	public static final String EXPRESION_REGULAR_NUMEROS_DECIMALES = "^[0-9]+([.,][0-9]+)?$";
 	public static final String EXPRESION_REGULAR_FORMATO_FECHA_YYYY_MM_DD = "^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$";
 	public static final String EXPRESION_REGULAR_FORMATO_EMAIL = "^[\\w-]+(\\.[\\w-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	private static Date date = new Date();
+	private static LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	public static int anioActual = localDate.getYear();
+	public static int mesActual = localDate.getMonthValue();
+	public static int diaActual = localDate.getDayOfMonth();
 
 	public static int generarDigitoVerificador(String cadena) {
 		int sumatorio = 0;

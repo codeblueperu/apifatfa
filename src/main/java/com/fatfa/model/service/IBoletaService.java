@@ -33,15 +33,8 @@ public interface IBoletaService {
 	 * @apiNote GUARDAR DATOS BOLETA PAGO
 	 * @param dataBoleta
 	 */
-	BoletaModel onGenerarTalonBoletaPago(BoletaModel dataBoleta);
+	void onGenerarTalonBoletaPago(BoletaModel dataBoleta, HttpServletRequest request, HttpServletResponse response);
 
-	/**
-	 * @author CodeBluePeru
-	 * @apiNote GENERAR CODIGO DE BARRA SEGUN EL TIPO DEL BANCO
-	 * @param idBoleta
-	 * @return
-	 */
-	String onGenerarCodigoBarraSegunTipoBanco(int idBoleta);
 
 	/**
 	 * @author SOPORTE
@@ -52,6 +45,5 @@ public interface IBoletaService {
 	 */
 	void onGenerarBoleta(int idBoleta,String nameFile, HttpServletRequest request, HttpServletResponse response);
 
-	BoletaModel prueba();
 
 }
