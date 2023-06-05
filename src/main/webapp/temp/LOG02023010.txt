@@ -1,8 +1,8 @@
 ============== ERROR EN LA FILA (2)=======================================
-==> NOMBRE DEL CAMPO: RECTIFICATIVA
-==> OBSERVACION: El valor del campo no corresponde al numero consecutivo: DICE (1) <====>  DEBE DECIR (2)
+==> NOMBRE DEL CAMPO: CUIT
+==> OBSERVACION: El valor del campo no coincide con ninguna empresa registrada, es posible que el CUIT este mal digitado ó vacio.
 =============================================================================================
 ============== ERROR EN LA FILA (3)=======================================
-==> NOMBRE DEL CAMPO: RECTIFICATIVA
-==> OBSERVACION: El valor del campo no corresponde al numero consecutivo: DICE (1) <====>  DEBE DECIR (2)
+==> NOMBRE DEL CAMPO: CUIT
+==> OBSERVACION: El valor del campo no coincide con ninguna empresa registrada, es posible que el CUIT este mal digitado ó vacio.
 =============================================================================================

@@ -51,7 +51,7 @@ public class NominasModel {
 	private Date fechaProcesa;
 
 	@Column(name = "jornada_reducida", nullable = true, columnDefinition = "BIT")
-	private String jornadaReducida;
+	private boolean jornadaReducida;
 	
 	@Column(name = "mes", length = 2, nullable = true, columnDefinition = "CHAR(2)")
 	private String mes;
@@ -292,14 +292,14 @@ public class NominasModel {
 		this.empresa = empresa;
 	}
 
-	public String getJornadaReducida() {
+	public boolean getJornadaReducida() {
 		return jornadaReducida;
 	}
 
-	public void setJornadaReducida(String jornadaReducida) {
+	public void setJornadaReducida(boolean jornadaReducida) {
 		this.jornadaReducida = jornadaReducida;
 	}
-
+	
 	
 	
 }

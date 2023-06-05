@@ -379,7 +379,7 @@
 				<textFieldExpression><![CDATA[$F{importe_total}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="200" y="277" width="235" height="15" uuid="eb841c79-803e-4700-b1e3-e1cd35990f9c"/>
+				<reportElement x="198" y="277" width="235" height="15" uuid="eb841c79-803e-4700-b1e3-e1cd35990f9c"/>
 				<textElement>
 					<font fontName="Century Gothic" size="8" isBold="true"/>
 				</textElement>

@@ -314,7 +314,12 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 
 //						#JORNADA REDUCIDA
 						if (formatter.formatCellValue(row.getCell(7)).length() == 2) {
-							nominaUser.setJornadaReducida(formatter.formatCellValue(row.getCell(7)).toUpperCase());
+							if (formatter.formatCellValue(row.getCell(7)).toUpperCase().compareTo("SI") == 0) {
+								nominaUser.setJornadaReducida(true);
+							} else {
+								nominaUser.setJornadaReducida(false);
+							}
+
 						} else {
 							errorCount++;
 							logErrores.add(estructuraLogCargaMasiva(contadorRow, "JORNADA REDUCIDA",

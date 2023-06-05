@@ -1,9 +1,12 @@
 package com.fatfa.model.serviceImp;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +34,7 @@ public class BoletaServiceImpl implements IBoletaService {
 
 	@Autowired
 	private IBoletaRepository repoBoleta;
-	
+
 	@Autowired
 	private IEmpresaRepository repoEmpresa;
 
@@ -39,7 +42,8 @@ public class BoletaServiceImpl implements IBoletaService {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public DetalleBoletaConceptoModel onCalcularMontoBoleta(int idEmpresa, String anio, String mes, int totalDiasInteres) {
+	public DetalleBoletaConceptoModel onCalcularMontoBoleta(int idEmpresa, String anio, String mes,
+			int totalDiasInteres) {
 		DetalleBoletaConceptoModel data = new DetalleBoletaConceptoModel();
 //		# DEL SUELDO DEL TRABAJADOR 1%
 		double MONTO_ART46 = 0;
@@ -86,7 +90,7 @@ public class BoletaServiceImpl implements IBoletaService {
 			data.setAporteArt48(new BigDecimal(MONTO_ART48).setScale(2, BigDecimal.ROUND_HALF_DOWN).doubleValue());
 			data.setIntereses(new BigDecimal(MONTO_INTERES).setScale(2, BigDecimal.ROUND_HALF_DOWN).doubleValue());
 			data.setTotalApagar(new BigDecimal(MONTO_BOLETA).setScale(2, BigDecimal.ROUND_HALF_DOWN).doubleValue());
-			
+
 		} catch (Exception e) {
 			log.error("ERROR CALCULAR BOLETA => " + e.toString());
 			throw e;
@@ -110,7 +114,7 @@ public class BoletaServiceImpl implements IBoletaService {
 			BoletaModel newData = repoBoleta.save(dataBoleta);
 //			#GENERAR CODIGO DE BARRA
 			this.onGenerarCodigoBarraSegunTipoBanco(newData.getIdBoleta());
-			
+
 		} catch (Exception e) {
 			log.error("ERROR GENERAR TALON BOLETA SEGUN TIPO BANCO => " + e.toString());
 			throw e;
@@ -122,13 +126,16 @@ public class BoletaServiceImpl implements IBoletaService {
 	public String onGenerarCodigoBarraSegunTipoBanco(int idBoleta) {
 		String codigoBarra = "";
 		try {
-			BoletaModel boleta = repoBoleta.findById(idBoleta).orElseThrow(() -> new ErrorConflictException("Error al intentar buscar la boleta mediante su identificador."));
-			EmpresasModel empresa = repoEmpresa.findById(boleta.getEmpresa().getIdEmpresa()).orElseThrow(() -> new ErrorConflictException("Error al intentar buscar empresa mediante su identificador."));
-			
+			BoletaModel boleta = repoBoleta.findById(idBoleta).orElseThrow(
+					() -> new ErrorConflictException("Error al intentar buscar la boleta mediante su identificador."));
+			EmpresasModel empresa = repoEmpresa.findById(boleta.getEmpresa().getIdEmpresa()).orElseThrow(
+					() -> new ErrorConflictException("Error al intentar buscar empresa mediante su identificador."));
+
 //			# CODIGO ASIGNADO POR EL BANCO 4 DIGITOS
-			codigoBarra +=  boleta.getBanco().getIdBanco();
+			codigoBarra += boleta.getBanco().getIdBanco();
 //			# IMPORTE TOTAL PAGAR 8 DIGITOS	<===> AUTOCOMLETAR CON 0 SI ES NECESARIO
-			codigoBarra += boleta.getImporteTotal().toString().replace(",", "").replace(".", "");
+			String importeTotal = boleta.getImporteTotal().toString().replace(",", "").replace(".", "");
+			codigoBarra += StringUtils.leftPad(importeTotal, 8, "0");
 //			# ANIO PERIODO 2 DIGITOS 
 			codigoBarra += boleta.getAnio().substring(2, 4);
 //			# 163 ?
@@ -140,19 +147,19 @@ public class BoletaServiceImpl implements IBoletaService {
 //			# ULTIMO DIGITO ANIO PERIODO 1 DIGITO
 			codigoBarra += boleta.getAnio().substring(3, 4);
 //			# VALOR DEFAULT 0
-			codigoBarra += "0";			
+			codigoBarra += "0";
 //			# 0085500190 ????
-			codigoBarra += "008550019";	
-			
-			//SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-			//codigoBarra += formatter.format(boleta.getFechaProbablePago());
-			
+			codigoBarra += "008550019";
+
+			// SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+			// codigoBarra += formatter.format(boleta.getFechaProbablePago());
+
 //			# DIGITO VERIFICADOR 1 DIGITO
-			codigoBarra += Constantes.generarDigitoVerificador(codigoBarra);	
+			codigoBarra += Constantes.generarDigitoVerificador(codigoBarra);
 //			#UPDATE CODIGO BARRA BOLETA
 			boleta.setCodigoBarras(codigoBarra);
 			repoBoleta.save(boleta);
-			
+
 		} catch (Exception e) {
 			log.error("ERROR GENERAR CODIGO BARRA SEGUN TIPO BANCO => " + e.toString());
 			throw e;
@@ -165,8 +172,11 @@ public class BoletaServiceImpl implements IBoletaService {
 		// TODO Auto-generated method stub
 		return repoBoleta.findAll().get(0);
 	}
-	
-	
 
+	@Override
+	public void onGenerarBoleta(int idBoleta, HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

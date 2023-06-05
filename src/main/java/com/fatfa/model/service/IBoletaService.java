@@ -1,6 +1,9 @@
 package com.fatfa.model.service;
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.fatfa.model.entity.BoletaModel;
 import com.fatfa.model.entity.DetalleBoletaConceptoModel;
 
@@ -40,6 +43,9 @@ public interface IBoletaService {
 	 * @return
 	 */
 	String onGenerarCodigoBarraSegunTipoBanco(int idBoleta);
+	
+	void onGenerarBoleta(int idBoleta, HttpServletRequest request,
+			HttpServletResponse response); 
 	
 	BoletaModel prueba ();
 	
