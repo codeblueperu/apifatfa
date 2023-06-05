@@ -113,27 +113,32 @@ public class BoletaServiceImpl implements IBoletaService {
 	}
 
 	@Override
-	public void onGenerarTalonBoletaPago(BoletaModel dataBoleta, HttpServletRequest request, HttpServletResponse response) {
+	public void onGenerarTalonBoletaPago(BoletaModel dataBoleta, HttpServletRequest request,
+			HttpServletResponse response) {
 		BoletaModel boletaDB = new BoletaModel();
 		String nameFile = "";
 		try {
 //			# GUARDAR DATOS DE LA BOLETA
 			boletaDB = repoBoleta.save(dataBoleta);
 //			#GENERAR CODIGO DE BARRA
-			
+
 //			BANCO DE LA NACION
-			if(dataBoleta.getBanco().getIdBanco().trim().compareTo("4977") == 0) {
+			if (dataBoleta.getBanco().getIdBanco().trim().compareTo("4977") == 0) {
+
 				srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
 				nameFile = "boleta_banco_nacion.jrxml";
 			}
 //			PAGO FACIL
-			else if(dataBoleta.getBanco().getIdBanco().trim().compareTo("1037") == 0){
+			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("1037") == 0) {
+
 				srvBancos.onGeneraCodigoBarraPagoFacil(boletaDB.getIdBoleta());
 				nameFile = "boleta_pago_facil.jrxml";
-			}else {
+			} else {
+				System.err.println(0);
 				srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
 				nameFile = "boleta_banco_nacion.jrxml";
 			}
+
 //			GENERAR BOLETA DE PAGO SEGUN EL TIPO DE BANCO
 			onGenerarBoleta(boletaDB.getIdBoleta(), nameFile, request, response);
 
@@ -141,14 +146,14 @@ public class BoletaServiceImpl implements IBoletaService {
 			log.error("ERROR GENERAR TALON BOLETA SEGUN TIPO BANCO => " + e.toString());
 			throw e;
 		}
-		//return boletaDB;
+		// return boletaDB;
 	}
 
 	@Override
 	public void onGenerarBoleta(int idBoleta, String nameFile, HttpServletRequest request,
 			HttpServletResponse response) {
 		Connection connection = null;
-
+		System.err.println(idBoleta);
 		try {
 			String rutaFile = request.getSession().getServletContext().getRealPath("/rpt/boletas/" + nameFile);
 			JasperReport jasperReport = JasperCompileManager.compileReport(rutaFile);

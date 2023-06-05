@@ -32,6 +32,7 @@ public class BancosServiceImp implements IBancosService {
 
 	@Override
 	public String onGeneraCodigigoBarraBancoNacion(int idBoleta) {
+		
 		String codigoBarra = "";
 		try {
 			BoletaModel boleta = repoBoleta.findById(idBoleta).orElseThrow(
@@ -78,6 +79,7 @@ public class BancosServiceImp implements IBancosService {
 	@Override
 	public String onGeneraCodigoBarraPagoFacil(int idBoleta) {
 		String codigoBarra = "";
+		
 		try {
 			BoletaModel boleta = repoBoleta.findById(idBoleta).orElseThrow(
 					() -> new ErrorConflictException("Error al intentar buscar la boleta mediante su identificador."));
@@ -103,6 +105,10 @@ public class BancosServiceImp implements IBancosService {
 //			# MES PERIODO 2 DIGITOS
 			codigoBarra += boleta.getMes();
 			
+			
+//			#UPDATE CODIGO BARRA BOLETA
+			boleta.setCodigoBarras(codigoBarra);
+			repoBoleta.save(boleta);
 			
 		} catch (Exception e) {
 			log.error("ERROR GENERAR CODIGO BARRA PAGO FACIL => " + e.toString());
