@@ -1,5 +1,8 @@
 package com.fatfa.model.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +31,11 @@ public class BoletasController {
 	}
 	
 	@PostMapping("/guardarDataBoleta")
-	public ResponseEntity<?> srvGuardarDatosBoleta(@RequestBody BoletaModel dataBoleta) {
-		srvBoleta.onGenerarTalonBoletaPago(dataBoleta);
-		return ResponseEntity.ok().body("EXCELENTE");
+	public void srvGuardarDatosBoleta(@RequestBody BoletaModel dataBoleta, HttpServletRequest request, HttpServletResponse response) {
+		BoletaModel boletaDB	=srvBoleta.onGenerarTalonBoletaPago(dataBoleta);
+		
+		srvBoleta.onGenerarBoleta(boletaDB.getIdBoleta(), "boleta_banco_nacion.jrxml", request, response);
+		
+		//return ResponseEntity.ok().body("EXCELENTE");
 	}
 }

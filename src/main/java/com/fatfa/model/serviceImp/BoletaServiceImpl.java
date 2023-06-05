@@ -1,8 +1,13 @@
 package com.fatfa.model.serviceImp;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,6 +28,10 @@ import com.fatfa.model.repository.IDeclaradosRepository;
 import com.fatfa.model.repository.IEmpresaRepository;
 import com.fatfa.model.service.IBoletaService;
 import com.fatfa.utils.Constantes;
+
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JasperRunManager;
 
 @Service
 public class BoletaServiceImpl implements IBoletaService {
@@ -108,18 +117,19 @@ public class BoletaServiceImpl implements IBoletaService {
 	}
 
 	@Override
-	public void onGenerarTalonBoletaPago(BoletaModel dataBoleta) {
+	public BoletaModel onGenerarTalonBoletaPago(BoletaModel dataBoleta) {
+		BoletaModel boletaDB = new BoletaModel();
 		try {
 //			# GUARDAR DATOS DE LA BOLETA
-			BoletaModel newData = repoBoleta.save(dataBoleta);
+			boletaDB = repoBoleta.save(dataBoleta);
 //			#GENERAR CODIGO DE BARRA
-			this.onGenerarCodigoBarraSegunTipoBanco(newData.getIdBoleta());
+			this.onGenerarCodigoBarraSegunTipoBanco(boletaDB.getIdBoleta());
 
 		} catch (Exception e) {
 			log.error("ERROR GENERAR TALON BOLETA SEGUN TIPO BANCO => " + e.toString());
 			throw e;
 		}
-
+		return boletaDB;
 	}
 
 	@Override
@@ -174,9 +184,50 @@ public class BoletaServiceImpl implements IBoletaService {
 	}
 
 	@Override
-	public void onGenerarBoleta(int idBoleta, HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
-		
+	public void onGenerarBoleta(int idBoleta, String nameFile, HttpServletRequest request,
+			HttpServletResponse response) {
+		Connection connection = null;
+
+		try {
+			String rutaFile = request.getSession().getServletContext().getRealPath("/rpt/boletas/" + nameFile);// "_FICHA_CONFIDENCIALIDAD_.jrxml";
+			JasperReport jasperReport = JasperCompileManager.compileReport(rutaFile);
+			Map<String, Object> parametros = new HashMap<>();
+
+			parametros.put("P_COD_BOLETA", idBoleta);
+
+			byte[] reporte = null;
+
+			connection = this.jdbcTemplate.getDataSource().getConnection();
+
+			if (connection != null) {
+				System.out.println("[connection connection] " + connection);
+			}
+
+			reporte = JasperRunManager.runReportToPdf(jasperReport, parametros, connection);
+
+			response.setContentType("application/pdf");
+			response.setHeader("Content-disposition", "inline; filename=BOLETANACONACION.pdf");
+			response.setHeader("Cache-Control", "max-age=30");
+			response.setHeader("Pragma", "No-cache");
+			response.setDateHeader("Expires", 0);
+			response.setContentLength(reporte.length);
+			ServletOutputStream out = response.getOutputStream();
+			out.write(reporte, 0, reporte.length);
+			out.flush();
+			out.close();
+
+		} catch (Exception e) {
+			log.error("ERROR! GENERAR BOLETA RPT " + e.toString());
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					System.out.println("ERROR! EN cerrar conexion");
+				}
+			}
+		}
+
 	}
 
 }

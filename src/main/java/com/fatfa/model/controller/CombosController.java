@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fatfa.model.entity.PartidosModel;
 import com.fatfa.model.entity.ProvinciasModel;
+import com.fatfa.model.repository.IBancosRepository;
 import com.fatfa.model.service.CombosService;
 
 @RestController
@@ -17,6 +18,9 @@ public class CombosController {
 	
 	@Autowired
 	private CombosService srvCombo;
+	
+	@Autowired
+	private IBancosRepository srvBancos;
 	
 	@GetMapping("/listaLocalidad")
 	public ResponseEntity<?> onLocalidadAll(@RequestParam("IdProvincia") ProvinciasModel IdProvincia, @RequestParam("IdPartidos") PartidosModel IdPartidos) {
@@ -62,6 +66,11 @@ public class CombosController {
 	@GetMapping("/ListaSindicato")
 	public ResponseEntity<?> onListaSIndicatoAll() {
 		return ResponseEntity.ok(srvCombo.srvSindicato());
+	}
+	
+	@GetMapping("/listaPagoBancos")
+	public ResponseEntity<?> onListaBancosAll() {
+		return ResponseEntity.ok(srvBancos.findAll());
 	}
 
 }

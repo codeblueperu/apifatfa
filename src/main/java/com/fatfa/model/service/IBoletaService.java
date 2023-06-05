@@ -1,6 +1,5 @@
 package com.fatfa.model.service;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,7 +33,7 @@ public interface IBoletaService {
 	 * @apiNote GUARDAR DATOS BOLETA PAGO
 	 * @param dataBoleta
 	 */
-	void onGenerarTalonBoletaPago(BoletaModel dataBoleta);
+	BoletaModel onGenerarTalonBoletaPago(BoletaModel dataBoleta);
 
 	/**
 	 * @author CodeBluePeru
@@ -43,11 +42,16 @@ public interface IBoletaService {
 	 * @return
 	 */
 	String onGenerarCodigoBarraSegunTipoBanco(int idBoleta);
-	
-	void onGenerarBoleta(int idBoleta, HttpServletRequest request,
-			HttpServletResponse response); 
-	
-	BoletaModel prueba ();
-	
+
+	/**
+	 * @author SOPORTE
+	 * @apiNote EMPRIMIR REPORTE BOLETA SEGUN SEA BANCO
+	 * @param idBoleta
+	 * @param request
+	 * @param response
+	 */
+	void onGenerarBoleta(int idBoleta,String nameFile, HttpServletRequest request, HttpServletResponse response);
+
+	BoletaModel prueba();
 
 }
