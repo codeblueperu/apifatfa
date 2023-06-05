@@ -2,8 +2,6 @@ package com.fatfa.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -12,9 +10,8 @@ import javax.persistence.Table;
 public class BancosModel {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_banco", nullable = false)
-	private int idBanco ;
+	@Column(name = "id_banco", length = 4, nullable = false)
+	private String idBanco ;
 	
 	@Column(name = "banco", length = 80, nullable = false)
 	private String banco;
@@ -27,18 +24,18 @@ public class BancosModel {
 		// TODO Auto-generated constructor stub
 	}
 
-	public BancosModel(int idBanco, String banco, boolean estado) {
+	public BancosModel(String idBanco, String banco, boolean estado) {
 		super();
 		this.idBanco = idBanco;
 		this.banco = banco;
 		this.estado = estado;
 	}
 
-	public int getidBanco() {
+	public String getIdBanco() {
 		return idBanco;
 	}
 
-	public void setidBanco(int idBanco) {
+	public void setIdBanco(String idBanco) {
 		this.idBanco = idBanco;
 	}
 

@@ -2,6 +2,7 @@ package com.fatfa.model.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -69,6 +70,10 @@ public class BoletaModel {
 	@OneToOne
 	@JoinColumn(name = "id_aporte")
 	private AporteSindicalModel aporteSindical;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_detalle_aporte")
+	private DetalleBoletaConceptoModel detalleConcepto;
 
 	public BoletaModel() {
 		super();
@@ -78,7 +83,8 @@ public class BoletaModel {
 	public BoletaModel(int idBoleta, EmpresasModel empresa, @NotBlank(message = "ESTE CAMPO ES REQUERIDO") String mes,
 			@NotBlank(message = "ESTE CAMPO ES REQUERIDO") String anio, BancosModel banco, Date fechaPrimerVencimiento,
 			Date fechaProbablePago, Double subtotal, Double intereces, Double importeTotal, String codigoBarras,
-			EstadoPagoModel estaoPago, String archivo, AporteSindicalModel aporteSindical) {
+			EstadoPagoModel estaoPago, String archivo, AporteSindicalModel aporteSindical,
+			DetalleBoletaConceptoModel detalleConcepto) {
 		super();
 		this.idBoleta = idBoleta;
 		this.empresa = empresa;
@@ -94,6 +100,7 @@ public class BoletaModel {
 		this.estaoPago = estaoPago;
 		this.archivo = archivo;
 		this.aporteSindical = aporteSindical;
+		this.detalleConcepto = detalleConcepto;
 	}
 
 	public int getIdBoleta() {
@@ -208,12 +215,20 @@ public class BoletaModel {
 		this.aporteSindical = aporteSindical;
 	}
 
+	public DetalleBoletaConceptoModel getDetalleConcepto() {
+		return detalleConcepto;
+	}
+
+	public void setDetalleConcepto(DetalleBoletaConceptoModel detalleConcepto) {
+		this.detalleConcepto = detalleConcepto;
+	}
+
 	@Override
 	public String toString() {
 		return "BoletaModel [idBoleta=" + idBoleta + ", empresa=" + empresa + ", mes=" + mes + ", anio=" + anio
 				+ ", banco=" + banco + ", fechaPrimerVencimiento=" + fechaPrimerVencimiento + ", fechaProbablePago="
 				+ fechaProbablePago + ", subtotal=" + subtotal + ", intereces=" + intereces + ", importeTotal="
 				+ importeTotal + ", codigoBarras=" + codigoBarras + ", estaoPago=" + estaoPago + ", archivo=" + archivo
-				+ ", aporteSindical=" + aporteSindical + "]";
+				+ ", aporteSindical=" + aporteSindical + ", detalleConcepto=" + detalleConcepto + "]";
 	}
 }
