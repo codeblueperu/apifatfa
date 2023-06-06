@@ -62,12 +62,23 @@ public class DeclaradosController {
 			map.put("message", "Datos no encontrados");
 		}else {
 			List<NominasModel> newdatos=new ArrayList<>();
-			for (int i = 0; i < datos.size(); i++) {
-				datos.get(i).setAnio(newanio);
-				datos.get(i).setMes(newmes);
-				datos.get(i).setRectificativa(newrectificativa);
-				newdatos.add(datos.get(i));
+//			for (int i = 0; i < datos.size(); i++) {
+//				datos.get(i).setAnio(newanio);
+//				datos.get(i).setMes(newmes);
+//				datos.get(i).setRectificativa(newrectificativa);
+//				
+//				newdatos.add(datos.get(i));
+//			}
+			for (NominasModel nomina : datos) {
+				//NominasModel nominaNueva = new NominasModel();
+				//nomina.setIdNomina(nominaNueva.getIdNomina());
+				
+				nomina.setAnio(newanio);
+				nomina.setMes(newmes);
+				nomina.setRectificativa(newrectificativa);
+				newdatos.add(nomina);
 			}
+			System.err.println(newdatos);
 			newdatos=srvDelcrados.srvCopiarDeclarados(newdatos);
 			map.put("data",newdatos);
 			map.put("message", "Nómina Copiada con éxito");
@@ -100,6 +111,19 @@ public class DeclaradosController {
 			@RequestParam(name = "anio", required = true) String anio,
 			@RequestParam(name = "mes", required = true) String mes) {
 		return ResponseEntity.ok(srvDelcrados.srvGuardarNominaMasiva(file, 0, anio, mes, 0));
+	}
+	
+	/**
+	 * @author SOPORTE
+	 * @param idEmpresa
+	 * @param mes
+	 * @param anio
+	 * @return
+	 */
+	@GetMapping("/buscarRectificativa")
+	public ResponseEntity<?> onBuscarRectificativaEmpresa(@RequestParam("idEmpresa") int idEmpresa,@RequestParam("mes") String mes,@RequestParam("anio") String anio) {
+		
+		return ResponseEntity.ok(srvDelcrados.srvObtenerelUltimoRectificativo(idEmpresa, anio, mes));
 	}
 	
 	 

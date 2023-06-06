@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.fatfa.model.entity.BoletaModel;
 import com.fatfa.model.entity.DetalleBoletaConceptoModel;
+import com.fatfa.model.entity.EstadoPagoModel;
 import com.fatfa.model.entity.NominasModel;
 import com.fatfa.model.repository.IBoletaRepository;
 import com.fatfa.model.repository.IDeclaradosRepository;
@@ -119,6 +120,7 @@ public class BoletaServiceImpl implements IBoletaService {
 		String nameFile = "";
 		try {
 //			# GUARDAR DATOS DE LA BOLETA
+			dataBoleta.setEstaoPago(new EstadoPagoModel(1));
 			boletaDB = repoBoleta.save(dataBoleta);
 //			#GENERAR CODIGO DE BARRA
 

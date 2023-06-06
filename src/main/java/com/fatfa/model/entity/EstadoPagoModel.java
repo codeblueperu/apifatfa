@@ -30,6 +30,11 @@ public class EstadoPagoModel {
 		this.idEstadoPago = idEstadoPago;
 		this.nombre = nombre;
 	}
+	
+	public EstadoPagoModel(int idEstadoPago) {
+		super();
+		this.idEstadoPago = idEstadoPago;
+	}
 
 	public int getIdEstadoPago() {
 		return idEstadoPago;

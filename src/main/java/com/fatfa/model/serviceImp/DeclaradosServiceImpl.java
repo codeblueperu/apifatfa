@@ -17,7 +17,6 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.transaction.Transactional;
 
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -88,7 +87,6 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 	}
 
 	@Override
-	@Transactional
 	public List<NominasModel> srvCopiarDeclarados(List<NominasModel> declarados) {
 		List<NominasModel> datos = new ArrayList<>();
 		try {
