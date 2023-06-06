@@ -47,7 +47,7 @@ public class ResourceServerConfig  extends ResourceServerConfigurerAdapter{
 		CorsConfiguration config = new CorsConfiguration();
 		config.applyPermitDefaultValues();		
 		config.setAllowCredentials(true);
-		config.setAllowedOrigins(Arrays.asList("Access-Control-Allow-Origin","http://localhost:4200")); //http://midomnio.com ||  http://localhost:4200		
+		config.setAllowedOrigins(Arrays.asList("Access-Control-Allow-Origin","http://localhost:8081", "http://192.168.117.71:8081")); //http://midomnio.com ||  http://localhost:4200		
 		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE","PATH")); 
 		config.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));				
 
