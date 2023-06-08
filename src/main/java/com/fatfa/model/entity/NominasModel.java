@@ -103,17 +103,70 @@ public class NominasModel {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public String toString() {
-		return "NominasModel [idNomina=" + idNomina + ", cuil=" + cuil + ", nombres=" + nombres + ", fechaIngreso="
-				+ fechaIngreso + ", fechaEgreso=" + fechaEgreso + ", sueldo=" + sueldo + ", estadoBaja=" + estadoBaja
-				+ ", fechaBaja=" + fechaBaja + ", fechaProcesa=" + fechaProcesa + ", jornadaReducida=" + jornadaReducida
-				+ ", mes=" + mes + ", anio=" + anio + ", rectificativa=" + rectificativa + ", montoSac=" + montoSac
-				+ ", licencia=" + licencia + ", afiliadoObraSocial=" + afiliadoObraSocial + ", observaciones="
-				+ observaciones + ", cantidadDiasTrabajados=" + cantidadDiasTrabajados + ", nombreArchivo="
-				+ nombreArchivo + ", categoria=" + categoria + ", sindicato=" + sindicato + ", zona=" + zona
-				+ ", empresa=" + empresa + "]";
+	
+
+	public NominasModel(int idNomina, String cuil, String nombres, Date fechaIngreso, Date fechaEgreso, double sueldo,
+			boolean estadoBaja, Date fechaBaja, Date fechaProcesa, boolean jornadaReducida, String mes, String anio,
+			int rectificativa, double montoSac, boolean licencia, boolean afiliadoObraSocial, String observaciones,
+			int cantidadDiasTrabajados, String nombreArchivo, CategoriasModelo categoria, SindicatosModel sindicato,
+			ZonasModel zona, EmpresasModel empresa) {
+		super();
+		this.idNomina = idNomina;
+		this.cuil = cuil;
+		this.nombres = nombres;
+		this.fechaIngreso = fechaIngreso;
+		this.fechaEgreso = fechaEgreso;
+		this.sueldo = sueldo;
+		this.estadoBaja = estadoBaja;
+		this.fechaBaja = fechaBaja;
+		this.fechaProcesa = fechaProcesa;
+		this.jornadaReducida = jornadaReducida;
+		this.mes = mes;
+		this.anio = anio;
+		this.rectificativa = rectificativa;
+		this.montoSac = montoSac;
+		this.licencia = licencia;
+		this.afiliadoObraSocial = afiliadoObraSocial;
+		this.observaciones = observaciones;
+		this.cantidadDiasTrabajados = cantidadDiasTrabajados;
+		this.nombreArchivo = nombreArchivo;
+		this.categoria = categoria;
+		this.sindicato = sindicato;
+		this.zona = zona;
+		this.empresa = empresa;
 	}
+
+	public NominasModel(String cuil, String nombres, Date fechaIngreso, Date fechaEgreso, double sueldo,
+			boolean estadoBaja, Date fechaBaja, Date fechaProcesa, boolean jornadaReducida, String mes, String anio,
+			int rectificativa, double montoSac, boolean licencia, boolean afiliadoObraSocial, String observaciones,
+			int cantidadDiasTrabajados, String nombreArchivo, CategoriasModelo categoria, SindicatosModel sindicato,
+			ZonasModel zona, EmpresasModel empresa) {
+		super();
+		this.cuil = cuil;
+		this.nombres = nombres;
+		this.fechaIngreso = fechaIngreso;
+		this.fechaEgreso = fechaEgreso;
+		this.sueldo = sueldo;
+		this.estadoBaja = estadoBaja;
+		this.fechaBaja = fechaBaja;
+		this.fechaProcesa = fechaProcesa;
+		this.jornadaReducida = jornadaReducida;
+		this.mes = mes;
+		this.anio = anio;
+		this.rectificativa = rectificativa;
+		this.montoSac = montoSac;
+		this.licencia = licencia;
+		this.afiliadoObraSocial = afiliadoObraSocial;
+		this.observaciones = observaciones;
+		this.cantidadDiasTrabajados = cantidadDiasTrabajados;
+		this.nombreArchivo = nombreArchivo;
+		this.categoria = categoria;
+		this.sindicato = sindicato;
+		this.zona = zona;
+		this.empresa = empresa;
+	}
+
+
 
 	public int getIdNomina() {
 		return idNomina;
@@ -299,7 +352,18 @@ public class NominasModel {
 	public void setJornadaReducida(boolean jornadaReducida) {
 		this.jornadaReducida = jornadaReducida;
 	}
-	
-	
-	
+
+
+
+	@Override
+	public String toString() {
+		return "NominasModel [idNomina=" + idNomina + ", cuil=" + cuil + ", nombres=" + nombres + ", fechaIngreso="
+				+ fechaIngreso + ", fechaEgreso=" + fechaEgreso + ", sueldo=" + sueldo + ", estadoBaja=" + estadoBaja
+				+ ", fechaBaja=" + fechaBaja + ", fechaProcesa=" + fechaProcesa + ", jornadaReducida=" + jornadaReducida
+				+ ", mes=" + mes + ", anio=" + anio + ", rectificativa=" + rectificativa + ", montoSac=" + montoSac
+				+ ", licencia=" + licencia + ", afiliadoObraSocial=" + afiliadoObraSocial + ", observaciones="
+				+ observaciones + ", cantidadDiasTrabajados=" + cantidadDiasTrabajados + ", nombreArchivo="
+				+ nombreArchivo + ", categoria=" + categoria + ", sindicato=" + sindicato + ", zona=" + zona
+				+ ", empresa=" + empresa + "]";
+	}	
 }

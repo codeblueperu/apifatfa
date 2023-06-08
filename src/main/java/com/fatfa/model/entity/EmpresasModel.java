@@ -73,6 +73,7 @@ public class EmpresasModel {
 		// TODO Auto-generated constructor stub
 	}
 
+
 	@Override
 	public String toString() {
 		return "EmpresasModel [idEmpresa=" + idEmpresa + ", cuit=" + cuit + ", razonSocial=" + razonSocial
@@ -81,8 +82,9 @@ public class EmpresasModel {
 				+ ", trabajadoresAfectadosPorConvenio=" + trabajadoresAfectadosPorConvenio
 				+ ", trabajadoresAfectadosPorObraSocial=" + trabajadoresAfectadosPorObraSocial + ", idSindicato="
 				+ idSindicato + ", reponsableDJ=" + reponsableDJ + ", responableRH=" + responableRH + ", idActividad="
-				+ idActividad + ", idConvenio=" + "]";
+				+ idActividad + "]";
 	}
+
 
 	public int getIdEmpresa() {
 		return idEmpresa;

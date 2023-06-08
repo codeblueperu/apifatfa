@@ -40,7 +40,6 @@ public class EmpresaController {
 		ResponsableDDJJModel datosDDJJ= datos.getResponsableDDJJ();
 		ResponsableRRHHModel datosRRHH= datos.getResponsableRRHH();
 		System.out.println(datos.getDatoEmpresa());
-		
 		 return ResponseEntity.ok(srvEmpresa.srvAgregarEmpresa(empresa,domicilio, datosDDJJ, datosRRHH));
 	}
 
@@ -50,8 +49,8 @@ public class EmpresaController {
 		return ResponseEntity.ok(srvEmpresa.srvBuscarEmpresaNombre(nombre, razon));
 	}
 
-	@GetMapping("/buscarEmpresaId/{idempresa}")
-	public ResponseEntity<?> onBuscarEmpresaID(@PathVariable int idempresa) {
+	@GetMapping("/buscarEmpresaId")
+	public ResponseEntity<?> onBuscarEmpresaID(@RequestParam("idEmpresa") int idempresa) {
 		return ResponseEntity.ok(srvEmpresa.srvBuscarEmpresaID(idempresa));
 	}
 

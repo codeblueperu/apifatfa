@@ -1,6 +1,7 @@
 package com.fatfa.model.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fatfa.model.entity.NominasModel;
+import com.fatfa.exceptions.ErrorNotFoundException;
 import com.fatfa.model.entity.EmpresasModel;
 import com.fatfa.model.service.IDeclaradosService;
 
@@ -25,79 +27,70 @@ public class DeclaradosController {
 
 	@Autowired
 	private IDeclaradosService srvDelcrados;
-	
-	
-	
-	@PostMapping(path="/saveDeclarados")
-	public ResponseEntity<?> onAgregarDeclarados(@RequestPart(name="datos") NominasModel datos, @RequestParam(name ="file",required = false ) MultipartFile file) {
-		
+
+	@PostMapping(path = "/saveDeclarados")
+	public ResponseEntity<?> onAgregarDeclarados(@RequestPart(name = "datos") NominasModel datos,
+			@RequestParam(name = "file", required = false) MultipartFile file) {
+
 		System.out.println(file);
-		if (file==null) {
+		if (file == null) {
 			return ResponseEntity.ok(srvDelcrados.srvAgregarDeclarados(datos));
-		}else {
-			String nombre= file.getOriginalFilename();
+		} else {
+			String nombre = file.getOriginalFilename();
 			datos.setNombreArchivo(nombre);
-			
+
 			srvDelcrados.saveFile(file);
 			return ResponseEntity.ok(srvDelcrados.srvAgregarDeclarados(datos));
 		}
-		
+
 	}
-	
+
 	@GetMapping("/copiaDeclarados")
-	public ResponseEntity<?> onCopiarDeclarados(
-			@RequestParam("empresa") EmpresasModel empresa,
-			@RequestParam("mes") String mes,
-			@RequestParam("anio") String anio,
-			@RequestParam("rectificativa") Integer rectificativa,
-			@RequestParam("newmes") String newmes,
-			@RequestParam("newanio") String newanio,
-			@RequestParam("newrectificativa") Integer newrectificativa) {
-		
+	public ResponseEntity<?> onCopiarDeclarados(@RequestParam("empresa") EmpresasModel empresa,
+			@RequestParam("mes") String mes, @RequestParam("anio") String anio,
+			@RequestParam("rectificativa") Integer rectificativa, @RequestParam("newmes") String newmes,
+			@RequestParam("newanio") String newanio, @RequestParam("newrectificativa") Integer newrectificativa) {
+
 		Map<String, Object> map = new HashMap<>();
 		List<NominasModel> datos = new ArrayList<>();
-		datos=srvDelcrados.srvBuscarDeclarados(empresa,mes,anio,rectificativa);
-		if(datos.isEmpty()) {
-			map.put("data",datos);
-			map.put("message", "Datos no encontrados");
-		}else {
-			List<NominasModel> newdatos=new ArrayList<>();
-//			for (int i = 0; i < datos.size(); i++) {
-//				datos.get(i).setAnio(newanio);
-//				datos.get(i).setMes(newmes);
-//				datos.get(i).setRectificativa(newrectificativa);
-//				
-//				newdatos.add(datos.get(i));
-//			}
-			for (NominasModel nomina : datos) {
-				//NominasModel nominaNueva = new NominasModel();
-				//nomina.setIdNomina(nominaNueva.getIdNomina());
-				
-				nomina.setAnio(newanio);
-				nomina.setMes(newmes);
-				nomina.setRectificativa(newrectificativa);
-				newdatos.add(nomina);
+		datos = srvDelcrados.srvBuscarDeclarados(empresa, mes, anio, rectificativa);
+		if (datos.size()==0) {
+			throw new ErrorNotFoundException("Nómina no encontrada");
+		} else {
+			List<NominasModel> newdatos = new ArrayList<>();
+
+			for (NominasModel nominaActual : datos) {
+				newdatos.add(new NominasModel(nominaActual.getCuil(), nominaActual.getNombres(),
+						nominaActual.getFechaIngreso(), nominaActual.getFechaEgreso(), nominaActual.getSueldo(),
+						nominaActual.isEstadoBaja(), nominaActual.getFechaBaja(), new Date(),
+						nominaActual.getJornadaReducida(), newmes, newanio,
+						newrectificativa, nominaActual.getMontoSac(), nominaActual.isLicencia(),
+						nominaActual.isAfiliadoObraSocial(), nominaActual.getObservaciones(),
+						nominaActual.getCantidadDiasTrabajados(), nominaActual.getNombreArchivo(),
+						nominaActual.getCategoria(), nominaActual.getSindicato(), nominaActual.getZona(),
+						nominaActual.getEmpresa()));
 			}
-			System.err.println(newdatos);
-			newdatos=srvDelcrados.srvCopiarDeclarados(newdatos);
-			map.put("data",newdatos);
+
+			newdatos = srvDelcrados.srvCopiarDeclarados(newdatos);
+			map.put("data", newdatos);
 			map.put("message", "Nómina Copiada con éxito");
 		}
 		return ResponseEntity.ok(map);
 	}
-	
 
 	@GetMapping("/buscarDeclarados")
-	public ResponseEntity<?> onBuscarDeclrados(@RequestParam("empresa") EmpresasModel empresa,@RequestParam("mes") String mes,@RequestParam("anio") String anio,@RequestParam("rectificativa") Integer rectificativa) {
-		
-		return ResponseEntity.ok(srvDelcrados.srvBuscarDeclarados(empresa,mes,anio,rectificativa));
+	public ResponseEntity<?> onBuscarDeclrados(@RequestParam("empresa") EmpresasModel empresa,
+			@RequestParam("mes") String mes, @RequestParam("anio") String anio,
+			@RequestParam("rectificativa") Integer rectificativa) {
+
+		return ResponseEntity.ok(srvDelcrados.srvBuscarDeclarados(empresa, mes, anio, rectificativa));
 	}
-	
+
 	@GetMapping("/buscarId")
 	public ResponseEntity<?> onBuscarDeclradosID(@RequestParam("id") Integer id) {
 		return ResponseEntity.ok(srvDelcrados.srvBuscarDeclaradosID(id));
 	}
-	
+
 	/**
 	 * @author SOPORTE
 	 * @apiNote CONTROLLADOR
@@ -112,7 +105,7 @@ public class DeclaradosController {
 			@RequestParam(name = "mes", required = true) String mes) {
 		return ResponseEntity.ok(srvDelcrados.srvGuardarNominaMasiva(file, 0, anio, mes, 0));
 	}
-	
+
 	/**
 	 * @author SOPORTE
 	 * @param idEmpresa
@@ -121,10 +114,10 @@ public class DeclaradosController {
 	 * @return
 	 */
 	@GetMapping("/buscarRectificativa")
-	public ResponseEntity<?> onBuscarRectificativaEmpresa(@RequestParam("idEmpresa") int idEmpresa,@RequestParam("mes") String mes,@RequestParam("anio") String anio) {
-		
+	public ResponseEntity<?> onBuscarRectificativaEmpresa(@RequestParam("idEmpresa") int idEmpresa,
+			@RequestParam("mes") String mes, @RequestParam("anio") String anio) {
+
 		return ResponseEntity.ok(srvDelcrados.srvObtenerelUltimoRectificativo(idEmpresa, anio, mes));
 	}
-	
-	 
+
 }

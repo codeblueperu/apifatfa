@@ -84,7 +84,7 @@ public class BoletaServiceImpl implements IBoletaService {
 			MONTO_SUBTOTAL_BOLETA = MONTO_ART46 + MONTO_ART47 + MONTO_ART48 + MONTO_CONTRIBUCION;
 //			#CALCULO INTERES POR DIA  O MES
 			if (totalDiasInteres > 30) {
-				MONTO_INTERES += MONTO_SUBTOTAL_BOLETA * 5.91;
+				MONTO_INTERES += (MONTO_ART47 + MONTO_ART48) * 5.91;
 			} else if (totalDiasInteres > 0 && totalDiasInteres < 30) {
 				MONTO_INTERES += MONTO_SUBTOTAL_BOLETA * 0.19;
 			}
