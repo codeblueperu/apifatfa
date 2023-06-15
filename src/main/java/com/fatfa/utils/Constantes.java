@@ -1,8 +1,12 @@
 package com.fatfa.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class Constantes {
 
@@ -41,5 +45,43 @@ public class Constantes {
 			resultado = 0;
 
 		return resultado;
+	}
+
+	/**
+	 * @author SOPORTE
+	 * @apiNote OBETENR LA FECHA EN STRING SEGUN EL FORMATO
+	 * @param fecha
+	 * @param formato
+	 * @return
+	 */
+	public static String utilFormatoFecha(Date fecha, String formato) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(formato);
+		return dateFormat.format(fecha);
+
+	}
+	/**
+	 * @author SOPORTE
+	 * @apiNote CONVERTIR DE STRING A DATE
+	 * @param fecha
+	 * @param formato
+	 * @return
+	 * @throws ParseException
+	 */
+	public static Date utilConvertirFecha(String fecha, String formato) throws ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(formato);
+		return dateFormat.parse(fecha);
+
+	}
+	
+	/**
+	 * @author SOPORTE
+	 * @apiNote COMPLETAR CON 0 A LA IZQUIERDA
+	 * @param valor
+	 * @param numCero
+	 * @return
+	 */
+	public static String completeCeroIzquierda(String valor,int numCero) {
+		return StringUtils.leftPad(String.valueOf(valor), numCero, "0");
+
 	}
 }

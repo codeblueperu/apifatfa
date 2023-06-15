@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="boleta_pago_facil" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="090041ac-c96f-4215-9a61-05e2dd45b286">
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="1.3636363636363638"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="P_COD_BOLETA" class="java.lang.Integer">
@@ -57,7 +57,7 @@
 	<field name="aporte_art48" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="estado_pago" class="java.lang.String">
+	<field name="contribucion_extraordinaria" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="nombre_aporte" class="java.lang.String">
@@ -69,8 +69,14 @@
 	<field name="id_empresa" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="estado_pago" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_de_sueldos" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<title>
-		<band height="295" splitType="Stretch">
+		<band height="337" splitType="Stretch">
 			<staticText>
 				<reportElement x="104" y="0" width="305" height="16" uuid="35f1aa6b-f934-4e0d-a2e8-9c8720af15ce"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -130,7 +136,7 @@
 				<reportElement mode="Transparent" x="371" y="109" width="184" height="19" uuid="bbadfaa3-2947-4ce4-9a77-ebb17845e92b"/>
 			</rectangle>
 			<rectangle radius="6">
-				<reportElement x="0" y="132" width="555" height="75" uuid="3ba083f7-eb3b-47b6-b3aa-0b1e12afdeaf"/>
+				<reportElement x="0" y="132" width="555" height="90" uuid="3ba083f7-eb3b-47b6-b3aa-0b1e12afdeaf"/>
 			</rectangle>
 			<staticText>
 				<reportElement mode="Opaque" x="15" y="104" width="118" height="10" uuid="8f680e4e-9607-488d-b353-a2b2bfaf25f5"/>
@@ -212,7 +218,7 @@
 				<text><![CDATA[ART. 48° C.C.T 556/09]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="30" y="192" width="409" height="15" uuid="9aab490d-bf5b-4c66-a039-6d8b61360a6c"/>
+				<reportElement x="30" y="207" width="409" height="15" uuid="9aab490d-bf5b-4c66-a039-6d8b61360a6c"/>
 				<box>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="0.0"/>
@@ -255,7 +261,7 @@
 				<textFieldExpression><![CDATA[$F{aporte_art48}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="440" y="192" width="115" height="15" uuid="4537fae1-1f01-4c1d-a0a9-92bd85f889bf"/>
+				<reportElement x="440" y="207" width="115" height="15" uuid="4537fae1-1f01-4c1d-a0a9-92bd85f889bf"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Century Gothic" size="8" isBold="true"/>
 				</textElement>
@@ -294,24 +300,24 @@
 				<text><![CDATA[]]></text>
 			</staticText>
 			<rectangle radius="10">
-				<reportElement x="455" y="211" width="100" height="20" uuid="92603ab4-13b0-4e79-a12c-9eecaaa0166d"/>
+				<reportElement x="455" y="241" width="100" height="20" uuid="92603ab4-13b0-4e79-a12c-9eecaaa0166d"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="407" y="211" width="48" height="20" uuid="ad1b60be-ba9b-4a9d-be11-5aee52cb66c6"/>
+				<reportElement x="407" y="241" width="48" height="20" uuid="ad1b60be-ba9b-4a9d-be11-5aee52cb66c6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Century Gothic" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="15" y="211" width="332" height="20" uuid="eda25ef6-a512-4235-b931-c4123344c2f8"/>
+				<reportElement x="15" y="241" width="332" height="20" uuid="eda25ef6-a512-4235-b931-c4123344c2f8"/>
 				<textElement markup="html">
 					<font fontName="Century Gothic" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SUJETO A POSTERIOR VERIFICACION SEGUN DATOS FORMULARIOS 931 Y ANEXO <br> DETALLE CON CANTIDAD DE PERSONAL]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="205" y="237" width="193" height="40" uuid="e8360cb3-e9e5-4868-911b-4efa9d6a9552"/>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Opaque" x="205" y="267" width="193" height="40" uuid="e8360cb3-e9e5-4868-911b-4efa9d6a9552"/>
 				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="none">
 					<jr:codeExpression><![CDATA[$F{codigo_barras}]]></jr:codeExpression>
 				</jr:Code128>
@@ -353,14 +359,14 @@
 				<textFieldExpression><![CDATA[$F{fecha_primer_vencimiento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="455" y="211" width="100" height="20" uuid="431245ae-dbd0-4755-8b01-0a5152e34359"/>
+				<reportElement x="455" y="241" width="100" height="20" uuid="431245ae-dbd0-4755-8b01-0a5152e34359"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Century Gothic" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{importe_total}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="198" y="277" width="235" height="15" uuid="eb841c79-803e-4700-b1e3-e1cd35990f9c"/>
+				<reportElement x="198" y="307" width="235" height="15" uuid="eb841c79-803e-4700-b1e3-e1cd35990f9c"/>
 				<textElement>
 					<font fontName="Century Gothic" size="8" isBold="true"/>
 				</textElement>
@@ -374,6 +380,44 @@
 				</textElement>
 				<text><![CDATA[Servicio Electrónico de Pago S.A]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="0" y="192" width="30" height="15" uuid="320b6a16-ea2f-4eca-b1e0-2cc324a64db0"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="192" width="409" height="15" uuid="595934a7-966e-4b35-ba10-08350ca311c5"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Century Gothic" size="8" isBold="false"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<text><![CDATA[CONTRIBUCION ESTRAORDINARIA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="440" y="192" width="115" height="15" uuid="c5d6d262-1958-4da4-86a3-71b5c0d8ead4"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Century Gothic" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contribucion_extraordinaria}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="387" y="115" width="147" height="10" uuid="31be98f7-b9f6-48a9-a734-606c94126441"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Century Gothic" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_de_sueldos}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 </jasperReport>

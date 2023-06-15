@@ -1,5 +1,7 @@
 package com.fatfa.model.service;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,22 +13,12 @@ public interface IBoletaService {
 	/**
 	 * @author CodeBluePeru
 	 * @param idEmpresa
-	 * @param anio
-	 * @param mes
+	 * @param anioPeriodoPago
+	 * @param mesPeriodoPago
 	 * @param fechaPosiblePago
 	 * @return
 	 */
-	DetalleBoletaConceptoModel onCalcularMontoBoleta(int idEmpresa, String anio, String mes, int totalDiasInteres);
-
-	/**
-	 * @author SOPORTE
-	 * @param idNomina
-	 * @param idempresa
-	 * @param anio
-	 * @param mes
-	 * @return
-	 */
-	double onObtenerRemuneracionIntegral(int idNomina);
+	DetalleBoletaConceptoModel onCalcularMontoBoleta(int idEmpresa, String anioPeriodoPago, String mesPeriodoPago, Date fechaPosiblePago);
 
 	/**
 	 * @author CodeBluePeru
@@ -35,7 +27,6 @@ public interface IBoletaService {
 	 */
 	void onGenerarTalonBoletaPago(BoletaModel dataBoleta, HttpServletRequest request, HttpServletResponse response);
 
-
 	/**
 	 * @author SOPORTE
 	 * @apiNote EMPRIMIR REPORTE BOLETA SEGUN SEA BANCO
@@ -43,7 +34,7 @@ public interface IBoletaService {
 	 * @param request
 	 * @param response
 	 */
-	void onGenerarBoleta(int idBoleta,String nameFile, HttpServletRequest request, HttpServletResponse response);
+	void onGenerarBoleta(int idBoleta, String nameFile, HttpServletRequest request, HttpServletResponse response);
 
 
 }

@@ -2,8 +2,6 @@ package com.fatfa.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -12,9 +10,8 @@ import javax.persistence.Table;
 public class CategoriasModelo {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_categoria")
-	private int idCategoria ;
+	@Column(name = "id_categoria", length = 1, nullable = false)
+	private String  idCategoria ;
 	
 	@Column(name = "categoria", length = 50, nullable = false)
 	private String categoria;
@@ -27,26 +24,26 @@ public class CategoriasModelo {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CategoriasModelo(int idCategoria, String categoria, boolean estado) {
+	public CategoriasModelo(String idCategoria, String categoria, boolean estado) {
 		super();
 		this.idCategoria = idCategoria;
 		this.categoria = categoria;
 		this.estado = estado;
 	}
-	public CategoriasModelo(int idCategoria) {
+	public CategoriasModelo(String idCategoria) {
 		super();
 		this.idCategoria = idCategoria;
 	}
-	public int getIdCategoria() {
+	public String getIdCategoria() {
 		return idCategoria;
 	}
 
-	public void setIdCategoria(int idCategoria) {
+	public void setIdCategoria(String idCategoria) {
 		this.idCategoria = idCategoria;
 	}
 
 	public String getCategoria() {
-		return categoria;
+		return categoria.toUpperCase();
 	}
 
 	public void setCategoria(String categoria) {

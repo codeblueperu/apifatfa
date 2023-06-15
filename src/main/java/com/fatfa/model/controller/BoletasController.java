@@ -1,5 +1,7 @@
 package com.fatfa.model.controller;
 
+import java.text.ParseException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fatfa.model.entity.BoletaModel;
 import com.fatfa.model.service.IBoletaService;
+import com.fatfa.utils.Constantes;
 
 @RestController
 @RequestMapping("/api/v1/boleta")
@@ -24,10 +27,9 @@ public class BoletasController {
 
 	@GetMapping("/datosIniciales")
 	public ResponseEntity<?> srvGenerarDatosIncialesBoleta(@RequestParam("idEmpresa") int idEmpresa,
-			@RequestParam("anio") String anio, @RequestParam("mes") String mes,
-			@RequestParam("totalDias") int totalDias) {
-
-		return ResponseEntity.ok(srvBoleta.onCalcularMontoBoleta(idEmpresa, anio, mes, totalDias));
+			@RequestParam("anio") String anioPeriodoPago, @RequestParam("mes") String mesPeriodoPago,
+			@RequestParam("fechaPosiblePago") String fechaPosiblePago) throws ParseException {
+		return ResponseEntity.ok(srvBoleta.onCalcularMontoBoleta(idEmpresa, anioPeriodoPago, mesPeriodoPago, Constantes.utilConvertirFecha(fechaPosiblePago, "yyyy-MM-dd")));
 	}
 	
 	@PostMapping("/guardarDataBoleta")

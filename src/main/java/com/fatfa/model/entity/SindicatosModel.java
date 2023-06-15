@@ -43,7 +43,7 @@ public class SindicatosModel {
 	
 	@Column(name = "avatar_sindicato", length = 50, nullable = false)
 	private String avatar;
-	@Column(name = "estado", nullable = false, columnDefinition = "BIT default 1")
+	@Column(name = "estado", nullable = false, columnDefinition = "BIT default 0")
 	private boolean estado;
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

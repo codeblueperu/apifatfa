@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.fatfa.model.entity.CategoriasModelo;
 
 @Repository
-public interface ICategoriasRepository extends JpaRepository<CategoriasModelo, Integer> {
+public interface ICategoriasRepository extends JpaRepository<CategoriasModelo, String> {
 	/**
 	 * @author SOPORTE
 	 * @apiNote BUSCAR CATEGORIA POR NOMBRE

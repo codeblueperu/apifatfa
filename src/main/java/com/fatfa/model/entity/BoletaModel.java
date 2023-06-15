@@ -62,7 +62,7 @@ public class BoletaModel {
 	
 	@OneToOne
 	@JoinColumn(name = "id_estado_pago")
-	private EstadoPagoModel estaoPago;
+	private EstadoPagoModel estadoPago;
 	
 	@Column(nullable = false, length = 100)
 	private String archivo;
@@ -83,7 +83,7 @@ public class BoletaModel {
 	public BoletaModel(int idBoleta, EmpresasModel empresa, @NotBlank(message = "ESTE CAMPO ES REQUERIDO") String mes,
 			@NotBlank(message = "ESTE CAMPO ES REQUERIDO") String anio, BancosModel banco, Date fechaPrimerVencimiento,
 			Date fechaProbablePago, Double subtotal, Double intereces, Double importeTotal, String codigoBarras,
-			EstadoPagoModel estaoPago, String archivo, AporteSindicalModel aporteSindical,
+			EstadoPagoModel estadoPago, String archivo, AporteSindicalModel aporteSindical,
 			DetalleBoletaConceptoModel detalleConcepto) {
 		super();
 		this.idBoleta = idBoleta;
@@ -97,7 +97,7 @@ public class BoletaModel {
 		this.intereces = intereces;
 		this.importeTotal = importeTotal;
 		this.codigoBarras = codigoBarras;
-		this.estaoPago = estaoPago;
+		this.estadoPago = estadoPago;
 		this.archivo = archivo;
 		this.aporteSindical = aporteSindical;
 		this.detalleConcepto = detalleConcepto;
@@ -191,12 +191,12 @@ public class BoletaModel {
 		this.codigoBarras = codigoBarras;
 	}
 
-	public EstadoPagoModel getEstaoPago() {
-		return estaoPago;
+	public EstadoPagoModel getEstadoPago() {
+		return estadoPago;
 	}
 
-	public void setEstaoPago(EstadoPagoModel estaoPago) {
-		this.estaoPago = estaoPago;
+	public void setEstaoPago(EstadoPagoModel estadoPago) {
+		this.estadoPago = estadoPago;
 	}
 
 	public String getArchivo() {
@@ -228,7 +228,7 @@ public class BoletaModel {
 		return "BoletaModel [idBoleta=" + idBoleta + ", empresa=" + empresa + ", mes=" + mes + ", anio=" + anio
 				+ ", banco=" + banco + ", fechaPrimerVencimiento=" + fechaPrimerVencimiento + ", fechaProbablePago="
 				+ fechaProbablePago + ", subtotal=" + subtotal + ", intereces=" + intereces + ", importeTotal="
-				+ importeTotal + ", codigoBarras=" + codigoBarras + ", estaoPago=" + estaoPago + ", archivo=" + archivo
+				+ importeTotal + ", codigoBarras=" + codigoBarras + ", estadoPago=" + estadoPago + ", archivo=" + archivo
 				+ ", aporteSindical=" + aporteSindical + ", detalleConcepto=" + detalleConcepto + "]";
 	}
 }

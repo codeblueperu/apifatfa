@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fatfa.exceptions.ErrorConflictException;
@@ -15,6 +14,7 @@ import com.fatfa.model.entity.EmpresasModel;
 import com.fatfa.model.repository.IBoletaRepository;
 import com.fatfa.model.repository.IEmpresaRepository;
 import com.fatfa.model.service.IBancosService;
+import com.fatfa.model.service.IGlobalService;
 import com.fatfa.utils.Constantes;
 
 @Service
@@ -28,11 +28,11 @@ public class BancosServiceImp implements IBancosService {
 	private IEmpresaRepository repoEmpresa;
 
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private IGlobalService srvGlobal;
 
 	@Override
 	public String onGeneraCodigigoBarraBancoNacion(int idBoleta) {
-		
+
 		String codigoBarra = "";
 		try {
 			BoletaModel boleta = repoBoleta.findById(idBoleta).orElseThrow(
@@ -79,7 +79,7 @@ public class BancosServiceImp implements IBancosService {
 	@Override
 	public String onGeneraCodigoBarraPagoFacil(int idBoleta) {
 		String codigoBarra = "";
-		
+
 		try {
 			BoletaModel boleta = repoBoleta.findById(idBoleta).orElseThrow(
 					() -> new ErrorConflictException("Error al intentar buscar la boleta mediante su identificador."));
@@ -95,40 +95,27 @@ public class BancosServiceImp implements IBancosService {
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat formatterAA = new SimpleDateFormat("yy");
 //			# ==> OBTENER DIAS TRASCURRIDOS DEL PRIMER VENCIMIENTO
-			int diasTranscurridoPrimerVencimiento = onCalcularDiferenciaFechas(
+			String fechaInicial = Constantes.anioActual + "-01-01";
+			int diasTranscurridoPrimerVencimiento = srvGlobal.onCalcularDiferenciaFechas(fechaInicial,
 					formatter.format(boleta.getFechaPrimerVencimiento()));
-			
+
 			codigoBarra += formatterAA.format(boleta.getFechaPrimerVencimiento())
 					+ StringUtils.leftPad(String.valueOf(diasTranscurridoPrimerVencimiento), 3, "0");
 //			#CUIT DE LA EMPRESA 11 DIGITOS
 			codigoBarra += empresa.getCuit();
 //			# MES PERIODO 2 DIGITOS
 			codigoBarra += boleta.getMes();
-			
-			
+
 //			#UPDATE CODIGO BARRA BOLETA
 			boleta.setCodigoBarras(codigoBarra);
 			repoBoleta.save(boleta);
-			
+
 		} catch (Exception e) {
 			log.error("ERROR GENERAR CODIGO BARRA PAGO FACIL => " + e.toString());
 			throw e;
 		}
 
 		return codigoBarra;
-	}
-
-	@Override
-	public int onCalcularDiferenciaFechas(String fechaVencimiento) {
-		int diaTranscurridos = 0;
-		String fechaInicial = Constantes.anioActual + "-01-01";
-		diaTranscurridos = jdbcTemplate.queryForObject(
-				"SELECT TIMESTAMPDIFF(DAY, '" + fechaInicial + "','" + fechaVencimiento + "') FROM dual",
-				Integer.class);
-
-		diaTranscurridos++;
-
-		return diaTranscurridos;
 	}
 
 }

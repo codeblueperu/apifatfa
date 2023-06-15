@@ -18,12 +18,4 @@ public interface IBancosService {
 	 * @return
 	 */
 	String onGeneraCodigoBarraPagoFacil(int idBoleta);
-	
-	/**
-	 * @author SOPORTE
-	 * @param fechaOne
-	 * @param fechaTwo
-	 * @return
-	 */
-	int onCalcularDiferenciaFechas(String fechaVencimiento);
 }

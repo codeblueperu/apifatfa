@@ -28,8 +28,8 @@ public class DetalleBoletaConceptoModel {
 	@Column(name = "intereses")
 	private double intereses;
 	
-	@Column(name = "otros")
-	private double otros;
+	@Column(name = "contribucion_extraordinaria")
+	private double contribucionExtraordinaria;
 	
 	@Column(name = "total_pagar")
 	private double totalApagar;
@@ -37,18 +37,17 @@ public class DetalleBoletaConceptoModel {
 
 	public DetalleBoletaConceptoModel() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-
-	public DetalleBoletaConceptoModel(double aporteArt46, double aporteArt47, double aporteArt48, double intereses,
-			double otros, double totalApagar) {
+	public DetalleBoletaConceptoModel(int idDetalleConcepto, double aporteArt46, double aporteArt47, double aporteArt48,
+			double intereses, double contribucionExtraordinaria, double totalApagar) {
 		super();
+		this.idDetalleConcepto = idDetalleConcepto;
 		this.aporteArt46 = aporteArt46;
 		this.aporteArt47 = aporteArt47;
 		this.aporteArt48 = aporteArt48;
 		this.intereses = intereses;
-		this.otros = otros;
+		this.contribucionExtraordinaria = contribucionExtraordinaria;
 		this.totalApagar = totalApagar;
 	}
 
@@ -103,13 +102,13 @@ public class DetalleBoletaConceptoModel {
 	}
 
 
-	public double getOtros() {
-		return otros;
+	public double getContribucionExtraordinaria() {
+		return contribucionExtraordinaria;
 	}
 
 
-	public void setOtros(double otros) {
-		this.otros = otros;
+	public void setContribucionExtraordinaria(double contribucionExtraordinaria) {
+		this.contribucionExtraordinaria = contribucionExtraordinaria;
 	}
 
 
@@ -120,13 +119,5 @@ public class DetalleBoletaConceptoModel {
 
 	public void setTotalApagar(double totalApagar) {
 		this.totalApagar = totalApagar;
-	}
-
-
-	@Override
-	public String toString() {
-		return "DetalleBoletaConceptoModel [idDetalleConcepto=" + idDetalleConcepto + ", aporteArt46=" + aporteArt46
-				+ ", aporteArt47=" + aporteArt47 + ", aporteArt48=" + aporteArt48 + ", intereses=" + intereses
-				+ ", otros=" + otros + ", totalApagar=" + totalApagar + "]";
 	}
 }

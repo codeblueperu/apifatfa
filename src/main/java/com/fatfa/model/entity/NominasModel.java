@@ -83,19 +83,19 @@ public class NominasModel {
 	private String nombreArchivo;
 	
 	@OneToOne()
-	@JoinColumn(name = "id_categoria")
+	@JoinColumn(name = "id_categoria", nullable = false)
 	private CategoriasModelo categoria;
 	
 	@OneToOne
-	@JoinColumn(name = "id_sindicato")
+	@JoinColumn(name = "id_sindicato", nullable = false)
 	private SindicatosModel sindicato;
 
 	@OneToOne
-	@JoinColumn(name = "id_zona")
+	@JoinColumn(name = "id_zona", nullable = false)
 	private ZonasModel zona;
 	
 	@OneToOne
-	@JoinColumn(name = "id_empresa")
+	@JoinColumn(name = "id_empresa", nullable = false)
 	private EmpresasModel empresa;
 
 	public NominasModel() {
