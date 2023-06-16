@@ -1,9 +1,7 @@
 package com.fatfa.model.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,7 +44,7 @@ public class SindicatosModel {
 	@Column(name = "estado", nullable = false, columnDefinition = "BIT default 0")
 	private boolean estado;
 	
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne()
 	@JoinColumn(name = "id_localidad")
 	private LocalidadModel idLocalidad;
 
@@ -55,13 +53,21 @@ public class SindicatosModel {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public String toString() {
-		return "SindicatosModel [idSindicato=" + idSindicato + ", estadoSindicato=" + nombreSindicato
-				+ ", telefonoSindicato=" + telefonoSindicato + ", domicilio=" + domicilio + ", nombreResponsable="
-				+ nombreResponsable + ", apellidoResponsable=" + apellidoResponsable + ", telefonoResponsable="
-				+ telefonoResponsable + ", correoResponsable=" + correoResponsable + ", avatar=" + avatar + ", estado="
-				+ estado + ", idLocalidad=" + idLocalidad + "]";
+	public SindicatosModel(int idSindicato, String nombreSindicato, String telefonoSindicato, String domicilio,
+			String nombreResponsable, String apellidoResponsable, String telefonoResponsable, String correoResponsable,
+			String avatar, boolean estado, LocalidadModel idLocalidad) {
+		super();
+		this.idSindicato = idSindicato;
+		this.nombreSindicato = nombreSindicato;
+		this.telefonoSindicato = telefonoSindicato;
+		this.domicilio = domicilio;
+		this.nombreResponsable = nombreResponsable;
+		this.apellidoResponsable = apellidoResponsable;
+		this.telefonoResponsable = telefonoResponsable;
+		this.correoResponsable = correoResponsable;
+		this.avatar = avatar;
+		this.estado = estado;
+		this.idLocalidad = idLocalidad;
 	}
 
 	public int getIdSindicato() {
@@ -72,7 +78,6 @@ public class SindicatosModel {
 		this.idSindicato = idSindicato;
 	}
 
-	
 	public String getNombreSindicato() {
 		return nombreSindicato;
 	}
@@ -152,7 +157,13 @@ public class SindicatosModel {
 	public void setIdLocalidad(LocalidadModel idLocalidad) {
 		this.idLocalidad = idLocalidad;
 	}
-	
 
-	
+	@Override
+	public String toString() {
+		return "SindicatosModel [idSindicato=" + idSindicato + ", nombreSindicato=" + nombreSindicato
+				+ ", telefonoSindicato=" + telefonoSindicato + ", domicilio=" + domicilio + ", nombreResponsable="
+				+ nombreResponsable + ", apellidoResponsable=" + apellidoResponsable + ", telefonoResponsable="
+				+ telefonoResponsable + ", correoResponsable=" + correoResponsable + ", avatar=" + avatar + ", estado="
+				+ estado + ", idLocalidad=" + idLocalidad + "]";
+	}	
 }

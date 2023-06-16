@@ -26,7 +26,7 @@ import com.fatfa.model.repository.IEstadoTrabajadores;
 import com.fatfa.model.repository.ILocalidadRepository;
 import com.fatfa.model.repository.IPartidosRepository;
 import com.fatfa.model.repository.IProvinciasRepository;
-import com.fatfa.model.repository.ISindicatoRepository;
+import com.fatfa.model.repository.ISindicatosRepository;
 import com.fatfa.model.repository.IZonasRepository;
 import com.fatfa.model.service.CombosService;
 
@@ -60,7 +60,7 @@ public class CombosServiceImpl implements CombosService {
 	private IEstadoTrabajadores repoEstado;
 
 	@Autowired
-	private ISindicatoRepository repoSindicato;
+	private ISindicatosRepository repoSindicato;
 
 	@Autowired
 	private IAporteSindical repoAporte;

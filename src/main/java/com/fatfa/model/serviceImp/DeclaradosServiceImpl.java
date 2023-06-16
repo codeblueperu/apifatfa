@@ -42,7 +42,7 @@ import com.fatfa.model.entity.EmpresasModel;
 import com.fatfa.model.repository.ICategoriasRepository;
 import com.fatfa.model.repository.IDeclaradosRepository;
 import com.fatfa.model.repository.IEmpresaRepository;
-import com.fatfa.model.repository.ISindicatoRepository;
+import com.fatfa.model.repository.ISindicatosRepository;
 import com.fatfa.model.repository.IZonasRepository;
 import com.fatfa.model.service.IDeclaradosService;
 import com.fatfa.utils.Constantes;
@@ -62,7 +62,7 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 	private ICategoriasRepository repoCategoria;
 
 	@Autowired
-	private ISindicatoRepository repoSindicato;
+	private ISindicatosRepository repoSindicato;
 
 	@Autowired
 	private IZonasRepository repoZona;
@@ -187,7 +187,7 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 
 //						#EMPRESA 
 						nominaUser.setEmpresa(validEmpresa.get());
-
+						
 //						#CUIL DEL TRABAJADOR
 						String cuil_trabajdor = formatter.formatCellValue(row.getCell(2));
 						if (!cuil_trabajdor.isEmpty() && (cuil_trabajdor.length() == 11)) {
@@ -220,7 +220,7 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 									"El valor del campo no coincide con el formato solicitado (yyyy-MM-dd) <===> ("
 											+ formatter.formatCellValue(row.getCell(16)) + ")"));
 						}
-
+						
 //						#CATEGORIA
 						Optional<CategoriasModelo> validcategoria = repoCategoria
 								.findByCategoria(formatter.formatCellValue(row.getCell(4)).toUpperCase());
@@ -231,7 +231,7 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 							logErrores.add(estructuraLogCargaMasiva(contadorRow, "CATEGORIA",
 									"El valor del campo no coincide con ninguna categoria registrada, es posible que la CATEGORIA este mal digitado  y/ó vacio"));
 						}
-
+						
 //						#SUELDO
 						Pattern paterNumericDecimales = Pattern.compile(Constantes.EXPRESION_REGULAR_NUMEROS_DECIMALES);
 						String sueldoTrabajador = formatter.formatCellValue(row.getCell(5));
@@ -239,8 +239,9 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 //						#VALIDAR SI CUMPLE LA EXPRECION REGULAR
 						if (mat.matches()) {
 							XSSFCell sueldoCell = (XSSFCell) row.getCell(5);
-							BigDecimal sueldo_trabajador = new BigDecimal(sueldoCell.getNumericCellValue()).setScale(2,
+							BigDecimal sueldo_trabajador = new BigDecimal(sueldoCell.getStringCellValue()).setScale(2,
 									BigDecimal.ROUND_HALF_DOWN);
+							
 							nominaUser.setSueldo(sueldo_trabajador.doubleValue());
 						} else {
 							errorCount++;
@@ -248,7 +249,7 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 									"El valor del campo no cumple con el formato adecuado (00000.00) <=====> ("
 											+ sueldoTrabajador + ")"));
 						}
-
+						
 //						#ESTADO BAJA
 						if (formatter.formatCellValue(row.getCell(6)).length() == 1) {
 							String estadoBaja = formatter.formatCellValue(row.getCell(6));
