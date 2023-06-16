@@ -365,5 +365,7 @@ public class NominasModel {
 				+ observaciones + ", cantidadDiasTrabajados=" + cantidadDiasTrabajados + ", nombreArchivo="
 				+ nombreArchivo + ", categoria=" + categoria + ", sindicato=" + sindicato + ", zona=" + zona
 				+ ", empresa=" + empresa + "]";
-	}	
+	}
+
+
 }

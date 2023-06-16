@@ -73,11 +73,11 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 	@Override
 	public Map<String, Object> srvAgregarDeclarados(NominasModel declarados) {
 		Map<String, Object> map = new HashMap<>();
+		
 		try {
 			NominasModel datos = new NominasModel();
 			datos = repoDeclarados.save(declarados);
-
-			map.put("data", datos);
+			map.put("", datos.toString());
 			map.put("message", "El Declarado fue registrado con éxito");
 		} catch (Exception e) {
 			log.error("ERROR GUARDAR DECLARADO => " + e.toString());

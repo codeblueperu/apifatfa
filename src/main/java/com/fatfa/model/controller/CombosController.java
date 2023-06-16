@@ -72,5 +72,10 @@ public class CombosController {
 	public ResponseEntity<?> onListaBancosAll() {
 		return ResponseEntity.ok(srvBancos.findAll());
 	}
+	
+	@GetMapping("/listaAporteSindical")
+	public ResponseEntity<?> onListaAportesAll() {
+		return ResponseEntity.ok(srvCombo.srvAporteSIndical());
+	}
 
 }

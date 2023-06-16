@@ -32,7 +32,7 @@ public class ResponsablesServiceImpl implements IResponsablesService  {
 			ResponsableDDJJModel datos= new ResponsableDDJJModel();
 				datos=repoREsDDJJ.save(responsableDDJJ);
 			
-			map.put("data", datos);
+			map.put("data", datos.toString());
 			map.put("message", "La empresa  fue registrado con éxito");
 			
 		} catch (Exception e) {

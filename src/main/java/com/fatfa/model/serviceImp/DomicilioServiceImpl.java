@@ -31,7 +31,7 @@ private static final Logger log = LoggerFactory.getLogger(DomicilioServiceImpl.c
 			
 			datos=repoDomicilio.saveAll(domicilio);
 			
-			map.put("data", datos);
+			map.put("data", datos.toString());
 			map.put("message", "El Domicilio  fue registrado con éxito");
 			
 		} catch (Exception e) {

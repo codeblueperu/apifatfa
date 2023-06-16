@@ -3,6 +3,7 @@ package com.fatfa.model.service;
 import java.util.List;
 
 import com.fatfa.model.entity.ActividadesEconomicaModel;
+import com.fatfa.model.entity.AporteSindicalModel;
 import com.fatfa.model.entity.CategoriasModelo;
 import com.fatfa.model.entity.ConveniosAplicablesModel;
 import com.fatfa.model.entity.EstadoTrabajadoresModel;
@@ -73,6 +74,13 @@ public interface CombosService {
 	 * @return
 	 */
 	List<SindicatosModel> srvSindicato();
+	
+	/**
+	 * @author CodeBluePeru
+	 * @apiNote LISTA TODAS LOS APORTES SINDICALES DE LA BASE DE DATOS
+	 * @return
+	 */
+	List<AporteSindicalModel> srvAporteSIndical();
 	
 	
 }

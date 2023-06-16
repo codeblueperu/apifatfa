@@ -32,7 +32,6 @@ public class DeclaradosController {
 	public ResponseEntity<?> onAgregarDeclarados(@RequestPart(name = "datos") NominasModel datos,
 			@RequestParam(name = "file", required = false) MultipartFile file) {
 
-		System.out.println(file);
 		if (file == null) {
 			return ResponseEntity.ok(srvDelcrados.srvAgregarDeclarados(datos));
 		} else {

@@ -125,7 +125,7 @@ public class EmpresaServiceImpl implements IEmpresaService {
 					System.out.println(domicilio.get(i));
 				}
 			}
-			map.put("data",datosempresa);
+			map.put("data",datosempresa.toString());
 			map.put("message", "La empresa  fue registrado con éxito");
 			
 		} catch (Exception e) {
