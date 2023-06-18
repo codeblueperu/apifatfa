@@ -42,9 +42,5 @@ public class MultiBody {
 
 	public void setResponsableRRHH(ResponsableRRHHModel responsableRRHH) {
 		this.responsableRRHH = responsableRRHH;
-	}
-	
-	
-	
-	
+	}	
 }

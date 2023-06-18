@@ -1,4 +1,4 @@
-package com.fatfa.model.entity;
+	package com.fatfa.model.entity;
 
 import java.util.Date;
 
@@ -89,6 +89,22 @@ public class UsuarioModel {
 		this.passwordResetToken = passwordResetToken;
 		this.passwordResetTokenDate = passwordResetTokenDate;
 		this.fechaModifica = fechaModifica;
+		this.idUsuarioCrea = idUsuarioCrea;
+		this.perfil = perfil;
+	}
+
+	public UsuarioModel(String email, String password, String nombresApellidos, boolean estadoCuenta,
+			boolean estadoCambioPassword, Date fechaCambioClave, boolean estadoAcceso, Date fechaAlta,
+			int idUsuarioCrea,PerfilesModel perfil) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.nombresApellidos = nombresApellidos;
+		this.estadoCuenta = estadoCuenta;
+		this.estadoCambioPassword = estadoCambioPassword;
+		this.fechaCambioClave = fechaCambioClave;
+		this.estadoAcceso = estadoAcceso;
+		this.fechaAlta = fechaAlta;
 		this.idUsuarioCrea = idUsuarioCrea;
 		this.perfil = perfil;
 	}

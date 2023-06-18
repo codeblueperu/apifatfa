@@ -36,6 +36,12 @@ public class UsuariosEmpresaModel {
 		this.usuario = usuario;
 	}
 
+	public UsuariosEmpresaModel(EmpresasModel empresa, UsuarioModel usuario) {
+		super();
+		this.empresa = empresa;
+		this.usuario = usuario;
+	}
+
 	public int getId() {
 		return id;
 	}
