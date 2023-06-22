@@ -26,7 +26,7 @@ public class SindicatoServiceImp implements ISindicatoService {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			repoSindicato.save(sindicato);		
-			map.put("message", "Sindicatoe registrado con éxito");
+			map.put("message", "Sindicato registrado con éxito");
 			
 		} catch (Exception e) {
 			log.error("ERROR GUARDAR SINDICATO => " + e.toString());
@@ -54,6 +54,16 @@ public class SindicatoServiceImp implements ISindicatoService {
 		Map<String, Object> map = new HashMap<>();
 		repoSindicato.deleteById(idSindicato);
 		map.put("message", "Sindicato eliminado con éxito");
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> srvEstadoSindicato(int idSindicato) {
+		Map<String, Object> map = new HashMap<>();
+		SindicatosModel sindicato = 	repoSindicato.findById(idSindicato).orElseThrow(()-> new ErrorNotFoundException("No se encontro ningun registro con el ID enviado."));
+		sindicato.setEstado(!sindicato.isEstado());
+		repoSindicato.save(sindicato);
+		map.put("message", "Estado cambiado con éxito");
 		return map;
 	}
 

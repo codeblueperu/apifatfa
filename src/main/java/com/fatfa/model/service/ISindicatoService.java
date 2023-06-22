@@ -37,4 +37,12 @@ public interface ISindicatoService {
 	 * @return
 	 */
 	Map<String, Object> srvEliminarSindicatoID(int idSindicato);
+	
+	/**
+	 * @author SOPORTE
+	 * @apiNote ACTUALIZAR ESTADO SINDICATO
+	 * @param idSindicato
+	 * @return
+	 */
+	Map<String, Object> srvEstadoSindicato(int idSindicato);
 }

@@ -51,9 +51,8 @@ public class SolicitudesUsuarioEmpresaModel {
 	@JoinColumn(name = "id_empresa", nullable = false)
 	private EmpresasModel empresa;
 	
-	@Enumerated(EnumType.STRING)
 	@Column(name = "estado_solicitud", nullable = false, length = 30)
-	private EstadoSolicitud estadoSolicitud;	
+	private String estadoSolicitud;	
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm",locale = "es-PE", timezone = "America/Lima")
 	@Column(name = "fecha_solicita", nullable = false,columnDefinition = "DATETIME" )
@@ -66,9 +65,6 @@ public class SolicitudesUsuarioEmpresaModel {
 	@Column(name = "observaciones", nullable = true, columnDefinition = "TEXT")
 	private String observaciones;
 
-	public enum EstadoSolicitud{
-		PENDIENTE,APROBADO,ANULADA
-	}
 	
 	public SolicitudesUsuarioEmpresaModel() {
 		super();
@@ -79,7 +75,7 @@ public class SolicitudesUsuarioEmpresaModel {
 			@NotEmpty(message = "El campo nombre es requerido.") String nombre,
 			@NotEmpty(message = "El campo nombre es requerido.") String apellidos,
 			@NotEmpty(message = "El campo email es requerido") @Email(message = "No es un formato de tipo email", regexp = "^[\\w-]+(\\.[\\w-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$") String email,
-			String contrasenia, PerfilesModel perfil, EmpresasModel empresa, EstadoSolicitud estadoSolicitud,
+			String contrasenia, PerfilesModel perfil, EmpresasModel empresa, String estadoSolicitud,
 			Date fechaSolicita, Date fechaApruebaSolcitud, String observaciones) {
 		super();
 		this.idSolicitud = idSolicitud;
@@ -119,6 +115,14 @@ public class SolicitudesUsuarioEmpresaModel {
 		this.apellidos = apellidos;
 	}
 
+	public String getEstadoSolicitud() {
+		return estadoSolicitud;
+	}
+
+	public void setEstadoSolicitud(String estadoSolicitud) {
+		this.estadoSolicitud = estadoSolicitud;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -149,14 +153,6 @@ public class SolicitudesUsuarioEmpresaModel {
 
 	public void setEmpresa(EmpresasModel empresa) {
 		this.empresa = empresa;
-	}
-
-	public EstadoSolicitud getEstadoSolicitud() {
-		return estadoSolicitud;
-	}
-
-	public void setEstadoSolicitud(EstadoSolicitud estadoSolicitud) {
-		this.estadoSolicitud = estadoSolicitud;
 	}
 
 	public Date getFechaSolicita() {

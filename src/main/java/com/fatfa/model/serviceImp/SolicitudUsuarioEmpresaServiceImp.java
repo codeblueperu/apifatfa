@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import com.fatfa.exceptions.ErrorConflictException;
 import com.fatfa.exceptions.ErrorNotFoundException;
 import com.fatfa.model.entity.SolicitudesUsuarioEmpresaModel;
-import com.fatfa.model.entity.SolicitudesUsuarioEmpresaModel.EstadoSolicitud;
 import com.fatfa.model.entity.UsuarioModel;
 import com.fatfa.model.entity.UsuariosEmpresaModel;
 import com.fatfa.model.repository.ISolicitudUsuarioEmpresaRepository;
@@ -46,13 +45,11 @@ public class SolicitudUsuarioEmpresaServiceImp implements ISolicitudUsuarioEmpre
 			String estadoSolicitud) {
 
 		List<SolicitudesUsuarioEmpresaModel> listaData = new ArrayList<>();
-
 		try {
 			if (idEmpresa == 0 && estadoSolicitud.compareTo("Todos") == 0) {
+				System.out.println(estadoSolicitud);
 				listaData = repoSolicitud.findAll();
-			}
-
-			if (idEmpresa > 0 && estadoSolicitud.compareTo("Todos") == 0) {
+			}else if (idEmpresa > 0 && estadoSolicitud.compareTo("Todos") == 0) {
 				listaData = repoSolicitud.findByEmpresaIdEmpresa(idEmpresa);
 			} else {
 				listaData = repoSolicitud.findByEmpresaIdEmpresaAndEstadoSolicitud(idEmpresa, estadoSolicitud);
@@ -68,13 +65,13 @@ public class SolicitudUsuarioEmpresaServiceImp implements ISolicitudUsuarioEmpre
 	@Override
 	public Map<String, Object> srvCreateUpdateSolicitudUsuarioEmpresa(SolicitudesUsuarioEmpresaModel solicitud) {
 		Map<String, Object> response = new HashMap<>();
-
+		
 		try {
 
 			// # BUSCAR QUE EL USUARIO A SOLICITAR NO TENGA YA UNA SOLICITUD PENDIENTE
 			Optional<SolicitudesUsuarioEmpresaModel> validaSolicitud = repoSolicitud
 					.findByEmpresaIdEmpresaAndEmailAndEstadoSolicitud(solicitud.getEmpresa().getIdEmpresa(),
-							solicitud.getEmail(), EstadoSolicitud.PENDIENTE.toString());
+							solicitud.getEmail(), "PENDIENTE");
 
 			if (validaSolicitud.isPresent()) {
 				throw new ErrorConflictException("Ya se encuentra una solicitud con estado pendiente para la cuenta <b>"
@@ -122,7 +119,7 @@ public class SolicitudUsuarioEmpresaServiceImp implements ISolicitudUsuarioEmpre
 
 //			# ACTUALIZAR EL ESTADO Y UN COMENTARIO SI LO UBIERA
 			solicitudDB.setObservaciones(observacion);
-			solicitudDB.setEstadoSolicitud(EstadoSolicitud.ANULADA);
+			solicitudDB.setEstadoSolicitud("ANULADA");
 			repoSolicitud.save(solicitudDB);
 //			# RETORNAMOS UNA RESPUESTA
 			response.put("message",
@@ -149,6 +146,8 @@ public class SolicitudUsuarioEmpresaServiceImp implements ISolicitudUsuarioEmpre
 					true, new Date(), true, new Date(), 1, solicitudDB.getPerfil()));
 //			# CREAMOS EL ANEXO A LA TABLA USUARIO EMPRESA
 			repoUserEmpresa.save(new UsuariosEmpresaModel(solicitudDB.getEmpresa(), usuarioCreado));
+			solicitudDB.setEstadoSolicitud("APROBADO");
+			repoSolicitud.save(solicitudDB);
 //			# RETORNAMOS UNA RESPUESTA
 			response.put("message",
 					"La solicitud para la cuenta <b>" + solicitudDB.getEmail() + "</b> de la empresa <b>"

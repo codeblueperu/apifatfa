@@ -35,6 +35,12 @@ public class SindicatoController {
 		return ResponseEntity.ok(srvSindicato.srvBuscarSindicatoID(idSindicato));
 	}
 	
+	
+	@PostMapping("/estadoId")
+	public ResponseEntity<?> onEstadoSindicato(@RequestParam("idsindicato") int idSindicato) {
+		return ResponseEntity.ok(srvSindicato.srvEstadoSindicato(idSindicato));
+	}
+	
 	@DeleteMapping("/eliminarId")
 	public ResponseEntity<?> onEliminarSindicatoID(@RequestParam("idsindicato") int idSindicato) {
 		return ResponseEntity.ok(srvSindicato.srvEliminarSindicatoID(idSindicato));
