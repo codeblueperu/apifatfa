@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.fatfa.exceptions.ErrorConflictException;
 import com.fatfa.exceptions.ErrorNotFoundException;
 import com.fatfa.model.dto.MatrizPeriodoIntersDTO;
 import com.fatfa.model.entity.BoletaModel;
@@ -217,10 +218,10 @@ public class BoletaServiceImpl implements IBoletaService {
 							dataBoleta.getAnio(), dataBoleta.getEmpresa().getIdEmpresa(),
 							dataBoleta.getEstadoPago().getIdEstadoPago());
 			if (validarBoleta.isPresent()) {
-//				throw new ErrorConflictException(
-//						"Estimado usuario, ya tiene una boleta generado anteriormente con el periodo <b>"
-//								+ dataBoleta.getAnio() + "-" + dataBoleta.getMes()
-//								+ "</b>, con un estado PENDIENTE DE PAGO. Se solicita su ANULACION antes de generar una nueva Boleta.");
+				throw new ErrorConflictException(
+						"Estimado usuario, ya tiene una boleta generado anteriormente con el periodo <b>"
+								+ dataBoleta.getAnio() + "-" + dataBoleta.getMes()
+								+ "</b>, con un estado PENDIENTE DE PAGO. Se solicita su ANULACION antes de generar una nueva Boleta.");
 			}
 
 			boletaDB = repoBoleta.save(dataBoleta);

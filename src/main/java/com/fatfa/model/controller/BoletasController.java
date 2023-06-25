@@ -37,4 +37,11 @@ public class BoletasController {
 		srvBoleta.onGenerarTalonBoletaPago(dataBoleta,  request,  response);			
 		//return ResponseEntity.ok().body("EXCELENTE");
 	}
+	
+	@GetMapping("/verificador")
+	public ResponseEntity<?> srverificador(@RequestParam("digitos") String codigobarra) throws ParseException {
+		
+		
+		return ResponseEntity.ok().body(Constantes.generarDigitoVerificador(codigobarra));
+	}
 }

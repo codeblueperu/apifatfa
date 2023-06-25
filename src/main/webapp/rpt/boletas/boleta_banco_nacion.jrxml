@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="boleta_banco_nacion" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="090041ac-c96f-4215-9a61-05e2dd45b286">
-	<property name="ireport.zoom" value="1.5000000000000007"/>
+	<property name="ireport.zoom" value="2.415765000000002"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="P_COD_BOLETA" class="java.lang.Integer">
@@ -31,6 +31,9 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="fecha_primer_vencimiento" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre_sindicato" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="fecha_probable_pago" class="java.sql.Timestamp">
@@ -429,6 +432,31 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total_de_sueldos}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="80" y="88" width="266" height="10" uuid="bf33b329-d11b-47d5-9e5b-74092decf547"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Century Gothic" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": "+$F{nombre_sindicato}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="439" y="10" width="96" height="15" uuid="cee5727b-d5cc-4db8-9eb3-d176b1d28d09"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Century Gothic" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[059488/48]]></text>
+			</staticText>
+			<image scaleImage="RetainShape" hAlign="Center" vAlign="Top" isUsingCache="false">
+				<reportElement x="15" y="-7" width="77" height="38" uuid="d4844b7e-9af3-4b74-8f88-5a501d2ebbb1"/>
+				<imageExpression><![CDATA["E:\\PROYECTOS\\BACKEND\\apifatfa\\src\\main\\webapp\\logos\\bcnacion.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="32" y="23" width="77" height="15" uuid="dda4ea2a-d1cf-4db9-9717-72f18febe2b9"/>
+				<textElement markup="html">
+					<font size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BANCO DE LA <br> NACION ARGENTINA]]></text>
+			</staticText>
 		</band>
 	</title>
 </jasperReport>
