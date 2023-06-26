@@ -38,7 +38,7 @@ public class DeclaradosController {
 			String nombre = file.getOriginalFilename();
 			datos.setNombreArchivo(nombre);
 
-			srvDelcrados.saveFile(file);
+			srvDelcrados.saveFile("justificante//",file);
 			return ResponseEntity.ok(srvDelcrados.srvAgregarDeclarados(datos));
 		}
 
