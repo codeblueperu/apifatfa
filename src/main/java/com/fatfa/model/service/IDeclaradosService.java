@@ -73,6 +73,6 @@ public interface IDeclaradosService {
 	 * @param file
 	 * @return
 	 */
-	String saveFile(MultipartFile file);
+	String saveFile(String carpeta,MultipartFile file);
 	
 }

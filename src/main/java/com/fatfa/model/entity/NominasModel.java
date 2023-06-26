@@ -19,7 +19,7 @@ public class NominasModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_nomina")
+	@Column(name = "id_nomina", nullable= true)
 	private int idNomina ;
 	
 	@Column(length = 11, nullable = false)

@@ -49,7 +49,7 @@ import com.fatfa.utils.Constantes;
 
 @Service
 public class DeclaradosServiceImpl implements IDeclaradosService {
-	private String ruta = "src//main//webapp//";
+	private String ruta = "src//main//webapp//rpt//";
 	private static final Logger log = LoggerFactory.getLogger(DeclaradosServiceImpl.class);
 
 	@Autowired
@@ -112,11 +112,11 @@ public class DeclaradosServiceImpl implements IDeclaradosService {
 	}
 
 	@Override
-	public String saveFile(MultipartFile file) {
+	public String saveFile(String carpeta, MultipartFile file) {
 		if (!file.isEmpty()) {
 			try {
 				byte[] bytes = file.getBytes();
-				Path path = Paths.get(ruta + file.getOriginalFilename());
+				Path path = Paths.get(ruta+carpeta + file.getOriginalFilename());
 				Files.write(path, bytes);
 			} catch (Exception e) {
 				// TODO: handle exception
