@@ -257,13 +257,15 @@ public class BoletaServiceImpl implements IBoletaService {
 	public void onGenerarBoleta(int idBoleta, String nameFile, HttpServletRequest request,
 			HttpServletResponse response) {
 		Connection connection = null;
-		System.err.println(idBoleta);
+		
 		try {
+			String RUTA_REPOSITORY = request.getSession().getServletContext().getRealPath("");
 			String rutaFile = request.getSession().getServletContext().getRealPath("/rpt/boletas/" + nameFile);
 			JasperReport jasperReport = JasperCompileManager.compileReport(rutaFile);
 			Map<String, Object> parametros = new HashMap<>();
 
 			parametros.put("P_COD_BOLETA", idBoleta);
+			parametros.put("P_RUTA", RUTA_REPOSITORY);
 
 			byte[] reporte = null;
 
