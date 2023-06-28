@@ -1,9 +1,18 @@
 package com.fatfa.model.controller;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.text.ParseException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +55,34 @@ public class TransferenciaController {
 			return ResponseEntity.ok(srvTransferencias.srvAgregarTransferencia(datos));
 		}
 		
+	}
+	
+	@GetMapping("/download")
+	public void getComprobanteTranferencia(@RequestParam("idTransferencia") int idTransferencia, HttpServletRequest request,
+			HttpServletResponse response)throws java.io.IOException{
+		TransferenciaModel datos= new TransferenciaModel();
+		datos=srvTransferencias.srvBuscraComprobante(idTransferencia);
+		if(!datos.getComprobante().isEmpty()) {
+			String pathurl="src//main//webapp//rpt//transferencia//"+datos.getComprobante();
+			File file = new File(pathurl);
+			
+			if(file.exists()) {
+				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+				if (mimeType == null) {
+					mimeType = "application/octet-stream";
+				}
+				response.setContentType(mimeType);
+
+				response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() + "\""));
+
+				response.setContentLength((int) file.length());
+
+				InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+				FileCopyUtils.copy(inputStream, response.getOutputStream());
+				inputStream.close();
+			}
+		}
 	}
 	
 }

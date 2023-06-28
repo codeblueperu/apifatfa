@@ -3,6 +3,7 @@ package com.fatfa.model.serviceImp;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -300,5 +301,18 @@ public class BoletaServiceImpl implements IBoletaService {
 			}
 		}
 
+	}
+
+	@Override
+	public List<BoletaModel> srvLisBoleta(int idEmpresa, int idAporte, String mes, String anio) {
+		
+		List<BoletaModel> boletas= new ArrayList<>();
+		
+		if(idEmpresa == 0) {
+			boletas = repoBoleta.findAll();
+		}else {
+			boletas = repoBoleta.findByEmpresaIdEmpresaAndAporteSindicalIdAporteAndMesAndAnio(idEmpresa, idAporte, mes, anio);
+		}
+		return boletas;
 	}
 }
