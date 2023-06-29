@@ -1,6 +1,7 @@
 package com.fatfa.model.serviceImp;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fatfa.exceptions.ErrorConflictException;
+import com.fatfa.exceptions.ErrorNotFoundException;
+import com.fatfa.model.entity.BancosModel;
 import com.fatfa.model.entity.BoletaModel;
 import com.fatfa.model.entity.EmpresasModel;
+import com.fatfa.model.repository.IBancosRepository;
 import com.fatfa.model.repository.IBoletaRepository;
 import com.fatfa.model.repository.IEmpresaRepository;
 import com.fatfa.model.service.IBancosService;
@@ -30,21 +34,29 @@ public class BancosServiceImp implements IBancosService {
 
 	@Autowired
 	private IGlobalService srvGlobal;
+	
+	@Autowired
+	private IBancosRepository repoBanco;
 
 	@Override
 	public String onGeneraCodigigoBarraBancoNacion(int idBoleta) {
 
 		String codigoBarra = "";
 		try {
+			
 			BoletaModel boleta = repoBoleta.findById(idBoleta).orElseThrow(
 					() -> new ErrorConflictException("Error al intentar buscar la boleta mediante su identificador."));
 			EmpresasModel empresa = repoEmpresa.findById(boleta.getEmpresa().getIdEmpresa()).orElseThrow(
 					() -> new ErrorConflictException("Error al intentar buscar empresa mediante su identificador."));
 
 //			# CODIGO ASIGNADO POR EL BANCO 4 DIGITOS
-			codigoBarra += boleta.getBanco().getIdBanco();
+			BancosModel bancoModel = repoBanco.findById(boleta.getBanco().getIdBanco()).orElseThrow(()-> new ErrorNotFoundException("No se encontro el Banco con el ID enviado :("));
+			System.err.println(boleta.getBanco());
+			codigoBarra +=bancoModel.getIdentificador();
 //			# IMPORTE TOTAL PAGAR 8 DIGITOS	<===> AUTOCOMLETAR CON 0 SI ES NECESARIO
-			String importeTotal = boleta.getImporteTotal().toString().replace(",", "").replace(".", "");
+			 BigDecimal montoDecimal = new BigDecimal(boleta.getImporteTotal()).setScale(2, RoundingMode.HALF_UP);			
+			String importeTotal =  montoDecimal.toString().replace(",", "").replace(".", "");
+			System.err.println(importeTotal);
 			codigoBarra += StringUtils.leftPad(importeTotal, 8, "0");
 //			# ANIO PERIODO 2 DIGITOS 
 			codigoBarra += boleta.getAnio().substring(2, 4);

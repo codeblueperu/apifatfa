@@ -218,27 +218,35 @@ public class BoletaServiceImpl implements IBoletaService {
 							dataBoleta.getAnio(), dataBoleta.getEmpresa().getIdEmpresa(),
 							dataBoleta.getEstadoPago().getIdEstadoPago());
 			if (validarBoleta.isPresent()) {
-				throw new ErrorConflictException(
-						"Estimado usuario, ya tiene una boleta generado anteriormente con el periodo <b>"
-								+ dataBoleta.getAnio() + "-" + dataBoleta.getMes()
-								+ "</b>, con un estado PENDIENTE DE PAGO. Se solicita su ANULACION antes de generar una nueva Boleta.");
+//				throw new ErrorConflictException(
+//						"Estimado usuario, ya tiene una boleta generado anteriormente con el periodo <b>"
+//								+ dataBoleta.getAnio() + "-" + dataBoleta.getMes()
+//								+ "</b>, con un estado PENDIENTE DE PAGO. Se solicita su ANULACION antes de generar una nueva Boleta.");
 			}
 
 			boletaDB = repoBoleta.save(dataBoleta);
 //			#GENERAR CODIGO DE BARRA
 
 //			BANCO DE LA NACION
-			if (dataBoleta.getBanco().getIdBanco().trim().compareTo("4977") == 0) {
+			if (dataBoleta.getBanco().getIdBanco().trim().compareTo("2") == 0) {
 
 				srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
 				nameFile = "boleta_banco_nacion.jrxml";
 			}
 //			PAGO FACIL
-			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("1037") == 0) {
+			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("1") == 0) {
 
-				srvBancos.onGeneraCodigoBarraPagoFacil(boletaDB.getIdBoleta());
+				srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
 				nameFile = "boleta_pago_facil.jrxml";
-			} else {
+			}
+//			RAPI PAGO
+			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("4") == 0) {
+
+				srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
+				nameFile = "boleta_rapi_pago.jrxml";
+			}
+//			BAPRO
+			else {
 				srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
 				nameFile = "boleta_banco_nacion.jrxml";
 			}
