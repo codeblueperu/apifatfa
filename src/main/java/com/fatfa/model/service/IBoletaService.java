@@ -1,6 +1,7 @@
 package com.fatfa.model.service;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,5 +37,15 @@ public interface IBoletaService {
 	 */
 	void onGenerarBoleta(int idBoleta, String nameFile, HttpServletRequest request, HttpServletResponse response);
 
+	/**
+	 * @author SOPORTE
+	 * @apiNote FILTRAR BOLETA DE LA BASE DE DATOS
+	 * @param idEmpresa
+	 * @param idAporte
+	 * @param mes
+	 * @param anio
+	 */
+	
+	List<BoletaModel> srvLisBoleta(int idEmpresa, int idAporte, String mes, String anio);
 
 }

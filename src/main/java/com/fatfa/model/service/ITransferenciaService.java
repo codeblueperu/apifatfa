@@ -21,4 +21,12 @@ public interface ITransferenciaService {
 	 * @return
 	 */
 	Map<String, Object> srvAgregarTransferencia(TransferenciaModel datos);
+	
+	/**
+	 * @author CodeBluePeru
+	 * @apiNote BUSCA LOS JUSTIFICATES DE TRANSFERENCIA
+	 * @param idTransferencia
+	 * @return
+	 */
+	TransferenciaModel srvBuscraComprobante(Integer idTransferencia);
 }

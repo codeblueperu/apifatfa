@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +61,16 @@ public class TransferenciaServiceImp implements ITransferenciaService {
 			throw e;
 		}
 		return transferencias;
+	}
+
+	@Override
+	public TransferenciaModel srvBuscraComprobante(Integer idTransferencia) {
+		Optional<TransferenciaModel> newdatos= repoTransferencias.findById(idTransferencia) ;
+		if(newdatos.isPresent()) {
+			return newdatos.get();
+		}else {
+			return null;
+		}
 	}
 
 }
