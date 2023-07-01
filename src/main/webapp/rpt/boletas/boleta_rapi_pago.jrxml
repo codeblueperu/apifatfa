@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="boleta_pago_facil" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="090041ac-c96f-4215-9a61-05e2dd45b286">
-	<property name="ireport.zoom" value="1.3636363636363638"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="boleta_rapi_pago" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="090041ac-c96f-4215-9a61-05e2dd45b286">
+	<property name="ireport.zoom" value="1.8181818181818181"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="P_COD_BOLETA" class="java.lang.Integer">
@@ -416,9 +416,9 @@
 				</textElement>
 				<textFieldExpression><![CDATA[": "+$F{nombre_sindicato}]]></textFieldExpression>
 			</textField>
-			<image scaleImage="RetainShape" hAlign="Left" vAlign="Top" isUsingCache="false">
-				<reportElement x="-5" y="0" width="77" height="38" uuid="d4844b7e-9af3-4b74-8f88-5a501d2ebbb1"/>
-				<imageExpression><![CDATA[$P{P_RUTA}+"\\logos\\pago_facil.jpg"]]></imageExpression>
+			<image scaleImage="RealHeight" hAlign="Left" vAlign="Top" isUsingCache="false">
+				<reportElement x="-5" y="3" width="77" height="38" uuid="d4844b7e-9af3-4b74-8f88-5a501d2ebbb1"/>
+				<imageExpression><![CDATA[$P{P_RUTA}+"\\logos\\rapipago.jpg"]]></imageExpression>
 			</image>
 			<textField pattern="dd/MM/yyyy hh:mm aa">
 				<reportElement x="0" y="357" width="555" height="23" forecolor="#666666" uuid="8543ef3e-bed0-4ca4-b12c-b5fa83cd19ae"/>
@@ -434,20 +434,6 @@
 				<reportElement x="474" y="2" width="77" height="38" uuid="df3f6268-6bca-4eee-bf5d-cacd074b8cc9"/>
 				<imageExpression><![CDATA[$P{P_RUTA}+"\\logos\\fatfa.png"]]></imageExpression>
 			</image>
-			<staticText>
-				<reportElement x="45" y="0" width="305" height="18" uuid="6706b7e6-2949-4ba5-8f91-e44016410d47"/>
-				<textElement textAlignment="Left" verticalAlignment="Bottom">
-					<font fontName="Century Gothic" size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[PAGO FACIL]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="45" y="18" width="318" height="15" uuid="ec02e2a3-7942-40c7-9340-2c1d1e01c3b0"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font fontName="Century Gothic" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Servicio Electrónico de Pago S. A.]]></text>
-			</staticText>
 		</band>
 	</title>
 </jasperReport>

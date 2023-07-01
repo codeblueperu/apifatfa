@@ -1,0 +1,20 @@
+============== ERROR EN LA FILA (2)=======================================
+==> NOMBRE DEL CAMPO: RECTIFICATIVA
+==> OBSERVACION: El valor del campo no corresponde al numero consecutivo: DICE (0) <====>  DEBE DECIR (1)
+=============================================================================================
+============== ERROR EN LA FILA (3)=======================================
+==> NOMBRE DEL CAMPO: RECTIFICATIVA
+==> OBSERVACION: El valor del campo no corresponde al numero consecutivo: DICE (0) <====>  DEBE DECIR (1)
+=============================================================================================
+============== ERROR EN LA FILA (4)=======================================
+==> NOMBRE DEL CAMPO: RECTIFICATIVA
+==> OBSERVACION: El valor del campo no corresponde al numero consecutivo: DICE (0) <====>  DEBE DECIR (1)
+=============================================================================================
+============== ERROR EN LA FILA (5)=======================================
+==> NOMBRE DEL CAMPO: RECTIFICATIVA
+==> OBSERVACION: El valor del campo no corresponde al numero consecutivo: DICE (0) <====>  DEBE DECIR (1)
+=============================================================================================
+============== ERROR EN LA FILA (6)=======================================
+==> NOMBRE DEL CAMPO: RECTIFICATIVA
+==> OBSERVACION: El valor del campo no corresponde al numero consecutivo: DICE (0) <====>  DEBE DECIR (1)
+=============================================================================================

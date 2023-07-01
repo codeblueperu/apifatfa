@@ -19,7 +19,7 @@ public class ConveniosAplicablesModel {
 	private String nombre;
 	
 	@Column(name = "activo", length = 50, nullable = false)
-	private String activo;
+	private boolean activo;
 	
 	@Column(name = "descripcion", length = 50, nullable = false)
 	private String descripcion;
@@ -40,11 +40,12 @@ public class ConveniosAplicablesModel {
 		this.nombre = nombre;
 	}
 
-	public String getActivo() {
+	
+	public boolean isActivo() {
 		return activo;
 	}
 
-	public void setActivo(String activo) {
+	public void setActivo(boolean activo) {
 		this.activo = activo;
 	}
 
@@ -61,6 +62,7 @@ public class ConveniosAplicablesModel {
 		return "ConveniosAplicablesModel [id=" + id + ", nombre=" + nombre + ", activo=" + activo + ", descripcion="
 				+ descripcion + "]";
 	}
+
 
 	
 	

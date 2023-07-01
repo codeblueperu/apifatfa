@@ -18,17 +18,21 @@ public class BancosModel {
 	
 	@Column(nullable = false, columnDefinition = "BIT default 1")
 	private boolean estado;
+	
+	@Column(name = "identificador", length = 4, nullable = false)
+	private String identificador ;
 
 	public BancosModel() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public BancosModel(String idBanco, String banco, boolean estado) {
+	public BancosModel(String idBanco, String banco, boolean estado, String identificador) {
 		super();
 		this.idBanco = idBanco;
 		this.banco = banco;
 		this.estado = estado;
+		this.identificador = identificador;
 	}
 
 	public String getIdBanco() {
@@ -55,8 +59,17 @@ public class BancosModel {
 		this.estado = estado;
 	}
 
+	public String getIdentificador() {
+		return identificador;
+	}
+
+	public void setIdentificador(String identificador) {
+		this.identificador = identificador;
+	}
+
 	@Override
 	public String toString() {
-		return "BancosModel [idBanco=" + idBanco + ", banco=" + banco + ", estado=" + estado + "]";
+		return "BancosModel [idBanco=" + idBanco + ", banco=" + banco + ", estado=" + estado + ", identificador="
+				+ identificador + "]";
 	}
 }

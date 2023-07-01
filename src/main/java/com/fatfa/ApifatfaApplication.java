@@ -15,7 +15,7 @@ public class ApifatfaApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApifatfaApplication.class, args);
-
+		
 		// System.err.println();
 
 	}

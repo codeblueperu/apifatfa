@@ -37,4 +37,14 @@ public class BoletasController {
 		srvBoleta.onGenerarTalonBoletaPago(dataBoleta,  request,  response);			
 		//return ResponseEntity.ok().body("EXCELENTE");
 	}
+	
+	@GetMapping("/verificador")
+	public ResponseEntity<?> srverificador(@RequestParam("digitos") String codigobarra) throws ParseException {
+		return ResponseEntity.ok().body(Constantes.generarDigitoVerificador(codigobarra));
+	}
+	
+	@GetMapping("/listBoleta")
+	public ResponseEntity<?> srvListBoletas(@RequestParam("idEmpresa") int idEmpresa, @RequestParam("idAporte") int aporte, @RequestParam("mes") String mes, @RequestParam("anio") String anio){
+		return ResponseEntity.ok(srvBoleta.srvLisBoleta(idEmpresa, aporte, mes, anio));
+	}
 }

@@ -3,6 +3,7 @@ package com.fatfa.model.serviceImp;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+
 
 import com.fatfa.exceptions.ErrorNotFoundException;
 import com.fatfa.model.dto.MatrizPeriodoIntersDTO;
@@ -209,40 +211,48 @@ public class BoletaServiceImpl implements IBoletaService {
 		BoletaModel boletaDB = new BoletaModel();
 		String nameFile = "";
 		try {
-//			# GUARDAR DATOS DE LA BOLETA
+//			# GUARDAR DATOS DE LA BOLETA SIEMPRE CON ESTADO PENDIENTE
 			dataBoleta.setEstaoPago(new EstadoPagoModel(1));
+			
 //			#BUSCAR SI YA TIENE UNA BOLETA GENERADA ANTERIORMENTE PARA EL MISMO PERIODO
 			Optional<BoletaModel> validarBoleta = repoBoleta
 					.findByMesAndAnioAndEmpresaIdEmpresaAndEstadoPagoIdEstadoPago(dataBoleta.getMes(),
 							dataBoleta.getAnio(), dataBoleta.getEmpresa().getIdEmpresa(),
 							dataBoleta.getEstadoPago().getIdEstadoPago());
+			
 			if (validarBoleta.isPresent()) {
-//				throw new ErrorConflictException(
-//						"Estimado usuario, ya tiene una boleta generado anteriormente con el periodo <b>"
-//								+ dataBoleta.getAnio() + "-" + dataBoleta.getMes()
-//								+ "</b>, con un estado PENDIENTE DE PAGO. Se solicita su ANULACION antes de generar una nueva Boleta.");
+//				#DAR DE BAJA A LA BOLETA GENERADA ANTERIORMENTE
+				BoletaModel boletaBaja = validarBoleta.get();
+				boletaBaja.setEstaoPago(new EstadoPagoModel(3));
+//				# DAMOS DE BAJA A LA BOLETA PARA PODER GUARDAR LA NUEVA RECTIFICATIVA
+				repoBoleta.save(boletaBaja);
 			}
 
+//			# PROCEDEMOS A GUARDAR LA BOLETA Y SU DETALLE
 			boletaDB = repoBoleta.save(dataBoleta);
+			
 //			#GENERAR CODIGO DE BARRA
+			srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
 
+//			# PROCEDEMOS A GENERAL EL REPORTE DE LA BOLETA SEGUN EL TIPO DE BANCO
 //			BANCO DE LA NACION
-			if (dataBoleta.getBanco().getIdBanco().trim().compareTo("4977") == 0) {
-
-				srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
+			if (dataBoleta.getBanco().getIdBanco().trim().compareTo("2") == 0) {				
 				nameFile = "boleta_banco_nacion.jrxml";
 			}
 //			PAGO FACIL
-			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("1037") == 0) {
-
-				srvBancos.onGeneraCodigoBarraPagoFacil(boletaDB.getIdBoleta());
+			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("1") == 0) {				
 				nameFile = "boleta_pago_facil.jrxml";
-			} else {
-				srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
+			}
+//			RAPI PAGO
+			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("4") == 0) {				
+				nameFile = "boleta_rapi_pago.jrxml";
+			}
+//			BAPRO
+			else {				
 				nameFile = "boleta_banco_nacion.jrxml";
 			}
 
-//			GENERAR BOLETA DE PAGO SEGUN EL TIPO DE BANCO
+//			#GENERAR RPT BOLETA
 			onGenerarBoleta(boletaDB.getIdBoleta(), nameFile, request, response);
 
 		} catch (Exception e) {
@@ -256,13 +266,15 @@ public class BoletaServiceImpl implements IBoletaService {
 	public void onGenerarBoleta(int idBoleta, String nameFile, HttpServletRequest request,
 			HttpServletResponse response) {
 		Connection connection = null;
-		System.err.println(idBoleta);
+		
 		try {
+			String RUTA_REPOSITORY = request.getSession().getServletContext().getRealPath("");
 			String rutaFile = request.getSession().getServletContext().getRealPath("/rpt/boletas/" + nameFile);
 			JasperReport jasperReport = JasperCompileManager.compileReport(rutaFile);
 			Map<String, Object> parametros = new HashMap<>();
 
 			parametros.put("P_COD_BOLETA", idBoleta);
+			parametros.put("P_RUTA", RUTA_REPOSITORY);
 
 			byte[] reporte = null;
 
@@ -297,5 +309,18 @@ public class BoletaServiceImpl implements IBoletaService {
 			}
 		}
 
+	}
+
+	@Override
+	public List<BoletaModel> srvLisBoleta(int idEmpresa, int idAporte, String mes, String anio) {
+		
+		List<BoletaModel> boletas= new ArrayList<>();
+		
+		if(idEmpresa == 0) {
+			boletas = repoBoleta.findAll();
+		}else {
+			boletas = repoBoleta.findByEmpresaIdEmpresaAndAporteSindicalIdAporteAndMesAndAnio(idEmpresa, idAporte, mes, anio);
+		}
+		return boletas;
 	}
 }

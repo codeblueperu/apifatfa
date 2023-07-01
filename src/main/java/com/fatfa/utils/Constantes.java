@@ -21,30 +21,30 @@ public class Constantes {
 	public static int mesActual = localDate.getMonthValue();
 	public static int diaActual = localDate.getDayOfMonth();
 
-	public static int generarDigitoVerificador(String cadena) {
-		int sumatorio = 0;
-		boolean paso = true;
-
-		for (int i = cadena.length() - 1; i >= 0; i--) {
-			int valor;
-			if (paso) {
-				valor = Character.getNumericValue(cadena.charAt(i)) * 3;
-				paso = false;
+	public static int generarDigitoVerificador(String codigobarra) {
+		int multiplicador = 1;
+		int sumaValorDigitos = 0;
+		for (int i = 0; i < codigobarra.length(); i++) {
+			char item = codigobarra.charAt(i);
+			String letra = String.valueOf(item);
+//			# SECUENCIA ES LOS PRIMEROS 5 DIGITOS 1-3-5-7-9 Y LUEGO SE REPITE LA SUCESION 3-5-7-9 HASTA EL ULTIMO DIGITO
+			if (i == 0) {
+				sumaValorDigitos += Integer.parseInt(letra) * multiplicador;
+				multiplicador += 2;
 			} else {
-				valor = Character.getNumericValue(cadena.charAt(i)) * 1;
-				paso = true;
+				sumaValorDigitos += Integer.parseInt(letra) * multiplicador;
+				multiplicador += 2;
 			}
 
-			sumatorio += valor;
+			if (multiplicador > 9) {
+				multiplicador = 3;
+			}
 		}
 
-		int resto = sumatorio % 10;
-		int resultado = 10 - resto;
+		double nmod2 = sumaValorDigitos / 2;
+		int mod10 = (int) nmod2 % 10;
 
-		if (resultado == 10)
-			resultado = 0;
-
-		return resultado;
+		return mod10;
 	}
 
 	/**
@@ -59,6 +59,7 @@ public class Constantes {
 		return dateFormat.format(fecha);
 
 	}
+
 	/**
 	 * @author SOPORTE
 	 * @apiNote CONVERTIR DE STRING A DATE
@@ -72,7 +73,7 @@ public class Constantes {
 		return dateFormat.parse(fecha);
 
 	}
-	
+
 	/**
 	 * @author SOPORTE
 	 * @apiNote COMPLETAR CON 0 A LA IZQUIERDA
@@ -80,7 +81,7 @@ public class Constantes {
 	 * @param numCero
 	 * @return
 	 */
-	public static String completeCeroIzquierda(String valor,int numCero) {
+	public static String completeCeroIzquierda(String valor, int numCero) {
 		return StringUtils.leftPad(String.valueOf(valor), numCero, "0");
 
 	}
