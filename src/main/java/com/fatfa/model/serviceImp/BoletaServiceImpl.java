@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import com.fatfa.exceptions.ErrorConflictException;
+
 import com.fatfa.exceptions.ErrorNotFoundException;
 import com.fatfa.model.dto.MatrizPeriodoIntersDTO;
 import com.fatfa.model.entity.BoletaModel;
@@ -211,48 +211,48 @@ public class BoletaServiceImpl implements IBoletaService {
 		BoletaModel boletaDB = new BoletaModel();
 		String nameFile = "";
 		try {
-//			# GUARDAR DATOS DE LA BOLETA
+//			# GUARDAR DATOS DE LA BOLETA SIEMPRE CON ESTADO PENDIENTE
 			dataBoleta.setEstaoPago(new EstadoPagoModel(1));
+			
 //			#BUSCAR SI YA TIENE UNA BOLETA GENERADA ANTERIORMENTE PARA EL MISMO PERIODO
 			Optional<BoletaModel> validarBoleta = repoBoleta
 					.findByMesAndAnioAndEmpresaIdEmpresaAndEstadoPagoIdEstadoPago(dataBoleta.getMes(),
 							dataBoleta.getAnio(), dataBoleta.getEmpresa().getIdEmpresa(),
 							dataBoleta.getEstadoPago().getIdEstadoPago());
+			
 			if (validarBoleta.isPresent()) {
-//				throw new ErrorConflictException(
-//						"Estimado usuario, ya tiene una boleta generado anteriormente con el periodo <b>"
-//								+ dataBoleta.getAnio() + "-" + dataBoleta.getMes()
-//								+ "</b>, con un estado PENDIENTE DE PAGO. Se solicita su ANULACION antes de generar una nueva Boleta.");
+//				#DAR DE BAJA A LA BOLETA GENERADA ANTERIORMENTE
+				BoletaModel boletaBaja = validarBoleta.get();
+				boletaBaja.setEstaoPago(new EstadoPagoModel(3));
+//				# DAMOS DE BAJA A LA BOLETA PARA PODER GUARDAR LA NUEVA RECTIFICATIVA
+				repoBoleta.save(boletaBaja);
 			}
 
+//			# PROCEDEMOS A GUARDAR LA BOLETA Y SU DETALLE
 			boletaDB = repoBoleta.save(dataBoleta);
+			
 //			#GENERAR CODIGO DE BARRA
+			srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
 
+//			# PROCEDEMOS A GENERAL EL REPORTE DE LA BOLETA SEGUN EL TIPO DE BANCO
 //			BANCO DE LA NACION
-			if (dataBoleta.getBanco().getIdBanco().trim().compareTo("2") == 0) {
-
-				srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
+			if (dataBoleta.getBanco().getIdBanco().trim().compareTo("2") == 0) {				
 				nameFile = "boleta_banco_nacion.jrxml";
 			}
 //			PAGO FACIL
-			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("1") == 0) {
-
-				srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
+			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("1") == 0) {				
 				nameFile = "boleta_pago_facil.jrxml";
 			}
 //			RAPI PAGO
-			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("4") == 0) {
-
-				srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
+			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("4") == 0) {				
 				nameFile = "boleta_rapi_pago.jrxml";
 			}
 //			BAPRO
-			else {
-				srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
+			else {				
 				nameFile = "boleta_banco_nacion.jrxml";
 			}
 
-//			GENERAR BOLETA DE PAGO SEGUN EL TIPO DE BANCO
+//			#GENERAR RPT BOLETA
 			onGenerarBoleta(boletaDB.getIdBoleta(), nameFile, request, response);
 
 		} catch (Exception e) {

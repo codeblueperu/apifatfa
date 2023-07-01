@@ -254,7 +254,7 @@
 					<font fontName="Century Gothic" size="8" isBold="false"/>
 					<paragraph firstLineIndent="5"/>
 				</textElement>
-				<text><![CDATA[CONTRIBUCION ESTRAORDINARIA]]></text>
+				<text><![CDATA[CONTRIBUCION EXTRAORDINARIA]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="440" y="147" width="115" height="15" uuid="b91021e3-a725-4e52-bbd4-17268ea00145"/>

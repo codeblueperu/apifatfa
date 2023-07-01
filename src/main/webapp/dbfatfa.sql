@@ -78,6 +78,4 @@ END
 
 #select calcular_coeficiente_antiguedad(1,3,'2023','05',200000.00) from dual
 
-
-
-SELECT TIMESTAMPDIFF(day, "2022-09-01", "2023-06-16") 
+-- SELECT TIMESTAMPDIFF(day, "2022-09-01", "2023-06-16") 
