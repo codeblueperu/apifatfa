@@ -248,6 +248,13 @@ public class BoletaServiceImpl implements IBoletaService {
 				nameFile = "boleta_rapi_pago.jrxml";
 			}
 //			BAPRO
+			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("3") == 0) {
+				nameFile = "boleta_bapro.jrxml";
+			}
+//			PAGO MIS CUENTAS
+			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("5") == 0) {
+				nameFile = "boleta_pago_mis_cuentas.jrxml";
+			}
 			else {				
 				nameFile = "boleta_banco_nacion.jrxml";
 			}
@@ -287,7 +294,7 @@ public class BoletaServiceImpl implements IBoletaService {
 			reporte = JasperRunManager.runReportToPdf(jasperReport, parametros, connection);
 
 			response.setContentType("application/pdf");
-			response.setHeader("Content-disposition", "inline; filename=BOLETANACONACION.pdf");
+			response.setHeader("Content-disposition", "inline; filename="+nameFile.replace(".jrxml", ".pdf"));
 			response.setHeader("Cache-Control", "max-age=30");
 			response.setHeader("Pragma", "No-cache");
 			response.setDateHeader("Expires", 0);

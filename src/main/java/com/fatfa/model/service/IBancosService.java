@@ -11,11 +11,4 @@ public interface IBancosService {
 	 */
 	String onGeneraCodigigoBarraBancoNacion(int idBoleta);
 	
-	/**
-	 * @author SOPORTE
-	 * @apiNote PAGO FACIL ARGENTINA
-	 * @param idBoleta
-	 * @return
-	 */
-	String onGeneraCodigoBarraPagoFacil(int idBoleta);
 }

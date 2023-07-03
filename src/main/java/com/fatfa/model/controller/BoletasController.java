@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fatfa.model.entity.BoletaModel;
+import com.fatfa.model.service.IBoletaImportacionService;
 import com.fatfa.model.service.IBoletaService;
 import com.fatfa.utils.Constantes;
 
@@ -24,6 +26,9 @@ public class BoletasController {
 
 	@Autowired
 	private IBoletaService srvBoleta;
+	
+	@Autowired
+	private IBoletaImportacionService srvBoletaImportacion;
 
 	@GetMapping("/datosIniciales")
 	public ResponseEntity<?> srvGenerarDatosIncialesBoleta(@RequestParam("idEmpresa") int idEmpresa,
@@ -34,8 +39,7 @@ public class BoletasController {
 	
 	@PostMapping("/guardarDataBoleta")
 	public void srvGuardarDatosBoleta(@RequestBody BoletaModel dataBoleta, HttpServletRequest request, HttpServletResponse response) {
-		srvBoleta.onGenerarTalonBoletaPago(dataBoleta,  request,  response);			
-		//return ResponseEntity.ok().body("EXCELENTE");
+		srvBoleta.onGenerarTalonBoletaPago(dataBoleta,  request,  response);	
 	}
 	
 	@GetMapping("/verificador")
@@ -46,5 +50,10 @@ public class BoletasController {
 	@GetMapping("/listBoleta")
 	public ResponseEntity<?> srvListBoletas(@RequestParam("idEmpresa") int idEmpresa, @RequestParam("idAporte") int aporte, @RequestParam("mes") String mes, @RequestParam("anio") String anio){
 		return ResponseEntity.ok(srvBoleta.srvLisBoleta(idEmpresa, aporte, mes, anio));
+	}
+	
+	@PostMapping("/imprtarMediopago")
+	public  ResponseEntity<?> srvImportarBoletaPago(@RequestParam (name = "file", required = false) MultipartFile file) {
+		return ResponseEntity.ok(srvBoletaImportacion.srvImportarBoleta(file));
 	}
 }
