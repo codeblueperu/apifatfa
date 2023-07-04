@@ -11,7 +11,7 @@ public interface IFilesStorageService {
 
 	public void init();
 
-	  public void save(MultipartFile file);
+	  public void save(MultipartFile file, String nameFolder);
 
 	  public Resource load(String filename);
 

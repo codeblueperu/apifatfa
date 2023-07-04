@@ -20,6 +20,7 @@ public class Constantes {
 	public static int anioActual = localDate.getYear();
 	public static int mesActual = localDate.getMonthValue();
 	public static int diaActual = localDate.getDayOfMonth();
+	public static final String ORIGNE_NAME_PAGO_FACIL = "PAGO FACIL               090061037FEDERACION ARGENTINA DE TRAB.DE FAR";
 
 	public static int generarDigitoVerificador(String codigobarra) {
 		int multiplicador = 1;

@@ -31,9 +31,12 @@ public class FilesStorageServiceImpl implements IFilesStorageService {
 	  }
 
 	  @Override
-	  public void save(MultipartFile file) {
+	  public void save(MultipartFile file, String nameFolder) {
 	    try {
-	      Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+	    	byte[] bytes = file.getBytes();
+			Path path = Paths.get("src//main//webapp//"+nameFolder+"//" + file.getOriginalFilename());
+			Files.write(path, bytes);
+	      //Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
 	    } catch (Exception e) {
 	      if (e instanceof FileAlreadyExistsException) {
 	        throw new RuntimeException("A file of that name already exists.");

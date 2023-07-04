@@ -212,7 +212,8 @@ public class BoletaServiceImpl implements IBoletaService {
 		String nameFile = "";
 		try {
 //			# GUARDAR DATOS DE LA BOLETA SIEMPRE CON ESTADO PENDIENTE
-			dataBoleta.setEstaoPago(new EstadoPagoModel(1));
+			dataBoleta.setEstadoPago(new EstadoPagoModel(1));
+			dataBoleta.setFechaImpresion(new Date());
 			
 //			#BUSCAR SI YA TIENE UNA BOLETA GENERADA ANTERIORMENTE PARA EL MISMO PERIODO
 			Optional<BoletaModel> validarBoleta = repoBoleta
@@ -223,7 +224,7 @@ public class BoletaServiceImpl implements IBoletaService {
 			if (validarBoleta.isPresent()) {
 //				#DAR DE BAJA A LA BOLETA GENERADA ANTERIORMENTE
 				BoletaModel boletaBaja = validarBoleta.get();
-				boletaBaja.setEstaoPago(new EstadoPagoModel(3));
+				boletaBaja.setEstadoPago(new EstadoPagoModel(3));
 //				# DAMOS DE BAJA A LA BOLETA PARA PODER GUARDAR LA NUEVA RECTIFICATIVA
 				repoBoleta.save(boletaBaja);
 			}

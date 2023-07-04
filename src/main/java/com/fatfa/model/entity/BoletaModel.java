@@ -16,61 +16,65 @@ import javax.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@Table(name="tb_boleta")
+@Table(name = "tb_boleta")
 public class BoletaModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_boleta", nullable = false)
 	private int idBoleta;
-	
+
 	@OneToOne
 	@JoinColumn(name = "id_empresa")
 	private EmpresasModel empresa;
-	
+
 	@NotBlank(message = "ESTE CAMPO ES REQUERIDO")
 	@Column(length = 2, nullable = false)
 	private String mes;
-	
+
 	@NotBlank(message = "ESTE CAMPO ES REQUERIDO")
 	@Column(length = 4, nullable = false)
 	private String anio;
-	
+
 	@OneToOne
 	@JoinColumn(name = "id_banco")
 	private BancosModel banco;
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",locale = "es-PE", timezone = "America/Lima")
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", locale = "es-PE", timezone = "America/Lima")
 	@Column(name = "fecha_primer_vencimiento", nullable = false)
 	private Date fechaPrimerVencimiento;
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",locale = "es-PE", timezone = "America/Lima")
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", locale = "es-PE", timezone = "America/Lima")
 	@Column(name = "fecha_probable_pago", nullable = false)
 	private Date fechaProbablePago;
-		
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", locale = "es-PE", timezone = "America/Lima")
+	@Column(name = "fecha_impresion", nullable = false, columnDefinition = "DATETIME")
+	private Date fechaImpresion;
+
 	@Column(name = "subtotal", nullable = false, columnDefinition = "DECIMAL(18,2)")
 	private Double subtotal;
-	
+
 	@Column(name = "intereces", nullable = false, columnDefinition = "DECIMAL(18,2)")
 	private Double intereces;
-	
+
 	@Column(name = "importe_total", nullable = false, columnDefinition = "DECIMAL(18,2)")
 	private Double importeTotal;
-	
+
 	@Column(name = "codigo_barras", nullable = false, length = 200)
 	private String codigoBarras;
-	
+
 	@OneToOne
 	@JoinColumn(name = "id_estado_pago")
 	private EstadoPagoModel estadoPago;
-	
+
 	@Column(nullable = false, length = 100)
 	private String archivo;
-	
+
 	@OneToOne
 	@JoinColumn(name = "id_aporte")
 	private AporteSindicalModel aporteSindical;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_detalle_aporte")
 	private DetalleBoletaConceptoModel detalleConcepto;
@@ -82,8 +86,8 @@ public class BoletaModel {
 
 	public BoletaModel(int idBoleta, EmpresasModel empresa, @NotBlank(message = "ESTE CAMPO ES REQUERIDO") String mes,
 			@NotBlank(message = "ESTE CAMPO ES REQUERIDO") String anio, BancosModel banco, Date fechaPrimerVencimiento,
-			Date fechaProbablePago, Double subtotal, Double intereces, Double importeTotal, String codigoBarras,
-			EstadoPagoModel estadoPago, String archivo, AporteSindicalModel aporteSindical,
+			Date fechaProbablePago, Date fechaImpresion, Double subtotal, Double intereces, Double importeTotal,
+			String codigoBarras, EstadoPagoModel estadoPago, String archivo, AporteSindicalModel aporteSindical,
 			DetalleBoletaConceptoModel detalleConcepto) {
 		super();
 		this.idBoleta = idBoleta;
@@ -93,6 +97,7 @@ public class BoletaModel {
 		this.banco = banco;
 		this.fechaPrimerVencimiento = fechaPrimerVencimiento;
 		this.fechaProbablePago = fechaProbablePago;
+		this.fechaImpresion = fechaImpresion;
 		this.subtotal = subtotal;
 		this.intereces = intereces;
 		this.importeTotal = importeTotal;
@@ -159,6 +164,14 @@ public class BoletaModel {
 		this.fechaProbablePago = fechaProbablePago;
 	}
 
+	public Date getFechaImpresion() {
+		return fechaImpresion;
+	}
+
+	public void setFechaImpresion(Date fechaImpresion) {
+		this.fechaImpresion = fechaImpresion;
+	}
+
 	public Double getSubtotal() {
 		return subtotal;
 	}
@@ -195,7 +208,7 @@ public class BoletaModel {
 		return estadoPago;
 	}
 
-	public void setEstaoPago(EstadoPagoModel estadoPago) {
+	public void setEstadoPago(EstadoPagoModel estadoPago) {
 		this.estadoPago = estadoPago;
 	}
 
@@ -227,8 +240,9 @@ public class BoletaModel {
 	public String toString() {
 		return "BoletaModel [idBoleta=" + idBoleta + ", empresa=" + empresa + ", mes=" + mes + ", anio=" + anio
 				+ ", banco=" + banco + ", fechaPrimerVencimiento=" + fechaPrimerVencimiento + ", fechaProbablePago="
-				+ fechaProbablePago + ", subtotal=" + subtotal + ", intereces=" + intereces + ", importeTotal="
-				+ importeTotal + ", codigoBarras=" + codigoBarras + ", estadoPago=" + estadoPago + ", archivo=" + archivo
-				+ ", aporteSindical=" + aporteSindical + ", detalleConcepto=" + detalleConcepto + "]";
+				+ fechaProbablePago + ", fechaImpresion=" + fechaImpresion + ", subtotal=" + subtotal + ", intereces="
+				+ intereces + ", importeTotal=" + importeTotal + ", codigoBarras=" + codigoBarras + ", estadoPago="
+				+ estadoPago + ", archivo=" + archivo + ", aporteSindical=" + aporteSindical + ", detalleConcepto="
+				+ detalleConcepto + "]";
 	}
 }

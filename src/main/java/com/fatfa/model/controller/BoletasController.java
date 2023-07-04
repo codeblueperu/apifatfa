@@ -52,7 +52,7 @@ public class BoletasController {
 		return ResponseEntity.ok(srvBoleta.srvLisBoleta(idEmpresa, aporte, mes, anio));
 	}
 	
-	@PostMapping("/imprtarMediopago")
+	@PostMapping("/importarMediopago")
 	public  ResponseEntity<?> srvImportarBoletaPago(@RequestParam (name = "file", required = false) MultipartFile file) {
 		return ResponseEntity.ok(srvBoletaImportacion.srvImportarBoleta(file));
 	}

@@ -18,8 +18,9 @@ public interface IBoletaRepository extends JpaRepository<BoletaModel, Integer> {
 	 * @param anioPeriodo
 	 * @return
 	 */
-	Optional<BoletaModel> findByMesAndAnioAndEmpresaIdEmpresaAndEstadoPagoIdEstadoPago(String mesPeriodo, String anioPeriodo, int idEmpresa, int idEstadoPago);
-	
+	Optional<BoletaModel> findByMesAndAnioAndEmpresaIdEmpresaAndEstadoPagoIdEstadoPago(String mesPeriodo,
+			String anioPeriodo, int idEmpresa, int idEstadoPago);
+
 	/**
 	 * @author SOPORTE
 	 * @apiNote BUSCAR BOLETA SEGUN ANIO Y MES y empresa
@@ -27,5 +28,14 @@ public interface IBoletaRepository extends JpaRepository<BoletaModel, Integer> {
 	 * @param anioPeriodo
 	 * @return
 	 */
-	List<BoletaModel> findByEmpresaIdEmpresaAndAporteSindicalIdAporteAndMesAndAnio(int idEmpresa, int idAporte, String mesPeriodo, String anioPeriodo);
+	List<BoletaModel> findByEmpresaIdEmpresaAndAporteSindicalIdAporteAndMesAndAnio(int idEmpresa, int idAporte,
+			String mesPeriodo, String anioPeriodo);
+
+	/**
+	 * @author SOPORTE
+	 * @param codigoBarras
+	 * @param estado
+	 * @return
+	 */
+	BoletaModel findByCodigoBarrasAndEstadoPagoIdEstadoPago(String codigoBarras, int estado);
 }
