@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fatfa.exceptions.ErrorNotFoundException;
+import com.fatfa.model.entity.EstadoPagoModel;
 import com.fatfa.model.entity.TransferenciaModel;
 import com.fatfa.model.repository.ITransferenciaRepository;
 import com.fatfa.model.service.ITransferenciaService;
@@ -41,19 +43,17 @@ public class TransferenciaServiceImp implements ITransferenciaService {
 	}
 
 	@Override
-	public List<TransferenciaModel> srvListarTransaferencia(int idEmpresa, String estado, Date fecha) {
+	public List<TransferenciaModel> srvListarTransaferencia(int idEmpresa, int estado, Date fecha, Date fechaF) {
 		List<TransferenciaModel> transferencias = new ArrayList<>();
-		System.out.println(fecha);
-		System.out.println(new Date());
 		try {
-			if (idEmpresa == 0 && estado.compareTo("Todos") == 0 && Constantes.utilFormatoFecha(fecha, "yyyy-MM-dd").compareTo(Constantes.utilFormatoFecha(new Date(), "yyyy-MM-dd")) == 0) {
+			if (idEmpresa == 0 && estado == 0 && Constantes.utilFormatoFecha(fecha, "yyyy-MM-dd").compareTo(Constantes.utilFormatoFecha(new Date(), "yyyy-MM-dd")) == 0) {
 				transferencias = repoTransferencias.findAll();
-			} else if (idEmpresa > 0 && estado.compareTo("Todos") == 0 && Constantes.utilFormatoFecha(fecha, "yyyy-MM-dd").compareTo(Constantes.utilFormatoFecha(new Date(), "yyyy-MM-dd")) == 0) {
+			} else if (idEmpresa > 0 && estado == 0 && Constantes.utilFormatoFecha(fecha, "yyyy-MM-dd").compareTo(Constantes.utilFormatoFecha(new Date(), "yyyy-MM-dd")) == 0) {
 				transferencias = repoTransferencias.findByEmpresaIdEmpresa(idEmpresa);
-			} else if (idEmpresa > 0 && estado.compareTo("Todos") == 1  && Constantes.utilFormatoFecha(fecha, "yyyy-MM-dd").compareTo(Constantes.utilFormatoFecha(new Date(), "yyyy-MM-dd")) == 0){
-				transferencias = repoTransferencias.findByEmpresaIdEmpresaAndEstadoSolicitud(idEmpresa, estado);
+			} else if (idEmpresa > 0 && estado == 0  && Constantes.utilFormatoFecha(fecha, "yyyy-MM-dd").compareTo(Constantes.utilFormatoFecha(new Date(), "yyyy-MM-dd")) == 0){
+				transferencias = repoTransferencias.findByEmpresaIdEmpresaAndEstadoPagoIdEstadoPago(idEmpresa, estado);
 			} else {
-				transferencias = repoTransferencias.findByEmpresaIdEmpresaAndEstadoSolicitudAndFechaPago(idEmpresa, estado, fecha);
+				transferencias = repoTransferencias.findByEmpresaIdEmpresaAndEstadoPagoIdEstadoPagoAndFechaPagoBetween(idEmpresa, estado, fecha, fechaF);
 			}
 
 		} catch (Exception e) {
@@ -71,6 +71,28 @@ public class TransferenciaServiceImp implements ITransferenciaService {
 		}else {
 			return null;
 		}
+	}
+
+	@Override
+	public Map<String, Object> srvUpdateTransferencias(int idTransferencias, int estadoPago) {
+		Map<String, Object> map = new HashMap<>();
+		System.out.println(estadoPago);
+		try {
+			TransferenciaModel transferencia = repoTransferencias.findById(idTransferencias).orElseThrow(()-> new ErrorNotFoundException("No se encontro ningun registro con el ID enviado."));
+			transferencia.setEstadoPago(new EstadoPagoModel(estadoPago));
+			repoTransferencias.save(transferencia);
+			if(estadoPago == 2) {
+				map.put("message","La transferencia fue <b>confirmada</b> con éxito.");
+			}else {
+				map.put("message","La transferencia fue <b>anulada</b> con éxito.");
+			}
+			
+		} catch (Exception e) {
+			log.error("ERROR AL MODIFICAR ESTADO DE TRANSFERENCIA => " + e.toString());
+			throw e;
+		}
+		
+		return map;
 	}
 
 }

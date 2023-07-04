@@ -24,7 +24,7 @@ public interface ITransferenciaRepository extends JpaRepository<TransferenciaMod
 	 * @return
 	 */
 	
-	List<TransferenciaModel> findByEmpresaIdEmpresaAndEstadoSolicitud(int idEmpresa, String estadoSolicitud);
+	List<TransferenciaModel> findByEmpresaIdEmpresaAndEstadoPagoIdEstadoPago(int idEmpresa, int estadoSolicitud);
 	
 	/**
 	 * @author CodeBluePeru
@@ -34,5 +34,5 @@ public interface ITransferenciaRepository extends JpaRepository<TransferenciaMod
 	 * @return
 	 */
 	
-	List<TransferenciaModel> findByEmpresaIdEmpresaAndEstadoSolicitudAndFechaPago(int idEmpresa, String estadoSolicitud, Date fecha);
+	List<TransferenciaModel> findByEmpresaIdEmpresaAndEstadoPagoIdEstadoPagoAndFechaPagoBetween(int idEmpresa, int estadoSolicitud, Date fecha, Date fechaF);
 }

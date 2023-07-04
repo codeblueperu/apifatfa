@@ -38,9 +38,9 @@ public class TransferenciaController {
 	
 	@GetMapping("/listatransferencia")
 	public ResponseEntity<?> onListaTranferencia(@RequestParam("idEmpresa") int idEmpresa,
-			@RequestParam("estado") String estado, @RequestParam("fecha")String fecha) throws ParseException {
+			@RequestParam("estado") int estado, @RequestParam("fecha")String fecha, @RequestParam("fechaF")String fechaF) throws ParseException {
 		System.err.println(fecha);
-		return ResponseEntity.ok(srvTransferencias.srvListarTransaferencia(idEmpresa, estado, Constantes.utilConvertirFecha(fecha, "yyyy-MM-dd")));
+		return ResponseEntity.ok(srvTransferencias.srvListarTransaferencia(idEmpresa, estado, Constantes.utilConvertirFecha(fecha, "yyyy-MM-dd"), Constantes.utilConvertirFecha(fechaF, "yyyy-MM-dd")));
 	}
 	
 	
@@ -83,6 +83,12 @@ public class TransferenciaController {
 				inputStream.close();
 			}
 		}
+	}
+	
+	@PostMapping("/updateTransferencia")
+	public ResponseEntity<?> onUpdateTransferencia(@RequestParam("idTransferencia") int transferencia,
+			@RequestParam("estado") int estado) {
+		return ResponseEntity.ok(srvTransferencias.srvUpdateTransferencias(transferencia, estado));
 	}
 	
 }

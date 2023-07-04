@@ -51,8 +51,9 @@ public class TransferenciaModel {
 	@Column(name = "observaciones", nullable = false)
 	private int observaciones;
 	
-	@Column(name = "estado_solicitud", nullable = false, length = 30)
-	private String estadoSolicitud;	
+	@OneToOne
+	@JoinColumn(name = "id_estado_pago", nullable = false)
+	private EstadoPagoModel estadoPago;
 	
 	@OneToOne
 	@JoinColumn(name = "id_usuario", nullable = false)
@@ -138,12 +139,14 @@ public class TransferenciaModel {
 		this.observaciones = observaciones;
 	}
 
-	public String getEstadoSolicitud() {
-		return estadoSolicitud;
+	
+
+	public EstadoPagoModel getEstadoPago() {
+		return estadoPago;
 	}
 
-	public void setEstadoSolicitud(String estadoSolicitud) {
-		this.estadoSolicitud = estadoSolicitud;
+	public void setEstadoPago(EstadoPagoModel estadoPago) {
+		this.estadoPago = estadoPago;
 	}
 
 	public UsuarioModel getIdUsuario() {
@@ -159,7 +162,7 @@ public class TransferenciaModel {
 		return "TransferenciaModel [idTransferencia=" + idTransferencia + ", empresa=" + empresa + ", numeroCuenta="
 				+ numeroCuenta + ", fechaPago=" + fechaPago + ", mes=" + mes + ", anio=" + anio + ", importeTotal="
 				+ importeTotal + ", comprobante=" + comprobante + ", detalleObservaciones=" + detalleObservaciones
-				+ ", observaciones=" + observaciones + ", estadoSolicitud=" + estadoSolicitud + ", idUsuario="
+				+ ", observaciones=" + observaciones + ", estadoSolicitud=" + estadoPago + ", idUsuario="
 				+ idUsuario + "]";
 	}
 

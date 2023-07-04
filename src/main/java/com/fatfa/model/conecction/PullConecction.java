@@ -46,7 +46,7 @@ public class PullConecction {
 		
 		driver.setUrl("jdbc:mysql://localhost:3306/dbfatfa?useSSL=false&serverTimezone=America/Lima&allowPublicKeyRetrieval=true");
 		driver.setUsername("root");
-		driver.setPassword("MOREinga02054$$");
+		driver.setPassword(""); //MOREinga02054$$
 
 
 		return driver;
