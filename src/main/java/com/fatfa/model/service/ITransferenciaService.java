@@ -10,10 +10,10 @@ public interface ITransferenciaService {
 
 	/**
 	 * @author CodeBluePeru
-	 * @apiNote PERMITE AGREGAR UNA NUEVA TRANSFERENCIA
+	 * @apiNote LISTA TODAS LAS TRANSFERENCIAS SEGUN LOS PARAMETROS ENVIADOS
 	 * @return
 	 */
-	List<TransferenciaModel> srvListarTransaferencia(int idEmpresa, String estado, Date fecha);
+	List<TransferenciaModel> srvListarTransaferencia(int idEmpresa, int estado, Date fecha, Date fechaF);
 	/**
 	 * @author CodeBluePeru
 	 * @apiNote PERMITE AGREGAR UNA NUEVA TRANSFERENCIA
@@ -29,4 +29,12 @@ public interface ITransferenciaService {
 	 * @return
 	 */
 	TransferenciaModel srvBuscraComprobante(Integer idTransferencia);
+	
+	/**
+	 * @author CodeBluePeru
+	 * @apiNote ACTUALIZA EL ESTADO DE PAGO DE TRANSFERENCIAS
+	 * @param idTransferencia
+	 * @return
+	 */
+	Map<String, Object> srvUpdateTransferencias(int idTransferencias, int estadoPago);
 }

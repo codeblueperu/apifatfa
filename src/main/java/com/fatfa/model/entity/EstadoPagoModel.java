@@ -15,7 +15,7 @@ public class EstadoPagoModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_estado_pago", nullable = false)
-	private int idEstadoPago ;
+	private int idEstadoPago;
 	
 	@Column(length = 25)
 	private String nombre;
