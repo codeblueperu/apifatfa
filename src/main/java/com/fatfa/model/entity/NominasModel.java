@@ -86,7 +86,7 @@ public class NominasModel {
 	@JoinColumn(name = "id_categoria", nullable = false)
 	private CategoriasModelo categoria;
 	
-	@OneToOne
+	@OneToOne()
 	@JoinColumn(name = "id_sindicato", nullable = false)
 	private SindicatosModel sindicato;
 

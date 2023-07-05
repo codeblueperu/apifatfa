@@ -54,6 +54,6 @@ public class BoletasController {
 	
 	@PostMapping("/importarMediopago")
 	public  ResponseEntity<?> srvImportarBoletaPago(@RequestParam (name = "file", required = false) MultipartFile file) {
-		return ResponseEntity.ok(srvBoletaImportacion.srvImportarBoleta(file));
+		return ResponseEntity.ok(srvBoletaImportacion.srvImportarBoletaRapiPago(file));
 	}
 }

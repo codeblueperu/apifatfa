@@ -46,6 +46,9 @@ public class BoletasImportacionModel {
 	
 	@Column(name = "id_usuario", nullable = false)
 	private int idUserLogin;
+	
+	@Column(name = "contenido_importacion", nullable = false, columnDefinition = "TEXT")
+	private String contenidoFile;
 
 	public BoletasImportacionModel() {
 		super();
@@ -53,7 +56,8 @@ public class BoletasImportacionModel {
 	}
 
 	public BoletasImportacionModel(int secuencial, BoletaModel boleta, String nombreArchivoimportacion,
-			BancosModel medioPago, double importeCobrado, Date fechaPago, Date fechaImportacion, int idUserLogin) {
+			BancosModel medioPago, double importeCobrado, Date fechaPago, Date fechaImportacion, int idUserLogin,
+			String contenidoFile) {
 		super();
 		this.secuencial = secuencial;
 		this.boleta = boleta;
@@ -63,6 +67,7 @@ public class BoletasImportacionModel {
 		this.fechaPago = fechaPago;
 		this.fechaImportacion = fechaImportacion;
 		this.idUserLogin = idUserLogin;
+		this.contenidoFile = contenidoFile;
 	}
 
 	public int getSecuencial() {
@@ -129,11 +134,19 @@ public class BoletasImportacionModel {
 		this.idUserLogin = idUserLogin;
 	}
 
+	public String getContenidoFile() {
+		return contenidoFile;
+	}
+
+	public void setContenidoFile(String contenidoFile) {
+		this.contenidoFile = contenidoFile;
+	}
+
 	@Override
 	public String toString() {
 		return "BoletasImportacionModel [secuencial=" + secuencial + ", boleta=" + boleta
 				+ ", nombreArchivoimportacion=" + nombreArchivoimportacion + ", medioPago=" + medioPago
 				+ ", importeCobrado=" + importeCobrado + ", fechaPago=" + fechaPago + ", fechaImportacion="
-				+ fechaImportacion + ", idUserLogin=" + idUserLogin + "]";
-	}	
+				+ fechaImportacion + ", idUserLogin=" + idUserLogin + ", contenidoFile=" + contenidoFile + "]";
+	}
 }

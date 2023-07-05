@@ -5,5 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IBoletaImportacionService {
 
-	HashMap<String, Object> srvImportarBoleta(MultipartFile archivo);
+	HashMap<String, Object> srvImportarBoletaPagoFacil(MultipartFile archivo);
+	
+	HashMap<String, Object> srvImportarBoletaRapiPago(MultipartFile archivo);
 }
