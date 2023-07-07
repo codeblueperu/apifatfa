@@ -54,7 +54,7 @@ public class BoletaImportacionServiceImp implements IBoletaImportacionService {
 		try {
 			String nameFile = archivo.getOriginalFilename();
 			srvStorage.save(archivo, "temp");
-
+			System.err.println(nameFile.substring(nameFile.lastIndexOf(".")+1));
 			File comprobanteBoleta = new File("src//main//webapp//temp//" + nameFile);
 			try (BufferedReader readFile = new BufferedReader(new FileReader(comprobanteBoleta))) {
 				String cabeceraFile = "";
