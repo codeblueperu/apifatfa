@@ -256,8 +256,8 @@ public class BoletaServiceImpl implements IBoletaService {
 			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("5") == 0) {
 				nameFile = "boleta_pago_mis_cuentas.jrxml";
 			}
-			else {				
-				nameFile = "boleta_banco_nacion.jrxml";
+			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("6") == 0) {				
+				nameFile = "boleta_banco_frances.jrxml";
 			}
 
 //			#GENERAR RPT BOLETA

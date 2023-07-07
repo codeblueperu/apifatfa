@@ -42,7 +42,8 @@ public class BancosServiceImp implements IBancosService {
 
 		String codigoBarra = "";
 		try {
-			
+//			# ESTE DIGITO CAMBIA CUANDO ES TRANSFERENCIA A 12
+			int digitosMontoPagar = 8;
 			BoletaModel boleta = repoBoleta.findById(idBoleta).orElseThrow(
 					() -> new ErrorConflictException("Error al intentar buscar la boleta mediante su identificador."));
 			EmpresasModel empresa = repoEmpresa.findById(boleta.getEmpresa().getIdEmpresa()).orElseThrow(
@@ -50,13 +51,15 @@ public class BancosServiceImp implements IBancosService {
 
 //			# CODIGO ASIGNADO POR EL BANCO 4 DIGITOS
 			BancosModel bancoModel = repoBanco.findById(boleta.getBanco().getIdBanco()).orElseThrow(()-> new ErrorNotFoundException("No se encontro el Banco con el ID enviado :("));
-			System.err.println(boleta.getBanco());
+			if(bancoModel.getIdBanco().compareTo("6") == 0 || bancoModel.getIdBanco().compareTo("7") == 0) {
+				digitosMontoPagar = 12;
+			}
 			codigoBarra +=bancoModel.getIdentificador();
 //			# IMPORTE TOTAL PAGAR 8 DIGITOS	<===> AUTOCOMLETAR CON 0 SI ES NECESARIO
 			 BigDecimal montoDecimal = new BigDecimal(boleta.getImporteTotal()).setScale(2, RoundingMode.HALF_UP);			
 			String importeTotal =  montoDecimal.toString().replace(",", "").replace(".", "");
-			System.err.println(importeTotal);
-			codigoBarra += StringUtils.leftPad(importeTotal, 8, "0");
+			//System.err.println(importeTotal);
+			codigoBarra += StringUtils.leftPad(importeTotal, digitosMontoPagar, "0");
 //			# ANIO PERIODO 2 DIGITOS 
 			codigoBarra += boleta.getAnio().substring(2, 4);
 //			# DIFERENCIA DE DIAS ==> DESDE LA FECHA INICIO AF HASTA EL FECHA DE VENCIMIENTO

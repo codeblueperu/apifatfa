@@ -53,7 +53,12 @@ public class BoletasController {
 	}
 	
 	@PostMapping("/importarMediopago")
-	public  ResponseEntity<?> srvImportarBoletaPago(@RequestParam (name = "file", required = false) MultipartFile file) {
-		return ResponseEntity.ok(srvBoletaImportacion.srvImportarBoletaRapiPago(file));
+	public  ResponseEntity<?> srvImportarBoletaPago(@RequestParam (name = "file", required = false) MultipartFile file, @RequestParam("banco")String banco) {
+		if(banco.compareTo("1") == 0) {
+			return ResponseEntity.ok(srvBoletaImportacion.srvImportarBoletaPagoFacil(file));
+		}else  {
+			return ResponseEntity.ok(srvBoletaImportacion.srvImportarBoletaRapiPago(file));
+		}
+		
 	}
 }
