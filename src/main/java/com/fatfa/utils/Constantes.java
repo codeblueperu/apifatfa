@@ -1,5 +1,7 @@
 package com.fatfa.utils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -85,5 +87,14 @@ public class Constantes {
 	public static String completeCeroIzquierda(String valor, int numCero) {
 		return StringUtils.leftPad(String.valueOf(valor), numCero, "0");
 
+	}
+	
+	public static double valorDecimal(double valor, int ndecimal) {
+		BigDecimal montoDecimal = new BigDecimal(valor).setScale(ndecimal, RoundingMode.HALF_UP);
+		return montoDecimal.doubleValue();
+	}
+	
+	public static Double formatearDecimales(Double numero, Integer numeroDecimales) {
+	    return Math.round(numero * Math.pow(10, numeroDecimales)) / Math.pow(10, numeroDecimales);
 	}
 }

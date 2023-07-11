@@ -33,7 +33,7 @@ public class BancosServiceImp implements IBancosService {
 
 	@Autowired
 	private IGlobalService srvGlobal;
-	
+
 	@Autowired
 	private IBancosRepository repoBanco;
 
@@ -50,20 +50,21 @@ public class BancosServiceImp implements IBancosService {
 					() -> new ErrorConflictException("Error al intentar buscar empresa mediante su identificador."));
 
 //			# CODIGO ASIGNADO POR EL BANCO 4 DIGITOS
-			BancosModel bancoModel = repoBanco.findById(boleta.getBanco().getIdBanco()).orElseThrow(()-> new ErrorNotFoundException("No se encontro el Banco con el ID enviado :("));
-			if(bancoModel.getIdBanco().compareTo("6") == 0 || bancoModel.getIdBanco().compareTo("7") == 0) {
+			BancosModel bancoModel = repoBanco.findById(boleta.getBanco().getIdBanco())
+					.orElseThrow(() -> new ErrorNotFoundException("No se encontro el Banco con el ID enviado :("));
+			if (bancoModel.getIdBanco().compareTo("6") == 0 || bancoModel.getIdBanco().compareTo("7") == 0) {
 				digitosMontoPagar = 12;
 			}
-			codigoBarra +=bancoModel.getIdentificador();
+			codigoBarra += bancoModel.getIdentificador();
 //			# IMPORTE TOTAL PAGAR 8 DIGITOS	<===> AUTOCOMLETAR CON 0 SI ES NECESARIO
-			 BigDecimal montoDecimal = new BigDecimal(boleta.getImporteTotal()).setScale(2, RoundingMode.HALF_UP);			
-			String importeTotal =  montoDecimal.toString().replace(",", "").replace(".", "");
-			//System.err.println(importeTotal);
+			BigDecimal montoDecimal = new BigDecimal(boleta.getImporteTotal()).setScale(2, RoundingMode.HALF_UP);
+			String importeTotal = montoDecimal.toString().replace(",", "").replace(".", "");
+			// System.err.println(importeTotal);
 			codigoBarra += StringUtils.leftPad(importeTotal, digitosMontoPagar, "0");
 //			# ANIO PERIODO 2 DIGITOS 
 			codigoBarra += boleta.getAnio().substring(2, 4);
 //			# DIFERENCIA DE DIAS ==> DESDE LA FECHA INICIO AF HASTA EL FECHA DE VENCIMIENTO
-			String fechaInicial = Constantes.anioActual + "-01-01"; 
+			String fechaInicial = Constantes.anioActual + "-01-01";
 			int diasTranscurridoPrimerVencimiento = srvGlobal.onCalcularDiferenciaFechas(fechaInicial,
 					Constantes.utilFormatoFecha(boleta.getFechaPrimerVencimiento(), "yyyy-MM-dd"));
 			codigoBarra += StringUtils.leftPad(String.valueOf(diasTranscurridoPrimerVencimiento), 3, "0");
@@ -77,14 +78,16 @@ public class BancosServiceImp implements IBancosService {
 			codigoBarra += "0";
 //			# VALOR TOTAL DE LA BOLETA * INTERES DIARIO / 2 DECIMALES | 6 DIGITOS
 			double intx = boleta.getImporteTotal() * 1.333333 / 100;
-			codigoBarra += StringUtils.leftPad(String.valueOf(new BigDecimal(intx).setScale(2, BigDecimal.ROUND_HALF_DOWN).doubleValue()).replace(".", "").replace(",", ""), 6, "0");
+			codigoBarra += StringUtils
+					.leftPad(String.valueOf(new BigDecimal(intx).setScale(2, BigDecimal.ROUND_HALF_DOWN).doubleValue())
+							.replace(".", "").replace(",", ""), 6, "0");
 //			#DIFERENCIA DE DIAS DEL SEGUNDO VENCIMIENTO
 			codigoBarra += "01";
 //			# PRIMER DIGITO VERIFICADOR		
 			codigoBarra += Constantes.generarDigitoVerificador(codigoBarra);
 //			# SEGUNDO DIGITO VERIFICADOR		
 			codigoBarra += Constantes.generarDigitoVerificador(codigoBarra);
-			
+
 //			#UPDATE CODIGO BARRA BOLETA
 			boleta.setCodigoBarras(codigoBarra);
 			repoBoleta.save(boleta);
