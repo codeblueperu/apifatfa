@@ -94,7 +94,7 @@ public class Constantes {
 		return montoDecimal.doubleValue();
 	}
 	
-	public static Double formatearDecimales(Double numero, Integer numeroDecimales) {
-	    return Math.round(numero * Math.pow(10, numeroDecimales)) / Math.pow(10, numeroDecimales);
+	public static float formatearDecimales(float numero, Integer numeroDecimales) {
+	    return (float) (Math.round(numero * Math.pow(10, numeroDecimales)) / Math.pow(10, numeroDecimales));
 	}
 }

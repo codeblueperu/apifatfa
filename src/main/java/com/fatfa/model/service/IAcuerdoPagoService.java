@@ -9,5 +9,5 @@ public interface IAcuerdoPagoService {
 
 	List<AcuerdosPagoModel> srvListaAcuerdosPago(int idEmpresa);
 	
-	HashMap<String, Object> srvCalcularDetalleCuotas(double capitalInicial, double tasainteres, int ncuotas);
+	HashMap<String, Object> srvCalcularDetalleCuotas(float capitalInicial, float tasainteres, int ncuotas);
 }

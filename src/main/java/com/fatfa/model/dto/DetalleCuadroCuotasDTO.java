@@ -6,15 +6,15 @@ public class DetalleCuadroCuotasDTO {
 	
 	private int numCuota;
 	
-	private double valorResidual;
+	private float valorResidual;
 	
-	private double interes;
+	private float interes;
 	
-	private double cuotaP;
+	private float cuotaP;
 	
-	private double cuota;
+	private float cuota;
 	
-	private double cuotaTotalConIntereses;
+	private float cuotaTotalConIntereses;
 	
 	private Date fechaVencimiento;
 
@@ -23,8 +23,8 @@ public class DetalleCuadroCuotasDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public DetalleCuadroCuotasDTO(int numCuota, double valorResidual, double interes, double cuotaP, double cuota,
-			double cuotaTotalConIntereses, Date fechaVencimiento) {
+	public DetalleCuadroCuotasDTO(int numCuota, float valorResidual, float interes, float cuotaP, float cuota,
+			float cuotaTotalConIntereses, Date fechaVencimiento) {
 		super();
 		this.numCuota = numCuota;
 		this.valorResidual = valorResidual;
@@ -43,43 +43,43 @@ public class DetalleCuadroCuotasDTO {
 		this.numCuota = numCuota;
 	}
 
-	public double getValorResidual() {
+	public float getValorResidual() {
 		return valorResidual;
 	}
 
-	public void setValorResidual(double valorResidual) {
+	public void setValorResidual(float valorResidual) {
 		this.valorResidual = valorResidual;
 	}
 
-	public double getInteres() {
+	public float getInteres() {
 		return interes;
 	}
 
-	public void setInteres(double interes) {
+	public void setInteres(float interes) {
 		this.interes = interes;
 	}
 
-	public double getCuotaP() {
+	public float getCuotaP() {
 		return cuotaP;
 	}
 
-	public void setCuotaP(double cuotaP) {
+	public void setCuotaP(float cuotaP) {
 		this.cuotaP = cuotaP;
 	}
 
-	public double getCuota() {
+	public float getCuota() {
 		return cuota;
 	}
 
-	public void setCuota(double cuota) {
+	public void setCuota(float cuota) {
 		this.cuota = cuota;
 	}
 
-	public double getCuotaTotalConIntereses() {
+	public float getCuotaTotalConIntereses() {
 		return cuotaTotalConIntereses;
 	}
 
-	public void setCuotaTotalConIntereses(double cuotaTotalConIntereses) {
+	public void setCuotaTotalConIntereses(float cuotaTotalConIntereses) {
 		this.cuotaTotalConIntereses = cuotaTotalConIntereses;
 	}
 

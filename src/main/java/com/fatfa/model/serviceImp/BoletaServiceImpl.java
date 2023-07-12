@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-
 import com.fatfa.exceptions.ErrorNotFoundException;
 import com.fatfa.model.dto.MatrizPeriodoIntersDTO;
 import com.fatfa.model.entity.BoletaModel;
@@ -214,13 +213,13 @@ public class BoletaServiceImpl implements IBoletaService {
 //			# GUARDAR DATOS DE LA BOLETA SIEMPRE CON ESTADO PENDIENTE
 			dataBoleta.setEstadoPago(new EstadoPagoModel(1));
 			dataBoleta.setFechaImpresion(new Date());
-			
+
 //			#BUSCAR SI YA TIENE UNA BOLETA GENERADA ANTERIORMENTE PARA EL MISMO PERIODO
 			Optional<BoletaModel> validarBoleta = repoBoleta
 					.findByMesAndAnioAndEmpresaIdEmpresaAndEstadoPagoIdEstadoPago(dataBoleta.getMes(),
 							dataBoleta.getAnio(), dataBoleta.getEmpresa().getIdEmpresa(),
 							dataBoleta.getEstadoPago().getIdEstadoPago());
-			
+
 			if (validarBoleta.isPresent()) {
 //				#DAR DE BAJA A LA BOLETA GENERADA ANTERIORMENTE
 				BoletaModel boletaBaja = validarBoleta.get();
@@ -231,21 +230,21 @@ public class BoletaServiceImpl implements IBoletaService {
 
 //			# PROCEDEMOS A GUARDAR LA BOLETA Y SU DETALLE
 			boletaDB = repoBoleta.save(dataBoleta);
-			
+
 //			#GENERAR CODIGO DE BARRA
 			srvBancos.onGeneraCodigigoBarraBancoNacion(boletaDB.getIdBoleta());
 
 //			# PROCEDEMOS A GENERAL EL REPORTE DE LA BOLETA SEGUN EL TIPO DE BANCO
 //			BANCO DE LA NACION
-			if (dataBoleta.getBanco().getIdBanco().trim().compareTo("2") == 0) {				
+			if (dataBoleta.getBanco().getIdBanco().trim().compareTo("2") == 0) {
 				nameFile = "boleta_banco_nacion.jrxml";
 			}
 //			PAGO FACIL
-			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("1") == 0) {				
+			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("1") == 0) {
 				nameFile = "boleta_pago_facil.jrxml";
 			}
 //			RAPI PAGO
-			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("4") == 0) {				
+			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("4") == 0) {
 				nameFile = "boleta_rapi_pago.jrxml";
 			}
 //			BAPRO
@@ -256,8 +255,13 @@ public class BoletaServiceImpl implements IBoletaService {
 			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("5") == 0) {
 				nameFile = "boleta_pago_mis_cuentas.jrxml";
 			}
-			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("6") == 0) {				
+//			BANCO FRANCES
+			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("6") == 0) {
 				nameFile = "boleta_banco_frances.jrxml";
+			} 
+//			BANCO NACION TRANSFERENCIA
+			else if (dataBoleta.getBanco().getIdBanco().trim().compareTo("7") == 0){
+				nameFile = "boleta_transferencia_banco_nacion.jrxml";
 			}
 
 //			#GENERAR RPT BOLETA
@@ -274,7 +278,7 @@ public class BoletaServiceImpl implements IBoletaService {
 	public void onGenerarBoleta(int idBoleta, String nameFile, HttpServletRequest request,
 			HttpServletResponse response) {
 		Connection connection = null;
-		
+
 		try {
 			String RUTA_REPOSITORY = request.getSession().getServletContext().getRealPath("");
 			String rutaFile = request.getSession().getServletContext().getRealPath("/rpt/boletas/" + nameFile);
@@ -295,7 +299,7 @@ public class BoletaServiceImpl implements IBoletaService {
 			reporte = JasperRunManager.runReportToPdf(jasperReport, parametros, connection);
 
 			response.setContentType("application/pdf");
-			response.setHeader("Content-disposition", "inline; filename="+nameFile.replace(".jrxml", ".pdf"));
+			response.setHeader("Content-disposition", "inline; filename=" + nameFile.replace(".jrxml", ".pdf"));
 			response.setHeader("Cache-Control", "max-age=30");
 			response.setHeader("Pragma", "No-cache");
 			response.setDateHeader("Expires", 0);
@@ -321,13 +325,14 @@ public class BoletaServiceImpl implements IBoletaService {
 
 	@Override
 	public List<BoletaModel> srvLisBoleta(int idEmpresa, int idAporte, String mes, String anio) {
-		
-		List<BoletaModel> boletas= new ArrayList<>();
-		
-		if(idEmpresa == 0) {
+
+		List<BoletaModel> boletas = new ArrayList<>();
+
+		if (idEmpresa == 0) {
 			boletas = repoBoleta.findAll();
-		}else {
-			boletas = repoBoleta.findByEmpresaIdEmpresaAndAporteSindicalIdAporteAndMesAndAnio(idEmpresa, idAporte, mes, anio);
+		} else {
+			boletas = repoBoleta.findByEmpresaIdEmpresaAndAporteSindicalIdAporteAndMesAndAnio(idEmpresa, idAporte, mes,
+					anio);
 		}
 		return boletas;
 	}

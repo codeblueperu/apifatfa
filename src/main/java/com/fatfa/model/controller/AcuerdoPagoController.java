@@ -23,7 +23,7 @@ public class AcuerdoPagoController {
 	}
 
 	@GetMapping("/calcularDetalleCuota")
-	public ResponseEntity<?> onCalcularDetalleCuotaAcuerdopago(@RequestParam("montoCapital") double montoCapital,
+	public ResponseEntity<?> onCalcularDetalleCuotaAcuerdopago(@RequestParam("montoCapital") float montoCapital,
 			@RequestParam("tasaInteres") int tasaInteres, @RequestParam("numeroCuotas") int numCuota) {
 		return ResponseEntity.ok(srvAcuerdos.srvCalcularDetalleCuotas(montoCapital, tasaInteres, numCuota));
 	}

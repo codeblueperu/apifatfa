@@ -1,7 +1,5 @@
 package com.fatfa.model.serviceImp;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,47 +29,42 @@ public class AcuerdoPagoServImp implements IAcuerdoPagoService {
 	}
 
 	@Override
-	public HashMap<String, Object> srvCalcularDetalleCuotas(double capitalInicial, double tasainteres, int ncuotas) {
+	public HashMap<String, Object> srvCalcularDetalleCuotas(float capitalInicial, float tasainteres, int ncuotas) {
 
 		HashMap<String, Object> response = new HashMap<>();
 		try {
 //			CALCULO DE CUOTA PURO
-			double cuota_pura = Constantes.formatearDecimales(capitalInicial, 3) / ncuotas;
-			double valorResidual = capitalInicial;
+			float cuota_pura = capitalInicial / ncuotas;
+			float valorResidual = capitalInicial;
 			List<DetalleCuadroCuotasDTO> detalle = new ArrayList<>();
-
-			// System.err.println(Constantes.formatearDecimales(cuota_pura, 3));
+		
+			// System.err.println( cuota_pura );
 
 			for (int i = 1; i <= ncuotas; i++) {
-
-				double interesCuota = Constantes.formatearDecimales(valorResidual, 3)
-						* Constantes.formatearDecimales(tasainteres / 100, 3);
-				double cuotaTotalConInteres = Constantes.formatearDecimales(interesCuota, 3)
-						+ Constantes.formatearDecimales(cuota_pura, 3);
-				double valorCuotaP = Constantes.formatearDecimales(cuotaTotalConInteres, 3)
-						- Constantes.formatearDecimales(interesCuota, 3);
+				float interesCuota = valorResidual * (float) tasainteres / 100;
+				float cuotaTotalConInteres = interesCuota + cuota_pura;
+				float valorCuotaP = cuotaTotalConInteres - interesCuota;
 
 				DetalleCuadroCuotasDTO cuadro = new DetalleCuadroCuotasDTO();
 				cuadro.setNumCuota(i);
-				cuadro.setValorResidual( Constantes.formatearDecimales(valorResidual,2));
-				cuadro.setInteres( Constantes.formatearDecimales(interesCuota,2));
-				cuadro.setCuotaP( Constantes.formatearDecimales(valorCuotaP,2));
-				cuadro.setCuota( Constantes.formatearDecimales(cuota_pura,2));
-				cuadro.setCuotaTotalConIntereses(Constantes.formatearDecimales(cuotaTotalConInteres, 2));
-				
-				valorResidual = Constantes.formatearDecimales(valorResidual, 3)
-						- Constantes.formatearDecimales(valorCuotaP, 3);
+				cuadro.setValorResidual(Constantes.formatearDecimales(valorResidual, 2));
+				cuadro.setInteres(Constantes.formatearDecimales(interesCuota,3));
+				cuadro.setCuotaP(Constantes.formatearDecimales(valorCuotaP, 2));
+				cuadro.setCuota(Constantes.formatearDecimales(cuota_pura, 2));
+				cuadro.setCuotaTotalConIntereses(cuotaTotalConInteres);
+
+				valorResidual = valorResidual - valorCuotaP;
 				detalle.add(cuadro);
 			}
 
 			double total_intereses = detalle.stream().mapToDouble(i -> i.getInteres()).sum();
 			double total_pagar = detalle.stream().mapToDouble(c -> c.getCuotaTotalConIntereses()).sum();
-			double valor_por_cuotas = Constantes.formatearDecimales(total_pagar / ncuotas, 3);
+			float valor_por_cuotas = (float) total_pagar / ncuotas;
 
-			response.put("valor_por_cuota",  Constantes.formatearDecimales(valor_por_cuotas,2));
-			response.put("cuota_pura",  Constantes.formatearDecimales(cuota_pura,2));
-			response.put("monto_total_interes", total_intereses);
-			response.put("monto_total_pagar", total_pagar);
+			response.put("valor_por_cuota", Constantes.formatearDecimales(valor_por_cuotas, 2));
+			response.put("cuota_pura", Constantes.formatearDecimales(cuota_pura, 2));
+			response.put("monto_total_interes", Constantes.formatearDecimales((float)total_intereses, 2));
+			response.put("monto_total_pagar", Constantes.formatearDecimales((float)total_pagar, 2));
 			response.put("detalle", detalle);
 		} catch (Exception e) {
 			log.error("Error al calcular detalle cuotas => " + e.toString());
