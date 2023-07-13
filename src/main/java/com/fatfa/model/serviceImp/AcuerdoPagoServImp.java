@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import com.fatfa.model.dto.DetalleCuadroCuotasDTO;
 import com.fatfa.model.entity.AcuerdosPagoModel;
+import com.fatfa.model.entity.DetalleAcuerdoPagosCuotaModel;
 import com.fatfa.model.repository.IAcuerdoPagoDao;
+import com.fatfa.model.repository.IDetalleAcuerdoPagoDao;
 import com.fatfa.model.service.IAcuerdoPagoService;
 import com.fatfa.utils.Constantes;
 
@@ -21,6 +25,9 @@ public class AcuerdoPagoServImp implements IAcuerdoPagoService {
 
 	@Autowired
 	private IAcuerdoPagoDao repoAcuerdo;
+	
+	@Autowired
+	private IDetalleAcuerdoPagoDao repoDetalle;
 
 	@Override
 	public List<AcuerdosPagoModel> srvListaAcuerdosPago(int idEmpresa) {
@@ -69,6 +76,30 @@ public class AcuerdoPagoServImp implements IAcuerdoPagoService {
 		} catch (Exception e) {
 			log.error("Error al calcular detalle cuotas => " + e.toString());
 
+			throw e;
+		}
+		return response;
+	}
+
+	@Transactional
+	@Override
+	public HashMap<String, Object> srvNuevoAcuerdoPago(AcuerdosPagoModel acuerdoPago) {
+		HashMap<String, Object> response = new HashMap<>();
+		try {
+			
+			AcuerdosPagoModel acuerdoDB = repoAcuerdo.save(acuerdoPago);
+			List<DetalleAcuerdoPagosCuotaModel> detalleCuotas = new ArrayList<>();
+			for (DetalleAcuerdoPagosCuotaModel item : acuerdoPago.getDetalleCuotas()) {
+				item.setAcuerdo(acuerdoDB);
+				detalleCuotas.add(item);
+			}
+			
+			repoDetalle.saveAll(detalleCuotas);
+			
+			response.put("message" , "El acuerdo de pago con N° <b>"+acuerdoDB.getNumeroActa()+"</b> se proceso correctamente");
+			
+		} catch (Exception e) {
+			log.error("Error al guardar acuerdo pago => " + e.toString());
 			throw e;
 		}
 		return response;

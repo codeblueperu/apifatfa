@@ -3,7 +3,6 @@ package com.fatfa.model.entity;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,9 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "tb_acuerdos_pagos")
@@ -30,8 +30,11 @@ public class AcuerdosPagoModel {
 	@JoinColumn(name = "id_empresa", nullable = false)
 	private EmpresasModel empresa;
 	
+	@NotEmpty(message = "Este campo no puede ser nulo.")
+	@Size(min = 6,max = 6,message = "Este campo debe contener como minimo 6 caractes")
 	@Column(name = "numero_acta", length = 6, nullable = false)
 	private String numeroActa;
+	
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",locale = "es-PE", timezone = "America/Lima")
 	@Column(name = "fecha_registro", nullable = false, columnDefinition = "DATETIME")
@@ -42,8 +45,7 @@ public class AcuerdosPagoModel {
 	@JoinColumn(name = "id_estado_pago")
 	private EstadoPagoModel estadoAcuerdo;
 	
-	@JsonManagedReference
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "acuerdo")
+	@OneToMany( mappedBy = "acuerdo")
 	private List<DetalleAcuerdoPagosCuotaModel> detalleCuotas;
 
 	public AcuerdosPagoModel() {
@@ -60,6 +62,11 @@ public class AcuerdosPagoModel {
 		this.fechaRegistro = fechaRegistro;
 		this.estadoAcuerdo = estadoAcuerdo;
 		this.detalleCuotas = detalleCuotas;
+	}
+
+	public AcuerdosPagoModel(int idAcuerdoPago) {
+		super();
+		this.idAcuerdoPago = idAcuerdoPago;
 	}
 
 	public int getIdAcuerdoPago() {

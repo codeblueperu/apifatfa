@@ -64,6 +64,20 @@ public class DetalleAcuerdoPagosCuotaModel {
 		this.estadoPago = estadoPago;
 		this.acuerdo = acuerdo;
 	}
+	
+	
+
+	public DetalleAcuerdoPagosCuotaModel(double nCuotaSindical, double subTotal, double intereses, double importeTotal,
+			Date fechaVencimiento, boolean estadoPago, AcuerdosPagoModel acuerdo) {
+		super();
+		this.nCuotaSindical = nCuotaSindical;
+		this.subTotal = subTotal;
+		this.intereses = intereses;
+		this.importeTotal = importeTotal;
+		this.fechaVencimiento = fechaVencimiento;
+		this.estadoPago = estadoPago;
+		this.acuerdo = acuerdo;
+	}
 
 	public int getIdDetalleCuota() {
 		return idDetalleCuota;
